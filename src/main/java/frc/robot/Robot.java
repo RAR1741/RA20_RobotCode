@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
-    driver = new XboxController(1);
+    driver = new XboxController(0);
     System.out.println("done");
   }
 
@@ -63,6 +63,8 @@ public class Robot extends TimedRobot {
     }
 
     shooter.manualControl(speed);
+    System.out.printf("Input: %3.2f%%    RPM: %.2f\n", speed, 
+      shooter.getLauncherRPM());
   }
 
   @Override
