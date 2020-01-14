@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -65,6 +66,9 @@ public class Robot extends TimedRobot {
     shooter.manualControl(speed);
     System.out.printf("Input: %3.2f%%    RPM: %.2f\n", speed, 
       shooter.getLauncherRPM());
+
+    SmartDashboard.putNumber("ShooterPower", speed);
+    SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
 
   @Override
