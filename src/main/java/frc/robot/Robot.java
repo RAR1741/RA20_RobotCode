@@ -8,8 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,13 +21,9 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  private CANSparkMax m_testMotor;
   
   @Override
   public void robotInit() {
-    int deviceID = 2;
-    m_testMotor = new CANSparkMax(deviceID,  MotorType.kBrushless);
-
   }
 
   @Override
@@ -46,12 +40,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_testMotor.set(1);
-    sleep(3000);
-    m_testMotor.set(-1);
-    sleep(3000);
-    m_testMotor.set(0);
-
   }
 
   @Override
@@ -60,13 +48,5 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-  }
-
-  protected void sleep(int ms) {
-    try {
-      wait(ms);
-    } catch (Exception e) {
-      //TODO: handle exception
-    }
   }
 }
