@@ -26,10 +26,10 @@ public class Limelight {
         this.ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         this.ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
 
-        SmartDashboard.putNumber("LimelightX", limelight.getTx());
-        SmartDashboard.putNumber("LimelightY", limelight.getTy());
-        SmartDashboard.putNumber("LimelightArea", limelight.getTa());
-        SmartDashboard.putNumber("LimelightTargeted", limelight.getTv());
+        SmartDashboard.putNumber("LimelightX", this.getTx());
+        SmartDashboard.putNumber("LimelightY", this.getTy());
+        SmartDashboard.putNumber("LimelightArea", this.getTa());
+        SmartDashboard.putNumber("LimelightTargeted", this.getTv());
     }
 
     public double getTv() {
