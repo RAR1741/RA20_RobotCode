@@ -60,7 +60,11 @@ public class Robot extends TimedRobot {
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = driver.getY(Hand.kRight);
     } else if (driver.getAButton()) {
-      speed = 1;
+      speed = -1;
+    }
+
+    if (Math.abs(speed) < 0.1) {
+      speed = 0;
     }
 
     shooter.manualControl(speed);
