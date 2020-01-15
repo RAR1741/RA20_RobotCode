@@ -26,8 +26,8 @@ public class Limelight {
         this.ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         this.ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
 
-        SmartDashboard.putNumber("LimelightX", limelight.getTa());
-        SmartDashboard.putNumber("LimelightY", limelight.getTa());
+        SmartDashboard.putNumber("LimelightX", limelight.getTx());
+        SmartDashboard.putNumber("LimelightY", limelight.getTy());
         SmartDashboard.putNumber("LimelightArea", limelight.getTa());
         SmartDashboard.putNumber("LimelightTargeted", limelight.getTv());
     }
