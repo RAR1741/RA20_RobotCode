@@ -5,12 +5,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drivetrain {
     
-    public int DeviceID1 = 1;
-    public int DeviceID2 = 2;
-    public int DeviceID3 = 3;
-    public int DeviceID4 = 4;
-    public int DeviceID5 = 5;
-    public int DeviceID6 = 6;
+    private int DeviceID1 = 1;
+    private int DeviceID2 = 2;
+    private int DeviceID3 = 3;
+    private int DeviceID4 = 4;
+    private int DeviceID5 = 5;
+    private int DeviceID6 = 6;
     
     private CANSparkMax m1 = new CANSparkMax(DeviceID1, MotorType.kBrushless);
     private CANSparkMax m2 = new CANSparkMax(DeviceID2, MotorType.kBrushless);
