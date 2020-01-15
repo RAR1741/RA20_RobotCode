@@ -7,11 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
 import frc.robot.Limelight;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -24,15 +19,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
+  Limelight limelight;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-
-   Limelight limelight;
   @Override
   public void robotInit() {
+    System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
+    System.out.println("done");
   }
 
   @Override
@@ -49,7 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    limelight.update(limelight);
+    limelight.update();
   }
 
   @Override

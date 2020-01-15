@@ -3,7 +3,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
@@ -13,35 +12,38 @@ public class Limelight {
     private double ty;
     private double ta;
 
-    NetworkTable limelight;
+    NetworkTable limelightTable;
 
-    public Limelight(NetworkTable table) {
-
+    public Limelight() {
+        // Assuming use of the default network table.
+        limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
+    public void update() {
+        this.tv = limelightTable.getEntry("tv").getDouble(0);
+        this.tx = limelightTable.getEntry("tx").getDouble(0);
+        this.ty = limelightTable.getEntry("ty").getDouble(0);
+        this.ta = limelightTable.getEntry("ta").getDouble(0);
 
-    public void update(Limelight limelight) {
-        this.tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-        this.tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-        this.ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-        this.ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-
-        SmartDashboard.putNumber("LimelightX", this.getTx());
-        SmartDashboard.putNumber("LimelightY", this.getTy());
-        SmartDashboard.putNumber("LimelightArea", this.getTa());
-        SmartDashboard.putNumber("LimelightTargeted", this.getTv());
+        SmartDashboard.putNumber("LimelightX", this.getTargetX());
+        SmartDashboard.putNumber("LimelightY", this.getTargetY());
+        SmartDashboard.putNumber("LimelightArea", this.getTargetArea());
+        SmartDashboard.putBoolean("LimelightTargeted", this.isTargetVisible());
     }
 
-    public double getTv() {
-        return this.tv;
+    public boolean isTargetVisible() {
+        return this.tv > 0.0;
     }
-    public double getTx() {
+
+    public double getTargetX() {
         return this.tx;
     }
-    public double getTy() {
+
+    public double getTargetY() {
         return this.ty;
     }
-    public double getTa() {
+
+    public double getTargetArea() {
         return this.ta;
     }
 }
