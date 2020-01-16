@@ -37,8 +37,8 @@ public class Drivetrain {
 
 
     public void arcadeDrive(double xDrive, double yDrive){
-        this.driveLeft(yDrive-xDrive);
-        this.driveRight(xDrive-yDrive);
+        this.driveLeft(yDrive - xDrive);
+        this.driveRight(xDrive - yDrive);
     }
 
 
