@@ -12,26 +12,26 @@ public class Drivetrain {
     private int DeviceID5 = 5;
     private int DeviceID6 = 6;
     
-    private CANSparkMax m1 = new CANSparkMax(DeviceID1, MotorType.kBrushless);
-    private CANSparkMax m2 = new CANSparkMax(DeviceID2, MotorType.kBrushless);
-    private CANSparkMax m3 = new CANSparkMax(DeviceID3, MotorType.kBrushless);
-    private CANSparkMax m4 = new CANSparkMax(DeviceID4, MotorType.kBrushless);
-    private CANSparkMax m5 = new CANSparkMax(DeviceID5, MotorType.kBrushless);
-    private CANSparkMax m6 = new CANSparkMax(DeviceID6, MotorType.kBrushless);
+    private CANSparkMax leftNeo = new CANSparkMax(DeviceID1, MotorType.kBrushless);
+    private CANSparkMax leftSlave1 = new CANSparkMax(DeviceID2, MotorType.kBrushless);
+    private CANSparkMax leftSlave2 = new CANSparkMax(DeviceID3, MotorType.kBrushless);
+    private CANSparkMax rigthNeo = new CANSparkMax(DeviceID4, MotorType.kBrushless);
+    private CANSparkMax rightSlave1 = new CANSparkMax(DeviceID5, MotorType.kBrushless);
+    private CANSparkMax rightSlave2 = new CANSparkMax(DeviceID6, MotorType.kBrushless);
 
 
     public void driveLeft(double speed){
-        m1.set(speed);
-        m2.set(speed);
-        m3.set(speed);
+        leftNeo.set(speed);
+        leftSlave1.set(speed);
+        leftSlave2.set(speed);
 
     }
 
 
     public void driveRight(double speed){
-        m4.set(speed);
-        m5.set(speed);
-        m6.set(speed);
+        rigthNeo.set(speed);
+        rightSlave1.set(speed);
+        rightSlave2.set(speed);
 
     }
 
