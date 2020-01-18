@@ -14,6 +14,7 @@ public class Drivetrain {
     private CANSparkMax rightSlave2;
 
     /**
+     * Constructor
      * 
      * @param leftNeo1ID The CAN id of the first left neo
      * @param leftNeo2ID The CAN id of the second left neo
@@ -41,6 +42,11 @@ public class Drivetrain {
 
     }
 
+    /**
+     * Drives the left side of the robot either forward or backward.
+     * 
+     * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
+     */
     public void driveLeft(double speed){
         leftNeo.set(speed);
         leftSlave1.set(speed);
@@ -48,7 +54,11 @@ public class Drivetrain {
 
     }
 
-
+    /**
+     * Drives the right side of the robot either forward or backward.
+     * 
+     * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
+     */
     public void driveRight(double speed){
         rightNeo.set(speed);
         rightSlave1.set(speed);
@@ -56,13 +66,27 @@ public class Drivetrain {
 
     }
 
-
+    /**
+     * Drives the robot with an arcade style drive
+     *
+     * @param xDrive The speed to drive the drivetrain in the x direction (ranges
+     *               from -1.0 to +1.0)
+     * @param yDrive The speed to drive the drivetrain in the y direction (ranges
+     *               from -1.0 to +1.0)
+     */
     public void arcadeDrive(double xDrive, double yDrive){
         this.driveLeft(yDrive - xDrive);
         this.driveRight(xDrive - yDrive);
     }
 
-
+    /**
+     * Drives the robot with an tank style drive
+     *
+     * @param xDrive The speed to drive the left drivetrain (ranges
+     *               from -1.0 to +1.0)
+     * @param yDrive The speed to drive the right drivetrain (ranges
+     *               from -1.0 to +1.0)
+     */
     public void tankDrive(double leftDrive, double rightDrive){
         this.driveLeft(leftDrive);
         this.driveRight(rightDrive);
