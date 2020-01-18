@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     System.out.print("Initializing shooter...");
-    shooter = new Shooter(new CANSparkMax(1, MotorType.kBrushless));
+    shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
@@ -58,9 +58,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double speed = 0;
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
-      speed = driver.getY(Hand.kRight);
+      speed = -1 * driver.getY(Hand.kRight);
     } else if (driver.getAButton()) {
-      speed = -1;
+      speed = 1;
     }
 
     if (Math.abs(speed) < 0.1) {
@@ -68,8 +68,6 @@ public class Robot extends TimedRobot {
     }
 
     shooter.manualControl(speed);
-    System.out.printf("Input: %3.2f%%    RPM: %.2f\n", speed, 
-      shooter.getLauncherRPM());
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());

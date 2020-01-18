@@ -7,6 +7,7 @@ public class Shooter {
 
   public Shooter(CANSparkMax motor) {
     launcher = motor;
+    launcher.setInverted(true);
   }
 
   public void manualControl(double power) {
