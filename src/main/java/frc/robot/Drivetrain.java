@@ -6,6 +6,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drivetrain {
     
+    /**
+     * {@value #DEADBAND_LIMIT} The limit for when to stop the motor running if the
+     * motor speed is too low.
+     */
+    private static final double DEADBAND_LIMIT = 0.02;
+
     private CANSparkMax leftNeo;
     private CANSparkMax leftSlave1;
     private CANSparkMax leftSlave2;
@@ -48,10 +54,8 @@ public class Drivetrain {
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
     public void driveLeft(double speed){
-        leftNeo.set(speed);
-        leftSlave1.set(speed);
-        leftSlave2.set(speed);
-
+        double sp = deadband(speed);
+        leftNeo.set(sp);
     }
 
     /**
@@ -60,10 +64,8 @@ public class Drivetrain {
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
     public void driveRight(double speed){
-        rightNeo.set(speed);
-        rightSlave1.set(speed);
-        rightSlave2.set(speed);
-
+        double sp = deadband(speed)
+        rightNeo.set(sp);
     }
 
     /**
@@ -90,5 +92,17 @@ public class Drivetrain {
     public void tankDrive(double leftDrive, double rightDrive){
         this.driveLeft(leftDrive);
         this.driveRight(rightDrive);
+    }
+
+    /**
+     * Normalizes the input to 0.0 if it is below the value set by
+     * {@link #DEADBAND_LIMIT} This is primarily used for reducing the strain on
+     * motors.
+     *
+     * @param in the input to check
+     * @return 0.0 if {@code in} is less than abs(DEADBAND_LIMIT) else {@code in}
+     */
+    public double deadband(double in) {
+        return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
     }
 }
