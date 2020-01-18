@@ -6,6 +6,6 @@ public class FakeTest {
   // Dummy test for verifying the ability to run tests.
   @Test
   public void testFake() {
-    assertEquals(true, false);
+    assertEquals(true, true);
   }
 }
