@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   Limelight limelight;
   Shooter shooter = null;
   XboxController driver = null;
-  Manipulation intake = null;
+  Manipulation manipulation = null;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing intake...");
-    intake = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2));
+    manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2));
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
