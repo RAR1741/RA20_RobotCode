@@ -3,22 +3,43 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+
 public class Drivetrain {
     
-    private int DeviceID1 = 1;
-    private int DeviceID2 = 2;
-    private int DeviceID3 = 3;
-    private int DeviceID4 = 4;
-    private int DeviceID5 = 5;
-    private int DeviceID6 = 6;
-    
-    private CANSparkMax leftNeo = new CANSparkMax(DeviceID1, MotorType.kBrushless);
-    private CANSparkMax leftSlave1 = new CANSparkMax(DeviceID2, MotorType.kBrushless);
-    private CANSparkMax leftSlave2 = new CANSparkMax(DeviceID3, MotorType.kBrushless);
-    private CANSparkMax rigthNeo = new CANSparkMax(DeviceID4, MotorType.kBrushless);
-    private CANSparkMax rightSlave1 = new CANSparkMax(DeviceID5, MotorType.kBrushless);
-    private CANSparkMax rightSlave2 = new CANSparkMax(DeviceID6, MotorType.kBrushless);
+    private CANSparkMax leftNeo;
+    private CANSparkMax leftSlave1;
+    private CANSparkMax leftSlave2;
+    private CANSparkMax rightNeo;
+    private CANSparkMax rightSlave1;
+    private CANSparkMax rightSlave2;
 
+    /**
+     * 
+     * @param leftNeo1ID The CAN id of the first left talon
+     * @param leftNeo2ID The CAN id of the second left talon
+     * @param leftNeo3ID The CAN id of the third left talon
+     * @param rightNeo1ID The CAN id of the first right talon.
+     * @param rightNeo2ID The CAN id of the second right talon.
+     * @param rightNeo3ID The CAN id of the third right talon.
+     */
+    Drivetrain(int leftNeo1ID, int leftNeo2ID, int leftNeo3ID, int rightNeo1ID, int rightNeo2ID, int rightNeo3ID){
+        CANSparkMax leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
+        CANSparkMax leftSlave1 = new CANSparkMax(leftNeo2ID, MotorType.kBrushless);
+        CANSparkMax leftSlave2 = new CANSparkMax(leftNeo3ID, MotorType.kBrushless);
+        CANSparkMax rightNeo = new CANSparkMax(rightNeo1ID, MotorType.kBrushless);
+        CANSparkMax rightSlave1 = new CANSparkMax(rightNeo2ID, MotorType.kBrushless);
+        CANSparkMax rightSlave2 = new CANSparkMax(rightNeo3ID, MotorType.kBrushless);
+
+        leftNeo.setInverted(true);
+        leftSlave1.setInverted(true);
+        leftSlave2.setInverted(true);
+
+        leftSlave1.follow(leftNeo);
+        leftSlave2.follow(leftNeo);
+        rightSlave1.follow(rightNeo);
+        rightSlave2.follow(rightNeo);
+
+    }
 
     public void driveLeft(double speed){
         leftNeo.set(speed);
@@ -29,7 +50,7 @@ public class Drivetrain {
 
 
     public void driveRight(double speed){
-        rigthNeo.set(speed);
+        rightNeo.set(speed);
         rightSlave1.set(speed);
         rightSlave2.set(speed);
 
