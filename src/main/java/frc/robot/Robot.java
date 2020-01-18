@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   Limelight limelight;
   Shooter shooter = null;
+  Drivetrain drive = null;
   XboxController driver = null;
 
   /**
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
     limelight = new Limelight();
     System.out.print("Initializing shooter...");
     shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+    System.out.println("Initializing drivetrain...");
+    drive = new Drivetrain(1, 2, 3, 4, 5, 6); //TODO: Insert actual ID's
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
@@ -63,6 +66,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     limelight.update();
+
+    double turnInput = driver.getX(Hand.kRight);
+    double speedInput = driver.getY(Hand.kLeft);
+
     double speed = 0;
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = -1 * driver.getY(Hand.kRight);
@@ -75,6 +82,8 @@ public class Robot extends TimedRobot {
     }
 
     shooter.manualControl(speed);
+
+    drive.arcadeDrive(turnInput, speedInput);
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
