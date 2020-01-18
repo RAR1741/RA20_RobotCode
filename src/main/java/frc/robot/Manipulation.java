@@ -9,14 +9,14 @@ public class Manipulation{
     private Talon intakeWheel;
     private DoubleSolenoid intakePneumatics;
 
-    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics){
+    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics) {
         this.intakeWheel = intakeWheel;
         this.intakePneumatics = intakePneumatics;
     }
 
     public void intakeSpin(){
+        //TODO: test if this power is right
         intakeWheel.set(1);
-//TODO: test if this power is right
     }
 
     public void intakeOut(){

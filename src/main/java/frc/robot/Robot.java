@@ -9,10 +9,14 @@ package frc.robot;
 
 
 import frc.robot.Limelight;
+import frc.robot.Shooter;
+import frc.robot.Manipulation;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -29,23 +33,52 @@ public class Robot extends TimedRobot {
   Limelight limelight;
   Shooter shooter = null;
   XboxController driver = null;
+  Manipulation intake = null;
 
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
+
+
+  /**
+   * CAN ID's:
+   * 
+   * PDP -> 1
+   * PCM -> 2
+   * Shooter -> 4
+   * Drivetrain Left -> 5,6,7
+   * Drivetrain Right -> 8,9,10
+   * Manipulation Intake -> 11
+   * Manipulation Index -> 12
+   * 
+   * 
+   * PCM Channels:
+   * 
+   * Drivetrain PTO's -> 0
+   * Manipulation Forward -> 1
+   * Manipulation Reverse -> 2
+   */
+
+
   
   @Override
   public void robotInit() {
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
+    System.out.println("done");
+
     System.out.print("Initializing shooter...");
-    shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+    shooter = new Shooter(new CANSparkMax(4, MotorType.kBrushless));
+    System.out.println("done");
+
+    System.out.print("Initializing intake...");
+    intake = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2));
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
-    System.out.println("done");
+    System.out.println("done");    
   }
 
   @Override
