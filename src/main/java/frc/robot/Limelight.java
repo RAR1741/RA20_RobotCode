@@ -11,6 +11,7 @@ public class Limelight {
     private double tx;
     private double ty;
     private double ta;
+    private double tvert;
 
     NetworkTable limelightTable;
 
@@ -24,6 +25,7 @@ public class Limelight {
         this.tx = limelightTable.getEntry("tx").getDouble(0);
         this.ty = limelightTable.getEntry("ty").getDouble(0);
         this.ta = limelightTable.getEntry("ta").getDouble(0);
+        this.tvert = limelightTable.getEntry("tvert").getDouble(0);
 
         SmartDashboard.putNumber("LimelightX", this.getTargetX());
         SmartDashboard.putNumber("LimelightY", this.getTargetY());
@@ -46,4 +48,9 @@ public class Limelight {
     public double getTargetArea() {
         return this.ta;
     }
+
+    public double getTargetVertical() {
+        return this.tvert;
+    }
+
 }
