@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     System.out.print("Initializing shooter...");
     shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("Initializing drivetrain...");
-    drive = new Drivetrain(1, 2, 3, 4, 5, 6); //TODO: Insert actual ID's
+    drive = new Drivetrain(2, 3, 4, 5, 6, 7);
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
