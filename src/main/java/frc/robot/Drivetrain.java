@@ -15,12 +15,12 @@ public class Drivetrain {
 
     /**
      * 
-     * @param leftNeo1ID The CAN id of the first left talon
-     * @param leftNeo2ID The CAN id of the second left talon
-     * @param leftNeo3ID The CAN id of the third left talon
-     * @param rightNeo1ID The CAN id of the first right talon.
-     * @param rightNeo2ID The CAN id of the second right talon.
-     * @param rightNeo3ID The CAN id of the third right talon.
+     * @param leftNeo1ID The CAN id of the first left neo
+     * @param leftNeo2ID The CAN id of the second left neo
+     * @param leftNeo3ID The CAN id of the third left neo
+     * @param rightNeo1ID The CAN id of the first right neo.
+     * @param rightNeo2ID The CAN id of the second right neo.
+     * @param rightNeo3ID The CAN id of the third right neo.
      */
     Drivetrain(int leftNeo1ID, int leftNeo2ID, int leftNeo3ID, int rightNeo1ID, int rightNeo2ID, int rightNeo3ID){
         CANSparkMax leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
