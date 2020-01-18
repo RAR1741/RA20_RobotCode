@@ -1,0 +1,114 @@
+{
+    "maven_repos": {
+        "SnobotSim": "http://raw.githubusercontent.com/snobotsim/maven_repo/master/development",
+        "Wpi": "http://first.wpi.edu/FRC/roborio/maven/release/"
+    },
+    "required_third_party": [
+        "CTRE-Phoenix",
+        "REVRobotics",
+        "KauaiLabs_navX_FRC"
+    ],
+    "snobot_sim": {
+        "version_number": "2020-0.0.1",
+        "libraries": {
+            "java": [
+                "com.snobot.simulator:snobot_sim_gui:${version_number}",
+                "com.snobot.simulator:snobot_sim_java:${version_number}",
+                "com.snobot.simulator:snobot_sim_joysticks:${version_number}",
+                "com.snobot.simulator:snobot_sim_utilities:${version_number}",
+
+                "edu.wpi.first.ntcore:ntcore-jni:${wpilibVersion}:${nativeclassifier}"
+            ],
+            "jni": [
+                "edu.wpi.first.wpiutil:wpiutil-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+                "edu.wpi.first.hal:hal-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+
+                "edu.wpi.first.cscore:cscore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+                "edu.wpi.first.ntcore:ntcore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+                "edu.wpi.first.wpilibc:wpilibc-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+                "edu.wpi.first.cameraserver:cameraserver-cpp:${wpilibVersion}:${nativeclassifier}@zip"
+            ],
+            "cpp": [
+                "com.snobot.simulator:snobot_sim:${version_number}",
+                "com.snobot.simulator:adx_family:${version_number}",
+                "com.snobot.simulator:navx_simulator:${version_number}"
+            ],
+            "cpp_java": [
+                "edu.wpi.first.wpilibj:wpilibj-java:${wpilibVersion}",
+                "edu.wpi.first.ntcore:ntcore-java:${wpilibVersion}",
+                "edu.wpi.first.cscore:cscore-java:${wpilibVersion}",
+                "edu.wpi.first.wpiutil:wpiutil-java:${wpilibVersion}",
+                "edu.wpi.first.hal:hal-java:${wpilibVersion}",
+                "edu.wpi.first.cameraserver:cameraserver-java:${wpilibVersion}"
+            ]
+        }
+    },
+    "third_party": {
+        "libraries": {
+            "java": [
+                "jfree:jfreechart:1.0.13",
+                "org.apache.logging.log4j:log4j-core:2.11.0",
+                "org.yaml:snakeyaml:1.18",
+                "com.miglayout:miglayout-swing:4.2",
+                "net.java.jinput:jinput:2.0.7"
+            ],
+            "jni": [
+                "net.java.jinput:jinput:2.0.7"
+            ]
+        }
+    },
+    "vendor_props": {
+        "vendors": {
+            "KauaiLabs_navX_FRC": {
+                "default_version": "3.1.400",
+                "versions": {
+                    "3.1.400": {
+                        "version_number": "3.1.400_V0_RC",
+                        "libraries": {
+                            "java": ["com.snobot.simulator:navx_simulator:${version_number}"],
+                            "jni": ["com.snobot.simulator:navx_simulator:${version_number}:${nativeclassifier}"]
+                        }
+                    }
+                }
+            },
+            "CTRE-Phoenix": {
+                "default_version": "5.17.2",
+                "versions": {
+                    "5.17.2": {
+                        "version_number": "5.17.2_V0_RC",
+                        "libraries": {
+                            "java": ["com.snobot.simulator:ctre_sim_override:${version_number}"],
+                            "jni": ["com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}"]
+                        }
+                    },
+                    "5.17.3": {
+                        "version_number": "5.17.2_V0_RC",
+                        "libraries": {
+                            "java": ["com.snobot.simulator:ctre_sim_override:${version_number}"],
+                            "jni": ["com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}"]
+                        }
+                    }
+                }
+            },
+            "REVRobotics": {
+                "default_version": "1.5.0",
+                "versions": {
+                    "1.5.0": {
+                        "version_number": "1.5.0_V0",
+                        "libraries": {
+                            "java": ["com.snobot.simulator:rev_simulator:${version_number}"],
+                            "jni": ["com.snobot.simulator:rev_simulator:${version_number}:${nativeclassifier}"]
+                        }
+                    },
+                    "1.5.1": {
+                        "version_number": "1.5.0_V0",
+                        "libraries": {
+                            "java": ["com.snobot.simulator:rev_simulator:${version_number}"],
+                            "jni": ["com.snobot.simulator:rev_simulator:${version_number}:${nativeclassifier}"]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
