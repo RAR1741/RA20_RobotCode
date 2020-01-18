@@ -7,9 +7,16 @@
 
 package frc.robot;
 
+
 import frc.robot.Limelight;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,6 +27,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public class Robot extends TimedRobot {
   Limelight limelight;
+  Shooter shooter = null;
+  XboxController driver = null;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -29,6 +38,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
+    System.out.print("Initializing shooter...");
+    shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+    System.out.println("done");
+
+    System.out.print("Initializing driver interface...");
+    driver = new XboxController(0);
     System.out.println("done");
   }
 
@@ -47,6 +62,21 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     limelight.update();
+    double speed = 0;
+    if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
+      speed = -1 * driver.getY(Hand.kRight);
+    } else if (driver.getAButton()) {
+      speed = 1;
+    }
+
+    if (Math.abs(speed) < 0.1) {
+      speed = 0;
+    }
+
+    shooter.manualControl(speed);
+
+    SmartDashboard.putNumber("ShooterPower", speed);
+    SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
 
   @Override
