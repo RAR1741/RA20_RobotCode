@@ -37,6 +37,52 @@
               "Range/Max": 10000.0,
               "Visuals/Show value": true
             }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/LimelightX",
+              "_title": "LimelightX"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/LimelightY",
+              "_title": "LimelightY"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/LimelightArea",
+              "_title": "LimelightArea"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/LimelightTargeted",
+              "_title": "LimelightTargeted",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
@@ -140,9 +186,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 23.0,
-    "width": 1440.0,
-    "height": 798.0
+    "x": -6.400000095367432,
+    "y": 0.0,
+    "width": 997.5999755859375,
+    "height": 560.7999877929688
   }
 }
