@@ -30,12 +30,12 @@ public class Drivetrain {
      * @param rightNeo3ID The CAN id of the third right neo.
      */
     Drivetrain(int leftNeo1ID, int leftNeo2ID, int leftNeo3ID, int rightNeo1ID, int rightNeo2ID, int rightNeo3ID){
-        CANSparkMax leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
-        CANSparkMax leftSlave1 = new CANSparkMax(leftNeo2ID, MotorType.kBrushless);
-        CANSparkMax leftSlave2 = new CANSparkMax(leftNeo3ID, MotorType.kBrushless);
-        CANSparkMax rightNeo = new CANSparkMax(rightNeo1ID, MotorType.kBrushless);
-        CANSparkMax rightSlave1 = new CANSparkMax(rightNeo2ID, MotorType.kBrushless);
-        CANSparkMax rightSlave2 = new CANSparkMax(rightNeo3ID, MotorType.kBrushless);
+        leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
+        leftSlave1 = new CANSparkMax(leftNeo2ID, MotorType.kBrushless);
+        leftSlave2 = new CANSparkMax(leftNeo3ID, MotorType.kBrushless);
+        rightNeo = new CANSparkMax(rightNeo1ID, MotorType.kBrushless);
+        rightSlave1 = new CANSparkMax(rightNeo2ID, MotorType.kBrushless);
+        rightSlave2 = new CANSparkMax(rightNeo3ID, MotorType.kBrushless);
 
         leftNeo.setInverted(true);
         leftSlave1.setInverted(true);
@@ -64,7 +64,7 @@ public class Drivetrain {
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
     public void driveRight(double speed){
-        double sp = deadband(speed)
+        double sp = deadband(speed);
         rightNeo.set(sp);
     }
 
