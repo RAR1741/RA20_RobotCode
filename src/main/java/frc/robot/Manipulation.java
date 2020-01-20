@@ -16,8 +16,10 @@ public class Manipulation{
      * 
      * @param intakeWheel The CAN id of the talon for the intake system
      * @param intakePneumatics The intake solenoid
+     * @param indexLoad The CAN id of the talon for the index loader
+     * @param indexFeed The CAN id of the talon for the index feeder
      */
-    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics) {
+    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics, Talon indexLoad, Talon indexFeed) {
         this.intakeWheel = intakeWheel;
         this.intakePneumatics = intakePneumatics;
     }
