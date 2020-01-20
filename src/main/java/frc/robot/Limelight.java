@@ -75,4 +75,7 @@ public class Limelight {
         return this.tvert;
     }
 
+    public void setLightEnabled(boolean enabled) {
+        limelightTable.getEntry("ledMode").forceSetNumber(enabled ? 3: 1);
+    }
 }
