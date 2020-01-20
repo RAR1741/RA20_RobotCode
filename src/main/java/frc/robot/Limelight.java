@@ -37,6 +37,7 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightY", this.getTargetY());
         SmartDashboard.putNumber("LimelightArea", this.getTargetArea());
         SmartDashboard.putBoolean("LimelightTargeted", this.isTargetVisible());
+        SmartDashboard.putNumber("LimelightHeight", this.getTargetVertical());
     }
 
     /**
