@@ -8,6 +8,8 @@ public class Manipulation{
 
     private Talon intakeWheel;
     private DoubleSolenoid intakePneumatics;
+    private Talon indexLoad;
+    private Talon indexFeed;
 
     /**
      * Constructor
@@ -47,5 +49,20 @@ public class Manipulation{
      */
     public void intakeIn(){
         intakePneumatics.set(Value.kReverse);
+    }
+
+    /**
+     * Moves power cells down indexing system.
+     */
+    public void indexLoad(){
+        //TODO: test if this power is right
+        indexLoad.set(0.5);
+    }
+
+    /**
+     * Feeds power cells into the scoring system.
+     */
+    public void indexFeed(){
+        indexFeed.set(1);
     }
 }
