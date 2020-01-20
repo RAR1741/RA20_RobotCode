@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing intake...");
-    manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2));
+    manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2), new Talon(12), new Talon(13));
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
