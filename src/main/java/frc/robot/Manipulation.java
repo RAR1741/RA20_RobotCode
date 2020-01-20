@@ -19,6 +19,10 @@ public class Manipulation{
         intakeWheel.set(1);
     }
 
+    public void intakeStop(){
+        intakeWheel.set(0);
+    }
+
     public void intakeOut(){
         intakePneumatics.set(Value.kForward);
     }

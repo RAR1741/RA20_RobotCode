@@ -109,6 +109,21 @@ public class Robot extends TimedRobot {
 
     shooter.manualControl(speed);
 
+    if (driver.getBumperPressed(Hand.kRight)) {
+      manipulation.intakeOut();
+    }
+
+    if (driver.getBumperPressed(Hand.kLeft)) {
+      manipulation.intakeIn();
+    }
+
+    if (driver.getXButton()) {
+      manipulation.intakeSpin();
+    } else {
+      manipulation.intakeStop();
+    }
+
+
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
