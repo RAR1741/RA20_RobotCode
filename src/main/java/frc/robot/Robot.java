@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     shooter = new Shooter(new CANSparkMax(4, MotorType.kBrushless));
     System.out.println("done");
 
-    System.out.print("Initializing intake...");
+    System.out.print("Initializing manipulation...");
     manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2), new Talon(12), new Talon(13));
     System.out.println("done");
 
@@ -117,7 +117,19 @@ public class Robot extends TimedRobot {
       manipulation.intakeIn();
     }
 
+    if (driver.getBButton()) {
+      manipulation.indexFeed(true);
+    } else {
+      manipulation.indexFeed(false);
+    }
+
     if (driver.getXButton()) {
+      manipulation.indexLoad(true);
+    } else {
+      manipulation.indexLoad(false);
+    }
+
+    if (driver.getYButton()) {
       manipulation.intakeSpin();
     } else {
       manipulation.intakeStop();

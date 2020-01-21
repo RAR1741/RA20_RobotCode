@@ -55,16 +55,20 @@ public class Manipulation{
 
     /**
      * Moves power cells down indexing system.
+     * 
+     * @param load if it should load
      */
-    public void indexLoad(){
-        //TODO: test if this power is right
-        indexLoad.set(0.5);
+    public void indexLoad(boolean load){
+        //TODO: test if this power is right.
+        indexLoad.set(load ? 0.5: 0);
     }
 
     /**
      * Feeds power cells into the scoring system.
+     * 
+     * @param feed if it should feed the shooter power cells.
      */
-    public void indexFeed(){
-        indexFeed.set(1);
+    public void indexFeed(boolean feed){
+        indexFeed.set(feed ? 1: 0);
     }
 }
