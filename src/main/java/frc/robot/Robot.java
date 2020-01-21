@@ -7,12 +7,13 @@
 
 package frc.robot;
 
-
 import frc.robot.Limelight;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -29,6 +30,8 @@ public class Robot extends TimedRobot {
   Limelight limelight;
   Shooter shooter = null;
   XboxController driver = null;
+  DriveModule module = null;
+  Compressor compressor = null;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -47,6 +50,18 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
+    System.out.println("done");
+
+    System.out.print("Initializing prototype drive module...");
+    module = new DriveModule(
+      new CANSparkMax(15, MotorType.kBrushless),
+      new CANSparkMax(16, MotorType.kBrushless),
+      new CANSparkMax(17, MotorType.kBrushless),
+      new Solenoid(2, 0));
+    System.out.println("done");
+
+    System.out.print("Initializing compressor...");
+    compressor = new Compressor(2);
     System.out.println("done");
   }
 
@@ -83,6 +98,8 @@ public class Robot extends TimedRobot {
     } else if (driver.getYButtonPressed()) {
       limelight.setLightEnabled(false);
     }
+
+    module.set(driver.getY(Hand.kLeft));
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
