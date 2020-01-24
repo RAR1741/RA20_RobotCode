@@ -32,6 +32,13 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   XboxController driver = null;
 
+  double pitch;
+  double roll;
+  double yaw;
+  double accelX;
+  double accelY;
+  double accelZ;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -57,6 +64,15 @@ public class Robot extends TimedRobot {
     System.out.println("done");
   }
 
+  public void gyroUpdate() {
+    pitch = gyro.getPitch();
+    roll = gyro.getRoll();
+    yaw = gyro.getYaw();
+    accelX = gyro.getRawAccelX();
+    accelY = gyro.getRawAccelY();
+    accelZ = gyro.getRawAccelZ();
+  }
+
   @Override
   public void autonomousInit() {
   }
@@ -71,6 +87,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    gyroUpdate();
     limelight.update();
     double speed = 0;
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
