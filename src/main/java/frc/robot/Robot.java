@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   XboxController driver = null;
 
+  double speed = 0;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -62,18 +64,26 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     limelight.update();
-    double speed = 0;
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = -1 * driver.getY(Hand.kRight);
     } else if (driver.getAButton()) {
-      speed = 1;
+      speed -= 0.05;
+    } else if (driver.getYButton()) {
+      speed += 0.05;
     }
 
+    /*
     if (Math.abs(speed) < 0.1) {
       speed = 0;
     }
+    */
 
-    shooter.manualControl(speed);
+    if (driver.getBButton()) {
+      shooter.manualControl(speed);
+    } else {
+      shooter.manualControl(0);
+    }
+    
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
