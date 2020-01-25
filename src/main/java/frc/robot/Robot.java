@@ -7,9 +7,12 @@
 
 package frc.robot;
 
-
 import frc.robot.Limelight;
 
+import java.io.File;
+import java.nio.file.Paths;
+
+import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -26,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private Toml config;
   Limelight limelight;
   Shooter shooter = null;
   Drivetrain drive = null;
@@ -38,6 +42,8 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
+    String path = localDeployPath("config.toml");
+    config = new Toml().read(new File(path));
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
     limelight.setLightEnabled(false);
@@ -106,4 +112,18 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+  public static String localPath(String... paths) {
+    File localPath = edu.wpi.first.wpilibj.Filesystem.getOperatingDirectory();
+    return Paths.get(localPath.toString(), paths).toString();
+  }
+
+  public static String localDeployPath(String fileName) {
+    if (!isReal()) {
+      return Paths.get(localPath(), "src", "main", "deploy", fileName).toString();
+    } else {
+      return Paths.get(localPath(), "deploy", fileName).toString();
+    }
+  }
+
 }
