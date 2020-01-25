@@ -1,0 +1,70 @@
+!!com.snobot.simulator.config.v1.SimulatorConfigV1
+mAccelerometers: []
+mAnalogIn:
+- mHandle: 0
+  mName: Analog In 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiAnalogInWrapper
+mAnalogOut: []
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers: {}
+mDigitalIO: []
+mEncoders:
+- mConnectedSpeedControllerHandle: 101
+  mHandle: 101
+  mName: CAN Encoder (1)
+  mType: com.snobot.simulator.simulator_components.smart_sc.SmartScEncoder
+- mConnectedSpeedControllerHandle: 103
+  mHandle: 103
+  mName: CAN Encoder (3)
+  mType: com.snobot.simulator.simulator_components.smart_sc.SmartScEncoder
+mGyros:
+- mHandle: 0
+  mName: Analog Gyro
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiAnalogGyroWrapper
+mPwm:
+- mHandle: 101
+  mMotorModelConfig:
+    mGearReduction: 10.0
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: true
+    mMotorType: CIM
+    mNumMotors: 2
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 0.15
+    mLoad: 0.25
+  mName: Left (M)
+  mType: com.snobot.simulator.simulator_components.rev.RevSpeedControllerSimWrapper
+- mHandle: 102
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Left (F)
+  mType: com.snobot.simulator.simulator_components.rev.RevSpeedControllerSimWrapper
+- mHandle: 103
+  mMotorModelConfig:
+    mGearReduction: 10.0
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 2
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 0.15
+    mLoad: 0.25
+  mName: Right (M)
+  mType: com.snobot.simulator.simulator_components.rev.RevSpeedControllerSimWrapper
+- mHandle: 104
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Right (F)
+  mType: com.snobot.simulator.simulator_components.rev.RevSpeedControllerSimWrapper
+mRelays: []
+mSimulatorComponents:
+- !!com.snobot.simulator.simulator_components.config.TankDriveConfig
+  mGyroHandle: 0
+  mLeftMotorHandle: 103
+  mRightMotorHandle: 101
+  mTurnKp: 33.33
+mSolenoids: []
