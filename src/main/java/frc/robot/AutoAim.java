@@ -5,6 +5,7 @@ public class AutoAim {
 
     private double error;
     private double motorPower;
+    private double degrees;
 
     public enum AutoAimState {
         AIM_X,
@@ -15,6 +16,7 @@ public class AutoAim {
     private AutoAimState state;
     private Drivetrain drive;
     private Limelight limelight;
+    private Shooter shooter;
 
     public AutoAim(Drivetrain drive, Limelight limelight) {
         state = AutoAimState.AIM_X;
@@ -27,10 +29,14 @@ public class AutoAim {
 
             case AIM_X:
                 aimX(limelight.getTargetX());
+                if(Math.abs(limelight.getTargetX()) < 1)
+                    state = AutoAimState.AIM_ANGLE;
                 break;
 
             case AIM_ANGLE:
-                //aimAngle(limelight.getTargetVertical());
+                aimAngle(limelight.getTargetVertical());
+                if (Math.abs(degrees * DEGREES_PER_REVOLUTIONS * REVOLUTIONS_PER_ENCODER - shooter.getAngleDegrees) < 1)
+                    state = AutoAimState.IDLE;
                 break;
 
             case IDLE:
@@ -43,5 +49,10 @@ public class AutoAim {
         motorPower = .5 * error;
         drive.driveLeft(-motorPower);
         drive.driveRight(motorPower);
+    }
+
+    private void aimAngle(double h) {
+        degrees = 0; //TODO: Use a table from testing to create an equation to plug this into
+        shooter.setAngle(degrees);
     }
 }
