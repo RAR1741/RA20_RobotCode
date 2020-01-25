@@ -31,7 +31,7 @@ public class Shooter {
   }
 
   public double getAngleDegree() {
-    return angleMotor.getEncoder() * ENCODERS_PER_REVOLUTIONS * REVOLUTIONS_PER_DEGREE;
+    return angleMotor.getEncoder().getPosition() * ENCODERS_PER_REVOLUTIONS * REVOLUTIONS_PER_DEGREE;
   }
 
   public void setAngle(double degrees) {
