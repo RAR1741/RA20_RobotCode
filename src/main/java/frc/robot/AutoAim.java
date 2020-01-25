@@ -3,8 +3,6 @@ package frc.robot;
 
 public class AutoAim {
 
-    private final double P;
-    
     private double error;
     private double motorPower;
 
@@ -41,7 +39,7 @@ public class AutoAim {
     }
 
     private void aimX(double x) {
-        error = x * P;
+        error = x * 1;
         motorPower = .5 * error;
         drive.driveLeft(-motorPower);
         drive.driveRight(motorPower);
