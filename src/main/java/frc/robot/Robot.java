@@ -40,6 +40,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
+    limelight.setLightEnabled(false);
+    System.out.println("done");
+
     System.out.print("Initializing shooter...");
     shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("done");
@@ -84,6 +87,12 @@ public class Robot extends TimedRobot {
       shooter.manualControl(0);
     }
     
+
+    if (driver.getXButtonPressed()) {
+      limelight.setLightEnabled(true);
+    } else if (driver.getYButtonPressed()) {
+      limelight.setLightEnabled(false);
+    }
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
