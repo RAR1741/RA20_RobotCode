@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing shooter...");
-    shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+    shooter = new Shooter(new CANSparkMax(3, MotorType.kBrushless), new CANSparkMax(4, MotorType.kBrushless));
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");

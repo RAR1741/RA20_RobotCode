@@ -5,6 +5,7 @@ import com.revrobotics.ControlType;
 
 public class Shooter {
   private final double REVOLUTIONS_PER_DEGREE = 1.0;
+  private final double ENCODERS_PER_REVOLUTIONS = 1/42.0;
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
@@ -27,6 +28,10 @@ public class Shooter {
 
   public double getLauncherRPM() {
     return launcher.getEncoder().getVelocity();
+  }
+
+  public double getAngleDegree() {
+    return angleMotor.getEncoder() * ENCODERS_PER_REVOLUTIONS * REVOLUTIONS_PER_DEGREE;
   }
 
   public void setAngle(double degrees) {
