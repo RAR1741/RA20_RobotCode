@@ -10,6 +10,12 @@ public class Shooter {
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
 
+  /**
+   * Constructor
+   * 
+   * @param launcher CAN Id for the launcher motor.
+   * @param angleMotor CAN Id for the angle motor.
+   */
   public Shooter(CANSparkMax launcher, CANSparkMax angleMotor) {
     this.launcher = launcher;
     this.angleMotor = angleMotor;
@@ -22,18 +28,38 @@ public class Shooter {
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
   }
 
+  /**
+   * Sets motor power.
+   * 
+   * @param power the power at which the shooter spins.
+   */
   public void manualControl(double power) {
     launcher.set(power);
   }
 
+  /**
+   * Gets the shooter RPM
+   * 
+   * @return shooter RPM.
+   */
   public double getLauncherRPM() {
     return launcher.getEncoder().getVelocity();
   }
 
+  /**
+   * Gets the angle the angle motor is turned
+   * 
+   * @return degrees the angle motor is turned/
+   */
   public double getAngleDegree() {
     return angleMotor.getEncoder().getPosition() * ENCODERS_PER_REVOLUTIONS * REVOLUTIONS_PER_DEGREE;
   }
 
+  /**
+   * Sets angle motor to a specified angle
+   * 
+   * @param degrees degrees to which the angle motor will be turned.
+   */
   public void setAngle(double degrees) {
     angleMotor.getPIDController().setReference(degrees * REVOLUTIONS_PER_DEGREE, ControlType.kPosition);
   }
