@@ -18,12 +18,21 @@ public class AutoAim {
     private Limelight limelight;
     private Shooter shooter;
 
+    /**
+     * Constructor
+     * 
+     * @param drive drive train object.
+     * @param limelight limelight object.
+     */
     public AutoAim(Drivetrain drive, Limelight limelight) {
         state = AutoAimState.AIM_X;
         this.drive = drive;
         this.limelight = limelight;
     }
 
+    /**
+     * Runs Automatic Aiming state machine.
+     */
     public void run() {
         switch(state) {
 
@@ -44,6 +53,11 @@ public class AutoAim {
         }
     }
 
+    /**
+     * Aims to robot to the X-coordinate of the power port.
+     * 
+     * @param x current X-coordinate of the power port.
+     */
     private void aimX(double x) {
         error = x * 1;
         motorPower = .5 * error;
@@ -51,6 +65,11 @@ public class AutoAim {
         drive.driveRight(motorPower);
     }
 
+    /**
+     * Aims the shooter angle to the appropriate angle, based on distance, to the power port.
+     * 
+     * @param h current height of the power port.
+     */
     private void aimAngle(double h) {
         degrees = 0; //TODO: Use a table from testing to create an equation to plug this into
         shooter.setAngle(degrees);
