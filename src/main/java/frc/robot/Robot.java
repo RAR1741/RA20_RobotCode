@@ -7,11 +7,14 @@
 
 package frc.robot;
 
-
 import frc.robot.Limelight;
 import frc.robot.Shooter;
 import frc.robot.Manipulation;
 
+import java.io.File;
+import java.nio.file.Paths;
+
+import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -30,8 +33,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private Toml config;
   Limelight limelight;
   Shooter shooter = null;
+  Drivetrain drive = null;
   XboxController driver = null;
   Manipulation manipulation = null;
 
@@ -39,7 +44,6 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-
 
   /**
    * CAN ID's:
@@ -60,10 +64,10 @@ public class Robot extends TimedRobot {
    * Manipulation Reverse -> 2
    */
 
-
-  
   @Override
   public void robotInit() {
+    String path = localDeployPath("config.toml");
+    config = new Toml().read(new File(path));
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
     limelight.setLightEnabled(false);
@@ -75,6 +79,9 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing manipulation...");
     manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2), new Talon(12), new Talon(13));
+    System.out.println("done");
+    System.out.print("Initializing drivetrain...");
+    drive = new Drivetrain(5, 6, 7, 8, 9, 10);
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
@@ -97,6 +104,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     limelight.update();
+
+    double turnInput = driver.getX(Hand.kRight);
+    double speedInput = driver.getY(Hand.kLeft);
+
     double speed = 0;
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = -1 * driver.getY(Hand.kRight);
@@ -142,6 +153,8 @@ public class Robot extends TimedRobot {
       limelight.setLightEnabled(false);
     }
 
+    drive.arcadeDrive(turnInput, speedInput);
+
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
@@ -152,5 +165,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+  }
+
+
+  public static String localPath(String... paths) {
+    File localPath = edu.wpi.first.wpilibj.Filesystem.getOperatingDirectory();
+    return Paths.get(localPath.toString(), paths).toString();
+  }
+
+  public static String localDeployPath(String fileName) {
+    if (!isReal()) {
+      return Paths.get(localPath(), "src", "main", "deploy", fileName).toString();
+    } else {
+      return Paths.get(localPath(), "deploy", fileName).toString();
+    }
   }
 }
