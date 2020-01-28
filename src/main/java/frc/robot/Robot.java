@@ -50,11 +50,17 @@ public class Robot extends TimedRobot {
    * 
    * PDP -> 1
    * PCM -> 2
-   * Shooter -> 4
-   * Drivetrain Left -> 5,6,7
-   * Drivetrain Right -> 8,9,10
-   * Manipulation Intake -> 11
-   * Manipulation Index -> 12
+   * Climber -> 4
+   * Drive -> 5-10
+   * Shooter -> 11
+   * Shooter Hood -> 12
+   * Intake -> 13
+   * Index -> 14
+   * Index -> 15
+   * Pull Index -> 16 (Possible)
+   * 
+   * 
+   * 
    * 
    * 
    * PCM Channels:
@@ -78,7 +84,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing manipulation...");
-    manipulation = new Manipulation(new Talon(11), new DoubleSolenoid(1, 2), new Talon(12), new Talon(13));
+    manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15));
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
     drive = new Drivetrain(5, 6, 7, 8, 9, 10);

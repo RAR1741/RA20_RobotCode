@@ -21,6 +21,8 @@ public class Manipulation{
      */
     Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics, Talon indexLoad, Talon indexFeed) {
         this.intakeWheel = intakeWheel;
+        this.indexLoad = indexLoad;
+        this.indexFeed = indexFeed;
         this.intakePneumatics = intakePneumatics;
     }
 
