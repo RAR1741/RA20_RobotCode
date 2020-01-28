@@ -22,4 +22,22 @@ public class PowercellDetection {
         this.nb = detectionTable.getEntry("nb_objects").getDouble(0);
         this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0});
     }
+
+    /**
+     * Gets number of powercells detected.
+     * 
+     * @return number of powercells detected
+     */
+    public double getNumber() {
+        return nb;
+    }
+
+    /**
+     * Gets X-coordinate of center of the first powercell.
+     * 
+     * @return X-coordinate of center of the first powercell
+     */
+    public double getCenterX() {
+        return (boxes[0] + boxes[2])/2;
+    }
 }
