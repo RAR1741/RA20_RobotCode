@@ -3,6 +3,9 @@ package frc.robot;
 
 public class AutoAim {
 
+    private double REVOLUTIONS_PER_DEGREE = 0; //TODO: Determine revolutions of motor required to turn angle motor a degree
+    private double ENCODERS_PER_REVOLUTION = 42;
+
     private double error;
     private double motorPower;
     private double degrees;
@@ -44,7 +47,7 @@ public class AutoAim {
 
             case AIM_ANGLE:
                 aimAngle(limelight.getTargetVertical());
-                if (Math.abs(degrees * DEGREES_PER_REVOLUTIONS * REVOLUTIONS_PER_ENCODER - shooter.getAngleDegrees) < 1)
+                if (Math.abs(degrees * REVOLUTIONS_PER_DEGREE * ENCODERS_PER_REVOLUTION - shooter.getAngleDegree) < 1)
                     state = AutoAimState.IDLE;
                 break;
 
