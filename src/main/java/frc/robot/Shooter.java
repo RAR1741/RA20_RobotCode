@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 
 public class Shooter {
-  private final double REVOLUTIONS_PER_DEGREE = 1.0;
-  private final double ENCODERS_PER_REVOLUTIONS = 1/42.0;
+  private final double DEGREES_PER_REVOLUTION = 1.0; //TODO: Determine degrees per revolution of the angle motor.
+  private final double REVOLUTIONS_PER_ENCODER = 1/42.0;
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
@@ -52,7 +52,7 @@ public class Shooter {
    * @return degrees the angle motor is turned/
    */
   public double getAngleDegree() {
-    return angleMotor.getEncoder().getPosition() * ENCODERS_PER_REVOLUTIONS * REVOLUTIONS_PER_DEGREE;
+    return angleMotor.getEncoder().getPosition() * REVOLUTIONS_PER_ENCODER * DEGREES_PER_REVOLUTION;
   }
 
   /**
