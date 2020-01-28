@@ -1,0 +1,10 @@
+
+
+dependencies {
+    // SnobotSim
+    snobotSimCompile snobotSimJava()
+}
+
+tasks.withType(Test) {
+    systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
+}
