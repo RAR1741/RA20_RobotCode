@@ -24,8 +24,9 @@ public class Autonomous{
     /**
      * @param drive     drive train object.
      * @param limelight limelight object.
+     * @param shooter   shooter object.
      */
-    public void AutoAim(Drivetrain drive, Limelight limelight) {
+    public void Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter) {
         state = AutonomousState.AimShot1;
         this.drive = drive;
         this.limelight = limelight;
