@@ -61,6 +61,6 @@ public class Shooter {
    * @param degrees degrees to which the angle motor will be turned.
    */
   public void setAngle(double degrees) {
-    angleMotor.getPIDController().setReference(degrees * REVOLUTIONS_PER_DEGREE, ControlType.kPosition);
+    angleMotor.getPIDController().setReference(degrees * (1/DEGREES_PER_REVOLUTION), ControlType.kPosition);
   }
 }
