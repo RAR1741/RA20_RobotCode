@@ -19,14 +19,14 @@ public class Autonomous{
     private double error;
     private double motorPower;
     private double degrees;
-    boolean done = false;
+    private boolean done = false;
 
     /**
      * @param drive     drive train object.
      * @param limelight limelight object.
      * @param shooter   shooter object.
      */
-    public void Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter) {
+    public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
         state = AutonomousState.AimShot1;
         this.drive = drive;
         this.limelight = limelight;

@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   Drivetrain drive = null;
   XboxController driver = null;
   Manipulation manipulation = null;
-  Autonomous Autonomous;
+  Autonomous autonomous;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
     System.out.print("Initializing vision system (limelight)...");
+
     limelight = new Limelight();
     limelight.setLightEnabled(false);
     System.out.println("done");
@@ -87,6 +88,7 @@ public class Robot extends TimedRobot {
     System.out.print("Initializing manipulation...");
     manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15));
     System.out.println("done");
+
     System.out.print("Initializing drivetrain...");
     drive = new Drivetrain(5, 6, 7, 8, 9, 10);
     System.out.println("done");
@@ -94,17 +96,23 @@ public class Robot extends TimedRobot {
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
     System.out.println("done");    
+
+    System.out.print("Initializing Autonomous...");
+    autonomous = new Autonomous(drive, limelight, shooter, manipulation);
+    System.out.println("done");
   }
 
   @Override
   public void autonomousInit() {
+
+
 
   }
 
   @Override
   public void autonomousPeriodic() {
 
-    if(Autonomous.Auto()==true){
+    if(Autonomous.Auto()){
       System.out.println("Autonomous Done");
     }
 
