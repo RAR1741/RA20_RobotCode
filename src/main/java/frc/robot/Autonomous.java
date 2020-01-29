@@ -30,6 +30,7 @@ public class Autonomous{
         state = AutonomousState.AimShot1;
         this.drive = drive;
         this.limelight = limelight;
+        this.shooter = shooter;
      }
 
      public void AimShot1(){
