@@ -57,7 +57,19 @@ public class Robot extends TimedRobot {
     shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
-    drive = new Drivetrain(5, 6, 7, 8, 9, 10);
+    DriveModule leftModule = new DriveModule(
+      new CANSparkMax(5, MotorType.kBrushless),
+      new CANSparkMax(6, MotorType.kBrushless),
+      new CANSparkMax(7, MotorType.kBrushless),
+      new Solenoid(2, 0)
+    );
+    DriveModule rightModule = new DriveModule(
+      new CANSparkMax(8, MotorType.kBrushless),
+      new CANSparkMax(9, MotorType.kBrushless),
+      new CANSparkMax(10, MotorType.kBrushless),
+      new Solenoid(2, 1)
+    );
+    drive = new Drivetrain(leftModule, rightModule);
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
