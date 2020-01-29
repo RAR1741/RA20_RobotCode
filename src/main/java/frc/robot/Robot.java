@@ -10,6 +10,8 @@ package frc.robot;
 import frc.robot.Limelight;
 import frc.robot.Shooter;
 import frc.robot.Manipulation;
+import frc.robot.Drivetrain;
+import frc.robot.Autonomous;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -39,6 +41,7 @@ public class Robot extends TimedRobot {
   Drivetrain drive = null;
   XboxController driver = null;
   Manipulation manipulation = null;
+  Autonomous Autonomous;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -51,16 +54,14 @@ public class Robot extends TimedRobot {
    * PDP -> 1
    * PCM -> 2
    * Climber -> 4
-   * Drive -> 5-10
+   * Left Drive -> 5-7
+   * Right Drive -> 8-10
    * Shooter -> 11
    * Shooter Hood -> 12
    * Intake -> 13
-   * Index -> 14
-   * Index -> 15
+   * Index Helix -> 14
+   * Index Feeder -> 15
    * Pull Index -> 16 (Possible)
-   * 
-   * 
-   * 
    * 
    * 
    * PCM Channels:
@@ -97,10 +98,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+
   }
 
   @Override
   public void autonomousPeriodic() {
+
+    if(Autonomous.Auto()==true){
+      System.out.println("Autonomous Done");
+    }
+
   }
 
   @Override
