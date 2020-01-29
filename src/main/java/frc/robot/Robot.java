@@ -112,10 +112,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-    if(Autonomous.Auto()){
+    if(autonomous.Auto()){
       System.out.println("Autonomous Done");
     }
-
   }
 
   @Override
