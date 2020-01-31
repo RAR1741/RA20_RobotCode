@@ -3,6 +3,7 @@ package frc.robot;
 public class Autonomous{
 
    public enum AutonomousState{
+      
       AimShot1,
       Shoot1,
       MoveTrench,
@@ -30,6 +31,7 @@ public class Autonomous{
     * @param shooter   shooter object.
     */
    public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
+
       state = AutonomousState.AimShot1;
       this.drive = drive;
       this.limelight = limelight;
@@ -37,23 +39,32 @@ public class Autonomous{
    }
 
    public void AimShot1(){
+
       autoAim.run();
       state = AutonomousState.Shoot1;
    }
 
    public void Shoot1(){
+
       shooter.autoControl(targetSpeed);
+      manipulation.indexFeed(true);
+      manipulation.indexLoad(true);
+      wait();//TODO: determine correct time interval
+      manipulation.indexLoad(false);
+      manipulation.indexFeed(false);
       state = AutonomousState.MoveTrench;
    }
 
    public void MoveTrench(){
+
       drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
-      wait();
+      wait();//TODO: determine correct time interval
       drive.tankDrive(0, 0);
       state = AutonomousState.BallCollect;
    }
 
    public void BallGrab(){
+
       manipulation.intakeOut();
       manipulation.intakeSpin();
       /**
@@ -65,6 +76,7 @@ public class Autonomous{
    }
 
    public void MoveShoot(){
+
       drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
       wait();
       drive.tankDrive(0, 0);
@@ -72,12 +84,19 @@ public class Autonomous{
    }
 
    public void AimShot2(){
+
       autoAim.run();
       state = AutonomousState.Shoot2;
    }
 
    public void Shoot2(){
-      shooter.autoControl(targetSpeed);      
+
+      shooter.autoControl(targetSpeed);
+      manipulation.indexFeed(true);
+      manipulation.indexLoad(true);
+      wait();//TODO: determine correct time interval
+      manipulation.indexLoad(false);
+      manipulation.indexFeed(false);
       done = true;
    }
 
