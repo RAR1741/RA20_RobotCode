@@ -2,107 +2,113 @@ package frc.robot;
 
 public class Autonomous{
 
-    public enum AutonomousState{
-        AimShot1,
-        Shoot1,
-        MoveTrench,
-        BallCollect,
-        MoveShoot,
-        AimShot2,
-        Shoot2;
-    }
+   public enum AutonomousState{
+      AimShot1,
+      Shoot1,
+      MoveTrench,
+      BallCollect,
+      MoveShoot,
+      AimShot2,
+      Shoot2;
+   }
 
-    private AutonomousState state;
-    private Drivetrain drive;
-    private Limelight limelight;
-    private Shooter shooter;
-    private double error;
-    private double motorPower;
-    private double degrees;
-    private boolean done = false;
+   private AutonomousState state;
+   private AutoAim autoAim;
+   private Manipulation manipulation;
+   private Drivetrain drive;
+   private Limelight limelight;
+   private Shooter shooter;
+   private double error;
+   private double motorPower;
+   private double degrees;
+   private boolean done = false;
+   private double targetRPM; //TODO: determine correct target RPM
 
-    /**
-     * @param drive     drive train object.
-     * @param limelight limelight object.
-     * @param shooter   shooter object.
-     */
-    public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
-        state = AutonomousState.AimShot1;
-        this.drive = drive;
-        this.limelight = limelight;
-        this.shooter = shooter;
-     }
+   /**
+    * @param drive     drive train object.
+    * @param limelight limelight object.
+    * @param shooter   shooter object.
+    */
+   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
+      state = AutonomousState.AimShot1;
+      this.drive = drive;
+      this.limelight = limelight;
+      this.shooter = shooter;
+   }
 
-     public void AimShot1(){
+   public void AimShot1(){
+      autoAim.run();
+      state = AutonomousState.Shoot1;
+   }
 
-        state = AutonomousState.Shoot1;
-     }
+   public void Shoot1(){
+      shooter.autoControl(targetRPM);
+      state = AutonomousState.MoveTrench;
+   }
 
-     public void Shoot1(){
-        
-        state = AutonomousState.MoveTrench;
-     }
+   public void MoveTrench(){
+      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      state = AutonomousState.BallCollect;
+   }
 
-     public void MoveTrench(){
-        
-        state = AutonomousState.BallCollect;
-     }
+   public void BallGrab(){
+      manipulation.intakeOut();
+      manipulation.intakeSpin();
+      /**
+       * TODO: Coral Vision Prossesing and Drivetrain instructions go here
+       */
+      manipulation.intakeStop();
+      manipulation.intakeIn();
+      state = AutonomousState.MoveShoot;
+   }
 
-     public void BallGrab(){
+   public void MoveShoot(){
+      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      state = AutonomousState.AimShot2;
+   }
 
-        state = AutonomousState.MoveShoot;
-     }
+   public void AimShot2(){
+      autoAim.run();
+      state = AutonomousState.Shoot2;
+   }
 
-     public void MoveShoot(){
+   public void Shoot2(){
+      shooter.autoControl(targetRPM);      
+      done = true;
+   }
 
-        state = AutonomousState.AimShot2;
-     }
+   public boolean Auto(){
 
-     public void AimShot2(){
+      switch(state){
 
-        state = AutonomousState.Shoot2;
-     }
+         case AimShot1:
+         AimShot1();
+         break;
 
-     public void Shoot2(){
-        
-        done = true;
-     }
+         case Shoot1:
+         Shoot1();
+         break;
 
-     public boolean Auto(){
+         case MoveTrench:
+         MoveTrench();
+         break;
 
-        switch(state){
+         case BallCollect:
+         BallGrab();
+         break;
 
-            case AimShot1:
-            AimShot1();
-            break;
+         case MoveShoot:
+         MoveShoot();
+         break;
 
-            case Shoot1:
-            Shoot1();
-            break;
+         case AimShot2:
+         AimShot2();
+         break;
 
-            case MoveTrench:
-            MoveTrench();
-            break;
-
-            case BallCollect:
-            BallGrab();
-            break;
-
-            case MoveShoot:
-            MoveShoot();
-            break;
-
-            case AimShot2:
-            AimShot2();
-            break;
-
-            case Shoot2:
-            Shoot2();
-            break;
-
-        }
-
-        return done;
-
-     }
+         case Shoot2:
+         Shoot2();
+         break;
+      }
+      return done;
+   }
 }

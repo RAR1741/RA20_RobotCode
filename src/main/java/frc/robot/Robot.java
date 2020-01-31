@@ -7,12 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.Limelight;
-import frc.robot.Shooter;
-import frc.robot.Manipulation;
-import frc.robot.Drivetrain;
-import frc.robot.Autonomous;
-
 import java.io.File;
 import java.nio.file.Paths;
 

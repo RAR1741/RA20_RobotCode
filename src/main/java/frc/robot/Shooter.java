@@ -12,6 +12,10 @@ public class Shooter {
 
   public void manualControl(double power) {
     launcher.set(power);
+
+  }
+  public void autoControl(double power) {
+    launcher.set(power);
   }
 
   public double getLauncherRPM() {
