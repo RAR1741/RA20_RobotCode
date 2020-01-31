@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
    * Intake -> 13
    * Index Helix -> 14
    * Index Feeder -> 15
-   * Pull Index -> 16 (Possible)
+   * Index Pull -> 16 (Possible)
    * 
    * 
    * PCM Channels:

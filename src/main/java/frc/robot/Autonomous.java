@@ -22,7 +22,7 @@ public class Autonomous{
    private double motorPower;
    private double degrees;
    private boolean done = false;
-   private double targetRPM; //TODO: determine correct target RPM
+   private double targetSpeed; //TODO: determine correct target speed
 
    /**
     * @param drive     drive train object.
@@ -42,12 +42,14 @@ public class Autonomous{
    }
 
    public void Shoot1(){
-      shooter.autoControl(targetRPM);
+      shooter.autoControl(targetSpeed);
       state = AutonomousState.MoveTrench;
    }
 
    public void MoveTrench(){
       drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      wait();
+      drive.tankDrive(0, 0);
       state = AutonomousState.BallCollect;
    }
 
@@ -64,6 +66,8 @@ public class Autonomous{
 
    public void MoveShoot(){
       drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      wait();
+      drive.tankDrive(0, 0);
       state = AutonomousState.AimShot2;
    }
 
@@ -73,7 +77,7 @@ public class Autonomous{
    }
 
    public void Shoot2(){
-      shooter.autoControl(targetRPM);      
+      shooter.autoControl(targetSpeed);      
       done = true;
    }
 
