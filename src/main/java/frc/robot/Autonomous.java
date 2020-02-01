@@ -71,6 +71,10 @@ public class Autonomous{
       /* END: interiorWaypoints */
       
       end = new Pose2d();
+
+      config = new TrajectoryConfig(3, 2); /* TODO: Values may need to go up. Just a suggestion though... */
+
+      TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config);
       state = AutonomousState.BallCollect;
    }
 
