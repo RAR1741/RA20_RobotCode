@@ -1,9 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Talon;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Drivetrain {
     
@@ -13,12 +10,12 @@ public class Drivetrain {
      */
     private static final double DEADBAND_LIMIT = 0.02;
 
-    private Talon leftFalcon;
-    private Talon leftSlave1;
-    private Talon leftSlave2;
-    private Talon rightFalcon;
-    private Talon rightSlave1;
-    private Talon rightSlave2;
+    private TalonFX leftFalcon;
+    private TalonFX leftSlave1;
+    private TalonFX leftSlave2;
+    private TalonFX rightFalcon;
+    private TalonFX rightSlave1;
+    private TalonFX rightSlave2;
 
     /**
      * Constructor
@@ -31,12 +28,12 @@ public class Drivetrain {
      * @param rightFalcon3ID The CAN id of the third right falcon.
      */
     Drivetrain(int leftFalcon1Id, int leftFalcon2Id, int  leftFalcon3Id, int  rightFalcon1Id, int  rightFalcon2Id, int  rightFalcon3Id){
-        leftFalcon = new Talon(leftFalcon1Id);
-        leftSlave1 = new Talon(leftFalcon2Id);
-        leftSlave2 = new Talon(leftFalcon3Id);
-        rightFalcon = new Talon(rightFalcon1Id);
-        rightSlave1 = new Talon(rightFalcon2Id);
-        rightSlave2 = new Talon(rightFalcon3Id);
+        leftFalcon = new TalonFX(leftFalcon1Id);
+        leftSlave1 = new TalonFX(leftFalcon2Id);
+        leftSlave2 = new TalonFX(leftFalcon3Id);
+        rightFalcon = new TalonFX(rightFalcon1Id);
+        rightSlave1 = new TalonFX(rightFalcon2Id);
+        rightSlave2 = new TalonFX(rightFalcon3Id);
 
         leftFalcon.setInverted(true);
         leftSlave1.setInverted(true);
