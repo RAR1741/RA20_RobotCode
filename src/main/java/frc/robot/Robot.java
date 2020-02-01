@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   XboxController driver = null;
   Manipulation manipulation = null;
   Autonomous autonomous;
+  //PowercellDetection pcDetection;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    //pcDetection.uptate();
+    limelight.update();
     if(autonomous.Auto()){
       System.out.println("Autonomous Done");
     }
