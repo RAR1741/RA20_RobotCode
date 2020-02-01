@@ -1,5 +1,12 @@
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+
 public class Autonomous{
 
    public enum AutonomousState{
@@ -23,6 +30,12 @@ public class Autonomous{
    private double degrees;
    private boolean done = false;
    private double targetRPM; //TODO: determine correct target RPM
+   private TrajectoryConfig config;
+   private TrajectoryGenerator tGenerator;
+   private Pose2d start;
+   private Pose2d end;
+   private List<Translation2d> interiorWaypoints;
+   
 
    /**
     * @param drive     drive train object.
@@ -47,7 +60,9 @@ public class Autonomous{
    }
 
    public void MoveTrench(){
-      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      start = new Pose2d(, , );
+      end = new Pose2d(, , );
+      interiorWaypoints = new List<Translation2d>
       state = AutonomousState.BallCollect;
    }
 
@@ -75,6 +90,10 @@ public class Autonomous{
    public void Shoot2(){
       shooter.autoControl(targetRPM);      
       done = true;
+   }
+
+   public static void followTrajectory(Pose2d start, List<Translation2d> interiorWaypoints, Pose2d end, TrajectoryConfig config){
+      TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config);
    }
 
    public boolean Auto(){
