@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Drivetrain {
@@ -53,7 +54,7 @@ public class Drivetrain {
      */
     public void driveLeft(double speed){
         double sp = deadband(speed);
-        leftFalcon.set(sp);
+        leftFalcon.set(ControlMode.PercentOutput, sp);
     }
 
     /**
@@ -63,7 +64,7 @@ public class Drivetrain {
      */
     public void driveRight(double speed){
         double sp = deadband(speed);
-        rightFalcon.set(sp);
+        rightFalcon.set(ControlMode.PercentOutput, sp);
     }
 
     /**
