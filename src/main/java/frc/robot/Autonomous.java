@@ -89,9 +89,8 @@ public class Autonomous{
    }
 
    public void MoveShoot(){
-
       drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
-      wait();
+      //wait();
       drive.tankDrive(0, 0);
       state = AutonomousState.AimShot2;
    }
