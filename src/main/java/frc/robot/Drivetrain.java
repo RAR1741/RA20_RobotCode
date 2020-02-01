@@ -3,6 +3,7 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.trajectory.Trajectory;;
 
 public class Drivetrain {
     
@@ -92,6 +93,15 @@ public class Drivetrain {
     public void tankDrive(double leftDrive, double rightDrive){
         this.driveLeft(leftDrive);
         this.driveRight(rightDrive);
+    }
+
+    /**
+     * Drives the robot according to a set trajectory.
+     * 
+     * @param trajectory
+     */
+    public void trajectoryDrive(Trajectory trajectory) {
+
     }
 
     /**
