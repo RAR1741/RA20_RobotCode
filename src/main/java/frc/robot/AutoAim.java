@@ -64,8 +64,8 @@ public class AutoAim {
     private void aimX(double x) {
         error = x * 1;
         motorPower = .5 * error;
-        drive.driveLeft(-motorPower);
-        drive.driveRight(motorPower);
+        drive.driveLeft(motorPower);
+        drive.driveRight(-motorPower);
     }
 
     /**
