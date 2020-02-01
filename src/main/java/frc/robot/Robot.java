@@ -12,6 +12,8 @@ import frc.robot.Limelight;
 import java.io.File;
 import java.nio.file.Paths;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -35,11 +37,13 @@ public class Robot extends TimedRobot {
   Drivetrain drive = null;
   XboxController driver = null;
 
+  TalonFX falcon = null;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  
+
   @Override
   public void robotInit() {
     String path = localDeployPath("config.toml");
@@ -50,10 +54,14 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing shooter...");
-    shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+    // shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
-    drive = new Drivetrain(5, 6, 7, 8, 9, 10);
+    // drive = new Drivetrain(5, 6, 7, 8, 9, 10);
+    falcon = new TalonFX(4);
+    falcon.config_kP(0, 1);
+    falcon.config_kI(0, 0.0);
+    falcon.config_kD(0, 0.0);
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
@@ -90,8 +98,10 @@ public class Robot extends TimedRobot {
     if (Math.abs(speed) < 0.1) {
       speed = 0;
     }
+    // falcon.set(TalonFXControlMode.PercentOutput, speed);
+    falcon.set(TalonFXControlMode.Position, 1000);
 
-    shooter.manualControl(speed);
+    // shooter.manualControl(speed);
 
     if (driver.getXButtonPressed()) {
       limelight.setLightEnabled(true);
@@ -99,10 +109,10 @@ public class Robot extends TimedRobot {
       limelight.setLightEnabled(false);
     }
 
-    drive.arcadeDrive(turnInput, speedInput);
+    // drive.arcadeDrive(turnInput, speedInput);
 
     SmartDashboard.putNumber("ShooterPower", speed);
-    SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+    SmartDashboard.putNumber("ShooterRPM", falcon.getSelectedSensorPosition());
   }
 
   @Override
