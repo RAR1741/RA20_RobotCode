@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -60,9 +61,16 @@ public class Autonomous{
    }
 
    public void MoveTrench(){
-      start = new Pose2d(, , );
-      end = new Pose2d(, , );
-      interiorWaypoints = new List<Translation2d>
+      /* Graph made in Robot */
+      start = new Pose2d();
+
+      /* interiorWaypoints */
+      interiorWaypoints.add(new Translation2d());
+      interiorWaypoints.add(new Translation2d());
+      interiorWaypoints.add(new Translation2d());
+      /* END: interiorWaypoints */
+      
+      end = new Pose2d();
       state = AutonomousState.BallCollect;
    }
 
