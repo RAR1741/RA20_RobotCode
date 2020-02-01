@@ -19,12 +19,17 @@ public class Autonomous{
    private Drivetrain drive;
    private Limelight limelight;
    private Shooter shooter;
+   
    private double error;
    private double motorPower;
    private double degrees;
    private boolean done = false;
-   private double targetSpeed; //TODO: determine correct target speed
 
+   //TODO: determine correct target speeds
+   private double targetSpeedMax; 
+   private double targetSpeedMin;
+   private double targetSpeed;
+   
    /**
     * @param drive     drive train object.
     * @param limelight limelight object.
@@ -47,17 +52,20 @@ public class Autonomous{
    public void Shoot1(){
 
       shooter.autoControl(targetSpeed);
-      manipulation.indexFeed(true);
-      manipulation.indexLoad(true);
-      wait();//TODO: determine correct time interval
-      manipulation.indexLoad(false);
-      manipulation.indexFeed(false);
-      state = AutonomousState.MoveTrench;
+      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
+         manipulation.indexFeed(true);
+         manipulation.indexLoad(true);
+         wait();//TODO: determine correct time interval
+         manipulation.indexLoad(false);
+         manipulation.indexFeed(false);
+         shooter.autoControl(0);
+         }
+      done = true;
    }
 
    public void MoveTrench(){
 
-      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      drive.tankDrive(leftDrive, rightDrive);//TODO: determine correct numbers for driving
       wait();//TODO: determine correct time interval
       drive.tankDrive(0, 0);
       state = AutonomousState.BallCollect;
@@ -92,11 +100,14 @@ public class Autonomous{
    public void Shoot2(){
 
       shooter.autoControl(targetSpeed);
-      manipulation.indexFeed(true);
-      manipulation.indexLoad(true);
-      wait();//TODO: determine correct time interval
-      manipulation.indexLoad(false);
-      manipulation.indexFeed(false);
+      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
+         manipulation.indexFeed(true);
+         manipulation.indexLoad(true);
+         wait();//TODO: determine correct time interval
+         manipulation.indexLoad(false);
+         manipulation.indexFeed(false);
+         shooter.autoControl(0);
+         }
       done = true;
    }
 
