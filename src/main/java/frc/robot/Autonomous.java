@@ -14,7 +14,7 @@ public class Autonomous{
    }
 
    private AutonomousState state;
-   private AutoAim autoAim;
+   //private AutoAim autoAim;
    private Manipulation manipulation;
    private Drivetrain drive;
    private Limelight limelight;
@@ -25,6 +25,7 @@ public class Autonomous{
    private double motorPower;
    private double degrees;
    private boolean done = false;
+   private int pcCount = 0;
 
    //TODO: determine correct target speeds
    private double targetSpeedMax; 
@@ -58,7 +59,7 @@ public class Autonomous{
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.indexFeed(true);
          manipulation.indexLoad(true);
-         wait();//TODO: determine correct time interval
+         //wait();//TODO: determine correct time interval
          manipulation.indexLoad(false);
          manipulation.indexFeed(false);
          shooter.autoControl(0);
@@ -69,7 +70,7 @@ public class Autonomous{
    public void MoveTrench(){
 
       drive.tankDrive(leftDrive, rightDrive);//TODO: determine correct numbers for driving
-      wait();//TODO: determine correct time interval
+      //wait();//TODO: determine correct time interval
       drive.tankDrive(0, 0);
       state = AutonomousState.BallCollect;
    }
@@ -78,12 +79,13 @@ public class Autonomous{
 
       manipulation.intakeOut();
       manipulation.intakeSpin();
-      /**
-       * TODO: Coral Vision Prossesing and Drivetrain instructions go here
-       */
-      manipulation.intakeStop();
-      manipulation.intakeIn();
-      state = AutonomousState.MoveShoot;
+      if (pcCount < 5) {
+         //pcDetection.approach(pcDetection.getX());
+      } else {
+         manipulation.intakeStop();
+         manipulation.intakeIn();
+         state = AutonomousState.MoveShoot;
+      }
    }
 
    public void MoveShoot(){
@@ -106,7 +108,7 @@ public class Autonomous{
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.indexFeed(true);
          manipulation.indexLoad(true);
-         wait();//TODO: determine correct time interval
+         //wait();//TODO: determine correct time interval
          manipulation.indexLoad(false);
          manipulation.indexFeed(false);
          shooter.autoControl(0);

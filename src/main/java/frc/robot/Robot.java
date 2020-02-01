@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-    //pcDetection.uptate();
+    //pcDetection.update();
     limelight.update();
     if(autonomous.Auto()){
       System.out.println("Autonomous Done");
