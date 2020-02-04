@@ -1,12 +1,11 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class PhotoswitchSensor {
-    AnalogInput input;
-    private final double LIGHT_THRESHOLD = 25;
+    DigitalInput input;
 
-    public PhotoswitchSensor(AnalogInput input) {
+    public PhotoswitchSensor(DigitalInput input) {
         this.input = input;
     }
 
@@ -16,8 +15,6 @@ public class PhotoswitchSensor {
      * @return true if it can see retroreflective tape.
      */
     public boolean getClear() {
-        double voltage = input.getVoltage();
-
-        return voltage > LIGHT_THRESHOLD;
+        return input.get();
     }
 }
