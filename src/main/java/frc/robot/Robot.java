@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing photoswitch...");
+    lightInput = new DigitalInput(0);
     light = new PhotoswitchSensor(lightInput);
     System.out.println("done");
 
