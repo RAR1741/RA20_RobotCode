@@ -10,6 +10,8 @@ public class Manipulation{
     private DoubleSolenoid intakePneumatics;
     private Talon indexLoad;
     private Talon indexFeed;
+    private PhotoswitchSensor shootGate;
+    private PhotoswitchSensor intakeGate;
 
     /**
      * Constructor
@@ -19,11 +21,13 @@ public class Manipulation{
      * @param indexLoad The CAN id of the talon for the index loader
      * @param indexFeed The CAN id of the talon for the index feeder
      */
-    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics, Talon indexLoad, Talon indexFeed) {
+    Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics, Talon indexLoad, Talon indexFeed, PhotoswitchSensor shootGate, PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;
         this.indexLoad = indexLoad;
         this.indexFeed = indexFeed;
         this.intakePneumatics = intakePneumatics;
+        this.shootGate = shootGate;
+        this.intakeGate = intakeGate;
     }
 
     /**
