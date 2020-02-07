@@ -1,8 +1,7 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Drivetrain {
     
@@ -12,39 +11,39 @@ public class Drivetrain {
      */
     private static final double DEADBAND_LIMIT = 0.02;
 
-    private CANSparkMax leftNeo;
-    private CANSparkMax leftSlave1;
-    private CANSparkMax leftSlave2;
-    private CANSparkMax rightNeo;
-    private CANSparkMax rightSlave1;
-    private CANSparkMax rightSlave2;
+    private TalonFX leftFalcon;
+    private TalonFX leftSlave1;
+    private TalonFX leftSlave2;
+    private TalonFX rightFalcon;
+    private TalonFX rightSlave1;
+    private TalonFX rightSlave2;
 
     /**
      * Constructor
      * 
-     * @param leftNeo1ID The CAN id of the first left neo
-     * @param leftNeo2ID The CAN id of the second left neo
-     * @param leftNeo3ID The CAN id of the third left neo
-     * @param rightNeo1ID The CAN id of the first right neo.
-     * @param rightNeo2ID The CAN id of the second right neo.
-     * @param rightNeo3ID The CAN id of the third right neo.
+     * @param leftFalcon1Id The CAN id of the first left falcon.
+     * @param leftFalcon2Id The CAN id of the second left falcon.
+     * @param leftFalcon3Id The CAN id of the third left falcon.
+     * @param rightFalcon1ID The CAN id of the first right falcon.
+     * @param rightFalcon2ID The CAN id of the second right falcon.
+     * @param rightFalcon3ID The CAN id of the third right falcon.
      */
-    Drivetrain(int leftNeo1ID, int leftNeo2ID, int leftNeo3ID, int rightNeo1ID, int rightNeo2ID, int rightNeo3ID){
-        leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
-        leftSlave1 = new CANSparkMax(leftNeo2ID, MotorType.kBrushless);
-        leftSlave2 = new CANSparkMax(leftNeo3ID, MotorType.kBrushless);
-        rightNeo = new CANSparkMax(rightNeo1ID, MotorType.kBrushless);
-        rightSlave1 = new CANSparkMax(rightNeo2ID, MotorType.kBrushless);
-        rightSlave2 = new CANSparkMax(rightNeo3ID, MotorType.kBrushless);
+    Drivetrain(int leftFalcon1Id, int leftFalcon2Id, int  leftFalcon3Id, int  rightFalcon1Id, int  rightFalcon2Id, int  rightFalcon3Id){
+        leftFalcon = new TalonFX(leftFalcon1Id);
+        leftSlave1 = new TalonFX(leftFalcon2Id);
+        leftSlave2 = new TalonFX(leftFalcon3Id);
+        rightFalcon = new TalonFX(rightFalcon1Id);
+        rightSlave1 = new TalonFX(rightFalcon2Id);
+        rightSlave2 = new TalonFX(rightFalcon3Id);
 
-        leftNeo.setInverted(true);
+        leftFalcon.setInverted(true);
         leftSlave1.setInverted(true);
         leftSlave2.setInverted(true);
 
-        leftSlave1.follow(leftNeo);
-        leftSlave2.follow(leftNeo);
-        rightSlave1.follow(rightNeo);
-        rightSlave2.follow(rightNeo);
+        leftSlave1.follow(leftFalcon);
+        leftSlave2.follow(leftFalcon);
+        rightSlave1.follow(rightFalcon);
+        rightSlave2.follow(rightFalcon);
 
     }
 
@@ -55,7 +54,7 @@ public class Drivetrain {
      */
     public void driveLeft(double speed){
         double sp = deadband(speed);
-        leftNeo.set(sp);
+        leftFalcon.set(ControlMode.PercentOutput, sp);
     }
 
     /**
@@ -65,7 +64,7 @@ public class Drivetrain {
      */
     public void driveRight(double speed){
         double sp = deadband(speed);
-        rightNeo.set(sp);
+        rightFalcon.set(ControlMode.PercentOutput, sp);
     }
 
     /**
