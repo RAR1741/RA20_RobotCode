@@ -10,6 +10,7 @@ public class PowercellDetection {
     private double nb;
     private double[] boxes;
     private double[][] targets;
+    private double[] tempTarget;
     private double error;
     private double motorPower;
 
@@ -28,14 +29,7 @@ public class PowercellDetection {
     public void update() {
         this.nb = detectionTable.getEntry("nb_objects").getDouble(0);
         this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0});
-        targets = new double[boxes.length / 4][4];
-        for (int i = 0; i < boxes.length / 4; i++){
-            targets[i][0] = boxes[i * 4];
-            targets[i][1] = boxes[i * 4 + 1];
-            targets[i][2] = boxes[i * 4 + 2];
-            targets[i][3] = boxes[i * 4 + 3];
-        }
-        //TODO: Sort powercells based on area
+        this.sortTargets(this.boxes);
     }
 
     /**
@@ -74,5 +68,35 @@ public class PowercellDetection {
         //TODO: Determine division variable for percent of screen
         drive.driveLeft(x >= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - getArea())/SCREEN_AREA)/4);
         drive.driveRight(x <= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - getArea())/SCREEN_AREA)/4);
+    }
+
+    /**
+     * Sorts an array of box coordinates into a 2-D array sorted by the area of those boxes.
+     * 
+     * @param boxes array of box coordinates.
+     */
+    private void sortTargets(double[] boxes) {
+        targets = new double[boxes.length / 4][4];
+        for (int i = 0; i < boxes.length / 4; i++){
+            targets[i][0] = boxes[i * 4];
+            targets[i][1] = boxes[i * 4 + 1];
+            targets[i][2] = boxes[i * 4 + 2];
+            targets[i][3] = boxes[i * 4 + 3];
+        }
+
+        tempTarget = new double[4];
+        for (int i = 1; i < targets.length; i++) {
+            for (int j = i; j > 0; j--) {
+                if ((targets[j][2] - targets[j][0]) * (targets[j][1] - targets[j][3]) > 
+                (targets[j-1][2] - targets[j-1][0]) * (targets[j-1][1] - targets[j-1][3])) {
+                    for (int k = 0; k < targets[j].length; k++)
+                        tempTarget[k] = targets[j][k];
+                    for (int k = 0; k < targets[j].length; k++)
+                        targets[j][k] = targets[j-1][k];
+                    for (int k = 0; k < targets[j].length; k++)
+                        targets[j-1][k] = tempTarget[k];
+                }
+            }
+        }
     }
 }
