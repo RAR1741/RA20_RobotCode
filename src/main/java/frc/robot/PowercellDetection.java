@@ -78,10 +78,8 @@ public class PowercellDetection {
     private void sortTargets(double[] boxes) {
         targets = new double[boxes.length / 4][4];
         for (int i = 0; i < boxes.length / 4; i++){
-            targets[i][0] = boxes[i * 4];
-            targets[i][1] = boxes[i * 4 + 1];
-            targets[i][2] = boxes[i * 4 + 2];
-            targets[i][3] = boxes[i * 4 + 3];
+            for (int j = 0; j < 4; j++)
+                targets[i][0] = boxes[i * 4 + j];
         }
 
         tempTarget = new double[4];
