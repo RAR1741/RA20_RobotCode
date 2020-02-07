@@ -9,6 +9,7 @@ public class PowercellDetection {
 
     private double nb;
     private double[] boxes;
+    private double[][] targets;
     private double error;
     private double motorPower;
 
@@ -27,6 +28,13 @@ public class PowercellDetection {
     public void update() {
         this.nb = detectionTable.getEntry("nb_objects").getDouble(0);
         this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0});
+        targets = new double[boxes.length / 4][4];
+        for (int i = 0; i < boxes.length / 4; i++){
+            targets[i][0] = boxes[i * 4];
+            targets[i][1] = boxes[i * 4 + 1];
+            targets[i][2] = boxes[i * 4 + 2];
+            targets[i][3] = boxes[i * 4 + 3];
+        }
         //TODO: Sort powercells based on area
     }
 
@@ -45,7 +53,7 @@ public class PowercellDetection {
      * @return X-coordinate of center of the first powercell
      */
     public double getCenterX() {
-        return (boxes[0] + boxes[2])/2;
+        return (targets[0][0] + targets[0][2]) / 2;
     }
 
     /**
@@ -54,7 +62,7 @@ public class PowercellDetection {
      * @return area of the first powercell
      */
     public double getArea() {
-        return (boxes[2] - boxes[0]) * (boxes[1] - boxes[3]);
+        return (targets[0][2] - targets[0][0]) * (targets[0][1] - targets[0][3]);
     }
 
     /**
