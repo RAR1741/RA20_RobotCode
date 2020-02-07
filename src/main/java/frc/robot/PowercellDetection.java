@@ -71,7 +71,7 @@ public class PowercellDetection {
     }
 
     /**
-     * Sorts an array of box coordinates into a 2-D array sorted by the area of those boxes.
+     * Sorts an array of box coordinates into a 2-D array sorted by decending area of those boxes.
      * 
      * @param boxes array of box coordinates.
      */
