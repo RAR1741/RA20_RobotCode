@@ -41,7 +41,7 @@ public class Manipulation{
      * 
      * @param spin true if it should spin, false if not.
      */
-    public void intakeSpin(boolean spin) {
+    public void setIntakeSpin(boolean spin) {
         //TODO: test if this power is right
         intakeWheel.set(spin ? 1 : 0);
     }
@@ -51,7 +51,7 @@ public class Manipulation{
      * 
      * @param extend true if it should extend, false if not.
      */
-    public void intakeExtend(boolean extend) {
+    public void setIntakeExtend(boolean extend) {
         intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
     }
 
@@ -60,7 +60,7 @@ public class Manipulation{
      * 
      * @param load true if it should load
      */
-    public void indexLoad(boolean load) {
+    public void setIndexLoad(boolean load) {
         //TODO: test if this power is right.
         indexLoad.set(load ? 0.5: 0);
     }
@@ -70,7 +70,7 @@ public class Manipulation{
      * 
      * @param feed if it should feed the shooter power cells.
      */
-    public void indexFeed(boolean feed) {
+    public void setIndexFeed(boolean feed) {
         indexFeed.set(feed ? 1: 0);
     }
     
