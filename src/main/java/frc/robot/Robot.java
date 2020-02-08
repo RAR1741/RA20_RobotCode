@@ -10,12 +10,16 @@ package frc.robot;
 import java.io.File;
 import java.nio.file.Paths;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -31,12 +35,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private Toml config;
   Limelight limelight;
+  PhotoswitchSensor light;
+  DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
   Manipulation manipulation = null;
   Autonomous autonomous;
   //PowercellDetection pcDetection;
+  DriveModule module = null;
+  Compressor compressor = null;
+
+  // Booleans for toggling different things...
+  boolean limelightToggle = true;
+  boolean photoswitchSensorToggle = true;
+  boolean shooterToggle = true;
+  boolean drivetrainToggle = true;
+  boolean manipulationToggle = true;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -70,23 +85,60 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
-    System.out.print("Initializing vision system (limelight)...");
 
-    limelight = new Limelight();
-    limelight.setLightEnabled(false);
-    System.out.println("done");
+    if (this.limelightToggle) {
+      System.out.print("Initializing vision system (limelight)...");
+      limelight = new Limelight();
+      limelight.setLightEnabled(false);
+      System.out.println("done");
+    } else {
+      System.out.println("Vision system (limelight) disabled. Skipping initialization...");
+    }
 
-    System.out.print("Initializing shooter...");
-    shooter = new Shooter(new CANSparkMax(4, MotorType.kBrushless));
-    System.out.println("done");
+    if (this.photoswitchSensorToggle) {
+      System.out.print("Initializing photoswitch...");
+      lightInput = new DigitalInput(0);
+      light = new PhotoswitchSensor(lightInput);
+      System.out.println("done");
+    } else {
+      System.out.println("Photoswitch disabled. Skipping initialization...");
+    }
+    
+    if (this.shooterToggle) {
+      System.out.print("Initializing shooter...");
+      shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+      System.out.println("done");
+    } else {
+      System.out.println("Shooter disabled. Skipping initialization...");
+    }
 
-    System.out.print("Initializing manipulation...");
-    manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15));
-    System.out.println("done");
+    if (this.manipulationToggle) {
+        System.out.print("Initializing manipulation...");
+        manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15));
+        System.out.println("done");
+    } else {
+        System.out.println("Manipulation disabled. Skipping initialization...");
+    }
 
-    System.out.print("Initializing drivetrain...");
-    drive = new Drivetrain(5, 6, 7, 8, 9, 10);
-    System.out.println("done");
+    if (this.drivetrainToggle) {
+      System.out.print("Initializing drivetrain...");
+      DriveModule leftModule = new DriveModule(
+        new TalonFX(5),
+        new TalonFX(6),
+        new TalonFX(7),
+        new Solenoid(2, 0)
+      );
+      DriveModule rightModule = new DriveModule(
+        new TalonFX(8),
+        new TalonFX(9),
+        new TalonFX(10),
+        new Solenoid(2, 1)
+      );
+      drive = new Drivetrain(leftModule, rightModule);
+      System.out.println("done");
+    } else {
+      System.out.println("Drivetrain disabled. Skipping initialization...");
+    }
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
@@ -94,6 +146,10 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing Autonomous...");
     autonomous = new Autonomous(drive, limelight, shooter, manipulation);
+    System.out.println("done");
+
+    System.out.print("Initializing compressor...");
+    compressor = new Compressor(2);
     System.out.println("done");
   }
 
@@ -120,60 +176,76 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    limelight.update();
-
-    double turnInput = driver.getX(Hand.kRight);
-    double speedInput = driver.getY(Hand.kLeft);
-
-    double speed = 0;
-    if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
-      speed = -1 * driver.getY(Hand.kRight);
-    } else if (driver.getAButton()) {
-      speed = 1;
+    if (this.limelightToggle) {
+        limelight.update();
+        if (driver.getXButtonPressed()) {
+            limelight.setLightEnabled(true);
+          } else if (driver.getYButtonPressed()) {
+            limelight.setLightEnabled(false);
     }
 
-    if (Math.abs(speed) < 0.1) {
-      speed = 0;
+    if (this.shooterToggle) {
+      double speed = 0;
+
+      if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
+        speed = -1 * driver.getY(Hand.kRight);
+      } else if (driver.getAButton()) {
+        speed = 1;
+      }
+
+      if (Math.abs(speed) < 0.1) {
+        speed = 0;
+      }
+
+      shooter.manualControl(speed);
+
+      SmartDashboard.putNumber("ShooterPower", speed);
+      SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
     }
 
-    shooter.manualControl(speed);
-
-    if (driver.getBumperPressed(Hand.kRight)) {
-      manipulation.intakeOut();
+    if (this.manipulationToggle) {
+        if (driver.getBumperPressed(Hand.kRight)) {
+            manipulation.intakeOut();
+          }
+      
+          if (driver.getBumperPressed(Hand.kLeft)) {
+            manipulation.intakeIn();
+          }
+      
+          if (driver.getBButton()) {
+            manipulation.indexFeed(true);
+          } else {
+            manipulation.indexFeed(false);
+          }
+      
+          if (driver.getXButton()) {
+            manipulation.indexLoad(true);
+          } else {
+            manipulation.indexLoad(false);
+          }
+      
+          if (driver.getYButton()) {
+            manipulation.intakeSpin();
+          } else {
+            manipulation.intakeStop();
+          }
     }
 
-    if (driver.getBumperPressed(Hand.kLeft)) {
-      manipulation.intakeIn();
+    if (this.drivetrainToggle) {
+      double turnInput = driver.getX(Hand.kRight);
+      double speedInput = driver.getY(Hand.kLeft);
+
+      if (driver.getXButtonPressed()) {
+        limelight.setLightEnabled(true);
+      } else if (driver.getYButtonPressed()) {
+        limelight.setLightEnabled(false);
+      }
+
+      drive.arcadeDrive(turnInput, speedInput);
     }
 
-    if (driver.getBButton()) {
-      manipulation.indexFeed(true);
-    } else {
-      manipulation.indexFeed(false);
-    }
-
-    if (driver.getXButton()) {
-      manipulation.indexLoad(true);
-    } else {
-      manipulation.indexLoad(false);
-    }
-
-    if (driver.getYButton()) {
-      manipulation.intakeSpin();
-    } else {
-      manipulation.intakeStop();
-    }
-
-    if (driver.getXButtonPressed()) {
-      limelight.setLightEnabled(true);
-    } else if (driver.getYButtonPressed()) {
-      limelight.setLightEnabled(false);
-    }
-
-    drive.arcadeDrive(turnInput, speedInput);
-
-    SmartDashboard.putNumber("ShooterPower", speed);
-    SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+    if (this.photoswitchSensorToggle)
+      SmartDashboard.putBoolean("LightClear", light.getClear());
   }
 
   @Override
