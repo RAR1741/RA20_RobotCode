@@ -140,29 +140,29 @@ public class Robot extends TimedRobot {
     shooter.manualControl(speed);
 
     if (driver.getBumperPressed(Hand.kRight)) {
-      manipulation.intakeExtend(true);
+      manipulation.setIntakeExtend(true);
     }
 
     if (driver.getBumperPressed(Hand.kLeft)) {
-      manipulation.intakeExtend(false);
+      manipulation.setIntakeExtend(false);
     }
 
     if (driver.getBButton()) {
-      manipulation.indexFeed(true);
+      manipulation.setIndexFeed(true);
     } else {
-      manipulation.indexFeed(false);
+      manipulation.setIndexFeed(false);
     }
 
     if (driver.getXButton()) {
-      manipulation.indexLoad(true);
+      manipulation.setIndexLoad(true);
     } else {
-      manipulation.indexLoad(false);
+      manipulation.setIndexLoad(false);
     }
 
     if (driver.getYButton()) {
-      manipulation.intakeSpin(true);
+      manipulation.setIntakeSpin(true);
     } else {
-      manipulation.intakeSpin(false);
+      manipulation.setIntakeSpin(false);
     }
 
     if (driver.getXButtonPressed()) {
