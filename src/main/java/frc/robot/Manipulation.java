@@ -24,6 +24,8 @@ public class Manipulation{
      * @param intakePneumatics The intake solenoid
      * @param indexLoad The CAN id of the talon for the index loader
      * @param indexFeed The CAN id of the talon for the index feeder
+     * @param shootGate The shooting photoswitch object
+     * @param intakeGate The intake photoswitch object
      */
     Manipulation(Talon intakeWheel, DoubleSolenoid intakePneumatics, Talon indexLoad, Talon indexFeed, PhotoswitchSensor shootGate, PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;

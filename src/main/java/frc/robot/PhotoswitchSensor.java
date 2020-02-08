@@ -5,6 +5,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class PhotoswitchSensor {
     DigitalInput input;
 
+    /**
+     * Constructor
+     * 
+     * @param input The DIO port of the photoswitch sensor.
+     */
     public PhotoswitchSensor(DigitalInput input) {
         this.input = input;
     }

@@ -36,8 +36,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private Toml config;
   Limelight limelight;
-  PhotoswitchSensor light;
-  DigitalInput lightInput;
+  PhotoswitchSensor lightShoot;
+  PhotoswitchSensor lightIntake;
+  DigitalInput lightShootInput;
+  DigitalInput lightIntakeInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
@@ -82,9 +84,11 @@ public class Robot extends TimedRobot {
     limelight.setLightEnabled(false);
     System.out.println("done");
 
-    System.out.print("Initializing photoswitch...");
-    lightInput = new DigitalInput(0);
-    light = new PhotoswitchSensor(lightInput);
+    System.out.print("Initializing photoswitchs...");
+    lightShootInput = new DigitalInput(0);
+    lightShoot = new PhotoswitchSensor(lightShootInput);
+    lightIntakeInput = new DigitalInput(1);
+    lightIntake = new PhotoswitchSensor(lightIntakeInput);
     System.out.println("done");
 
     System.out.print("Initializing shooter...");
@@ -92,7 +96,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing manipulation...");
-    manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15));
+    manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
     drive = new Drivetrain(5, 6, 7, 8, 9, 10);
@@ -169,7 +173,7 @@ public class Robot extends TimedRobot {
 
     drive.arcadeDrive(turnInput, speedInput);
 
-    SmartDashboard.putBoolean("LightClear", light.getClear());
+    SmartDashboard.putNumber("IndexBalls", manipulation.getBalls());
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
