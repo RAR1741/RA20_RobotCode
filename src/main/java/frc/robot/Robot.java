@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   XboxController driver = null;
   Manipulation manipulation = null;
   Autonomous autonomous;
+  //PowercellDetection pcDetection;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
    * Intake -> 13
    * Index Helix -> 14
    * Index Feeder -> 15
-   * Pull Index -> 16 (Possible)
+   * Index Pull -> 16 (Possible)
    * 
    * 
    * PCM Channels:
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    //pcDetection.update();
+    limelight.update();
     if(autonomous.Auto()){
       System.out.println("Autonomous Done");
     }
