@@ -114,10 +114,9 @@ public class Drivetrain extends Subsystem {
         return new DifferentialDriveWheelSpeeds(leftFalcon.getSelectedSensorVelocity(), rightFalcon.getSelectedSensorVelocity());
     }
 
-    //TODO: Find a way to set falcons by voltage
     public void setVoltage(double lvolts, double rvolts){
-        leftNeo.setVoltage(lvolts);
-        rightNeo.setVoltage(-rvolts);
+        leftFalcon.set(ControlMode.Current, lvolts);
+        rightFalcon.set(ControlMode.Current, -rvolts);
     }
 
     /**
