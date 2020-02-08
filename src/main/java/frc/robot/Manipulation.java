@@ -90,4 +90,8 @@ public class Manipulation{
         prevShootState = shootGate.getBlocked();
         prevIntakeState = intakeGate.getBlocked();
     }
+
+    public int getBalls() {
+        return balls;
+    }
 }
