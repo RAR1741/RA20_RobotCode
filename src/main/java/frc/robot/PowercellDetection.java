@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -7,12 +10,9 @@ public class PowercellDetection {
 
     private final double SCREEN_AREA = 1; //TODO: Determine area camera view.
 
-    private double nb;
+    private int nb;
     private double[] boxes;
-    private double[][] targets;
-    private double[] tempTarget;
-    private double error;
-    private double motorPower;
+    private Target[] targets;
 
     private Drivetrain drive;
 
@@ -26,8 +26,11 @@ public class PowercellDetection {
         this.drive = drive;
     }
 
+    /**
+     * Updates variables.
+     */
     public void update() {
-        this.nb = detectionTable.getEntry("nb_objects").getDouble(0);
+        this.nb = (int)detectionTable.getEntry("nb_objects").getDouble(0);
         this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0});
         this.sortTargets(this.boxes);
     }
@@ -37,7 +40,7 @@ public class PowercellDetection {
      * 
      * @return number of powercells detected
      */
-    public double getNumber() {
+    public int getNumber() {
         return nb;
     }
 
@@ -48,8 +51,8 @@ public class PowercellDetection {
      */
     public void approachPC(double x) {
         //TODO: Determine division variable for percent of screen
-        drive.driveLeft(x >= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - getArea())/SCREEN_AREA)/4);
-        drive.driveRight(x <= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - getArea())/SCREEN_AREA)/4);
+        drive.driveLeft(x >= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - targets[0].getArea())/SCREEN_AREA)/4);
+        drive.driveRight(x <= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - targets[0].getArea())/SCREEN_AREA)/4);
     }
 
     /**
@@ -58,25 +61,17 @@ public class PowercellDetection {
      * @param boxes array of box coordinates.
      */
     private void sortTargets(double[] boxes) {
-        targets = new double[boxes.length / 4][4];
-        for (int i = 0; i < boxes.length / 4; i++){
-            for (int j = 0; j < 4; j++)
-                targets[i][0] = boxes[i * 4 + j];
+        targets = new Target[nb];
+        for (int i = 0; i < nb; i++){
+            targets[i] = new Target(boxes[i * 4 + 1], boxes[i * 4 + 2], boxes[i * 4 + 3], boxes[i * 4 + 4]);
         }
 
-        tempTarget = new double[4];
-        for (int i = 1; i < targets.length; i++) {
-            for (int j = i; j > 0; j--) {
-                if ((targets[j][2] - targets[j][0]) * (targets[j][1] - targets[j][3]) > 
-                (targets[j-1][2] - targets[j-1][0]) * (targets[j-1][1] - targets[j-1][3])) {
-                    for (int k = 0; k < targets[j].length; k++)
-                        tempTarget[k] = targets[j][k];
-                    for (int k = 0; k < targets[j].length; k++)
-                        targets[j][k] = targets[j-1][k];
-                    for (int k = 0; k < targets[j].length; k++)
-                        targets[j-1][k] = tempTarget[k];
-                }
-            }
-        }
+        Arrays.sort(targets, new sortByArea());
+    }
+}
+
+class sortByArea implements Comparator<Target> {
+    public int compare(Target a, Target b) {
+        return (int)(b.getArea() - a.getArea());
     }
 }

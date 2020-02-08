@@ -6,6 +6,14 @@ public class Target {
     private double bottomRightX;
     private double bottomRightY;
 
+    /**
+     * Constructor
+     * 
+     * @param topLeftX X-coordinate of the top left edge.
+     * @param topLeftY Y-coordinate of the top left edge.
+     * @param bottomRightX X-coordinate of the bottom right edge.
+     * @param bottomRightY Y-coordinate of the bottom right edge.
+     */
     public Target(double topLeftX, double topLeftY, double bottomRightX, double bottomRightY) {
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
