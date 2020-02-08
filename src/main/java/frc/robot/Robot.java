@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -33,6 +34,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private Toml config;
   Limelight limelight;
+  PhotoswitchSensor light;
+  DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
@@ -51,6 +54,11 @@ public class Robot extends TimedRobot {
     System.out.print("Initializing vision system (limelight)...");
     limelight = new Limelight();
     limelight.setLightEnabled(false);
+    System.out.println("done");
+
+    System.out.print("Initializing photoswitch...");
+    lightInput = new DigitalInput(0);
+    light = new PhotoswitchSensor(lightInput);
     System.out.println("done");
 
     System.out.print("Initializing shooter...");
@@ -121,6 +129,7 @@ public class Robot extends TimedRobot {
 
     drive.arcadeDrive(turnInput, speedInput);
 
+    SmartDashboard.putBoolean("LightClear", light.getClear());
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
   }
@@ -145,5 +154,4 @@ public class Robot extends TimedRobot {
       return Paths.get(localPath(), "deploy", fileName).toString();
     }
   }
-
 }
