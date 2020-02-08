@@ -12,6 +12,7 @@ import frc.robot.Limelight;
 import java.io.File;
 import java.nio.file.Paths;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -66,15 +67,15 @@ public class Robot extends TimedRobot {
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
     DriveModule leftModule = new DriveModule(
-      new CANSparkMax(5, MotorType.kBrushless),
-      new CANSparkMax(6, MotorType.kBrushless),
-      new CANSparkMax(7, MotorType.kBrushless),
+      new TalonFX(5),
+      new TalonFX(6),
+      new TalonFX(7),
       new Solenoid(2, 0)
     );
     DriveModule rightModule = new DriveModule(
-      new CANSparkMax(8, MotorType.kBrushless),
-      new CANSparkMax(9, MotorType.kBrushless),
-      new CANSparkMax(10, MotorType.kBrushless),
+      new TalonFX(8),
+      new TalonFX(9),
+      new TalonFX(10),
       new Solenoid(2, 1)
     );
     drive = new Drivetrain(leftModule, rightModule);
