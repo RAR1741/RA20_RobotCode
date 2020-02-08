@@ -176,8 +176,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (this.limelightToggle)
+    if (this.limelightToggle) {
       limelight.update();
+    }
 
     if (this.shooterToggle) {
       double speed = 0;
@@ -194,38 +195,44 @@ public class Robot extends TimedRobot {
 
       shooter.manualControl(speed);
 
-    if (driver.getBumperPressed(Hand.kRight)) {
-      manipulation.intakeOut();
-    }
-
-    if (driver.getBumperPressed(Hand.kLeft)) {
-      manipulation.intakeIn();
-    }
-
-    if (driver.getBButton()) {
-      manipulation.indexFeed(true);
-    } else {
-      manipulation.indexFeed(false);
-    }
-
-    if (driver.getXButton()) {
-      manipulation.indexLoad(true);
-    } else {
-      manipulation.indexLoad(false);
-    }
-
-    if (driver.getYButton()) {
-      manipulation.intakeSpin();
-    } else {
-      manipulation.intakeStop();
-    }
-
-    if (driver.getXButtonPressed()) {
-      limelight.setLightEnabled(true);
-    } else if (driver.getYButtonPressed()) {
-      limelight.setLightEnabled(false);
       SmartDashboard.putNumber("ShooterPower", speed);
       SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+    }
+
+    if (limelightToggle) {
+      if (driver.getXButtonPressed()) {
+        limelight.setLightEnabled(true);
+      } else if (driver.getYButtonPressed()) {
+        limelight.setLightEnabled(false);
+      }
+    }
+
+    if (manipulationToggle) {
+      if (driver.getBumperPressed(Hand.kRight)) {
+        manipulation.intakeOut();
+      }
+
+      if (driver.getBumperPressed(Hand.kLeft)) {
+        manipulation.intakeIn();
+      }
+
+      if (driver.getBButton()) {
+        manipulation.indexFeed(true);
+      } else {
+        manipulation.indexFeed(false);
+      }
+
+      if (driver.getXButton()) {
+        manipulation.indexLoad(true);
+      } else {
+        manipulation.indexLoad(false);
+      }
+
+      if (driver.getYButton()) {
+        manipulation.intakeSpin();
+      } else {
+        manipulation.intakeStop();
+      }
     }
 
     if (this.drivetrainToggle) {
@@ -241,7 +248,7 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(turnInput, speedInput);
     }
 
-    if (this.photoswitchSensorToggle)
+    if (this.photoswitchSensorToggle) {
       SmartDashboard.putBoolean("LightClear", light.getClear());
     }
   }
