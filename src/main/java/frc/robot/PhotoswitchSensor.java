@@ -25,8 +25,6 @@ public class PhotoswitchSensor {
      * @return true if the sensor became blocked since last check.
      */
     public boolean getChange(boolean previousState) {
-        boolean tempState = previousState;
-        previousState = this.getBlocked();
-        return !tempState && this.getBlocked();
+        return !previousState && this.getBlocked();
     }
 }

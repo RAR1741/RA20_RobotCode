@@ -13,6 +13,10 @@ public class Manipulation{
     private PhotoswitchSensor shootGate;
     private PhotoswitchSensor intakeGate;
 
+    private int balls;
+    private boolean prevShootState;
+    private boolean prevIntakeState;
+
     /**
      * Constructor
      * 
@@ -33,7 +37,7 @@ public class Manipulation{
     /**
      * Rotates the intake motor.
      */
-    public void intakeSpin(){
+    public void intakeSpin() {
         //TODO: test if this power is right
         intakeWheel.set(1);
     }
@@ -41,21 +45,21 @@ public class Manipulation{
     /**
      * Stops the rotation of the intake motor.
      */
-    public void intakeStop(){
+    public void intakeStop() {
         intakeWheel.set(0);
     }
 
     /**
      * Extends the intake system.
      */
-    public void intakeOut(){
+    public void intakeOut() {
         intakePneumatics.set(Value.kForward);
     }
 
     /**
      * Retracts the intake system.
      */
-    public void intakeIn(){
+    public void intakeIn() {
         intakePneumatics.set(Value.kReverse);
     }
 
@@ -64,7 +68,7 @@ public class Manipulation{
      * 
      * @param load if it should load
      */
-    public void indexLoad(boolean load){
+    public void indexLoad(boolean load) {
         //TODO: test if this power is right.
         indexLoad.set(load ? 0.5: 0);
     }
@@ -74,7 +78,16 @@ public class Manipulation{
      * 
      * @param feed if it should feed the shooter power cells.
      */
-    public void indexFeed(boolean feed){
+    public void indexFeed(boolean feed) {
         indexFeed.set(feed ? 1: 0);
+    }
+
+    public void updateIndex() {
+        if(intakeGate.getChange(prevIntakeState))
+            balls++;
+        if(shootGate.getChange(prevShootState))
+            balls--;
+        prevShootState = shootGate.getBlocked();
+        prevIntakeState = intakeGate.getBlocked();
     }
 }
