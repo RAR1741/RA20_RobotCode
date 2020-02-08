@@ -42,24 +42,6 @@ public class PowercellDetection {
     }
 
     /**
-     * Gets X-coordinate of center of the first powercell.
-     * 
-     * @return X-coordinate of center of the first powercell
-     */
-    public double getCenterX() {
-        return (targets[0][0] + targets[0][2]) / 2;
-    }
-
-    /**
-     * Gets Area of the first powercell.
-     * 
-     * @return area of the first powercell
-     */
-    public double getArea() {
-        return (targets[0][2] - targets[0][0]) * (targets[0][1] - targets[0][3]);
-    }
-
-    /**
      * Moves the robot to intercept powercells
      * 
      * @param x target X-coordinate
