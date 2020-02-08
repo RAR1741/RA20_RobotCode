@@ -1,12 +1,17 @@
 package frc.robot;
 
+import java.nio.file.Paths;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;;
 
 public class Autonomous{
 
@@ -23,59 +28,69 @@ public class Autonomous{
    private AutonomousState state;
    private AutoAim autoAim;
    private Manipulation manipulation;
-   private Drivetrain drive;
-   private Limelight limelight;
-   private Shooter shooter;
+   private final Drivetrain drive;
+   private final Limelight limelight;
+   private final Shooter shooter;
    private double error;
    private double motorPower;
    private double degrees;
    private boolean done = false;
-   private double targetRPM; //TODO: determine correct target RPM
+   private double targetRPM; // TODO: determine correct target RPM
    private TrajectoryConfig config;
    private TrajectoryGenerator tGenerator;
    private Pose2d start;
    private Pose2d end;
    private List<Translation2d> interiorWaypoints;
-   
+
+   /**
+    * TODO: get measurements for trajectories
+    * https://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/characterizing-drive.html
+    */
+   private double ksVolts;
+   private double kvVoltSecondsPerMeter;
+   private double kaVoltSecondsSquaredPerMeter;
+   private Object kDriveKinematics;
+   private double kRamseteZeta;
+   private double kRamseteB;
+   private double kPDriveVel;
 
    /**
     * @param drive     drive train object.
     * @param limelight limelight object.
     * @param shooter   shooter object.
     */
-   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
+   public Autonomous(final Drivetrain drive, final Limelight limelight, final Shooter shooter,
+         final Manipulation manipulation) {
       state = AutonomousState.AimShot1;
       this.drive = drive;
       this.limelight = limelight;
       this.shooter = shooter;
    }
 
-   public void AimShot1(){
+   public void AimShot1() {
       autoAim.run();
       state = AutonomousState.Shoot1;
    }
 
-   public void Shoot1(){
+   public void Shoot1() {
       shooter.autoControl(targetRPM);
       state = AutonomousState.MoveTrench;
    }
 
-   public void MoveTrench(){
-      /* Graph made in Robot */
-      start = new Pose2d();
-
-      /* interiorWaypoints */
-      interiorWaypoints.add(new Translation2d());
-      interiorWaypoints.add(new Translation2d());
-      interiorWaypoints.add(new Translation2d());
-      /* END: interiorWaypoints */
-      
-      end = new Pose2d();
-
-      config = new TrajectoryConfig(3, 2); /* TODO: Values may need to go up. Just a suggestion though... */
-
-      TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config);
-      state = AutonomousState.BallCollect;
+   public void MoveTrench() {
+      RamseteCommand ramseteCommand = new RamseteCommand(
+         TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), start,
+         new RamseteController(kRamseteB, kRamseteZeta),
+         new SimpleMotorFeedforward(ksVolts,
+                                    kvVoltSecondsPerMeter,
+                                    kaVoltSecondsSquaredPerMeter),
+                                    kDriveKinematics,
+         drive::getWheelSpeeds,
+         new PIDController(kPDriveVel, 0, 0), //left side
+         new PIDController(kPDriveVel, 0, 0), //right side
+         // RamseteCommand passes volts to the callback
+         drive::setVoltage, drive
+     );
    }
 
    public void BallGrab(){
@@ -102,10 +117,6 @@ public class Autonomous{
    public void Shoot2(){
       shooter.autoControl(targetRPM);      
       done = true;
-   }
-
-   public static void followTrajectory(Pose2d start, List<Translation2d> interiorWaypoints, Pose2d end, TrajectoryConfig config){
-      TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config);
    }
 
    public boolean Auto(){
