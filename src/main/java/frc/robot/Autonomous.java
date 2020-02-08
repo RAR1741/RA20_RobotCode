@@ -64,7 +64,6 @@ public class Autonomous {
     * @param manipulation manipulation object.
     */
    public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
-
       state = AutonomousState.AimShot1;
       this.drive = drive;
       this.limelight = limelight;
@@ -78,7 +77,6 @@ public class Autonomous {
    }
 
    public void Shoot1() {
-
       shooter.autoControl(targetSpeed);
       if (shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin) {
          manipulation.indexFeed(true);
@@ -92,14 +90,15 @@ public class Autonomous {
    }
 
    public void MoveTrench() {
-      RamseteCommand ramseteCommand = new RamseteCommand(
-            TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), start,
-            new RamseteController(kRamseteB, kRamseteZeta),
-            new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
-            drive::getWheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
-            new PIDController(kPDriveVel, 0, 0), // right side
-            // RamseteCommand passes volts to the callback
-            drive::setVoltage, drive);
+
+      // RamseteCommand ramseteCommand = new RamseteCommand(
+      //       TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), start,
+      //       new RamseteController(kRamseteB, kRamseteZeta),
+      //       new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
+      //       drive::getWheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
+      //       new PIDController(kPDriveVel, 0, 0), // right side
+      //       // RamseteCommand passes volts to the callback
+      //       drive::setVoltage, drive);
    }
 
    public void BallGrab() {
@@ -116,14 +115,13 @@ public class Autonomous {
    }
 
    public void MoveShoot() {
-      drive.tankDrive(leftDrive, rightDrive);// TODO: Determine correct numbers for driving
+      // drive.tankDrive(leftDrive, rightDrive);// TODO: Determine correct numbers for driving
       // wait();
       drive.tankDrive(0, 0);
       state = AutonomousState.AimShot2;
    }
 
    public void AimShot2() {
-
       // autoAim.run();
       state = AutonomousState.Shoot2;
    }

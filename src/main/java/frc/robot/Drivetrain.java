@@ -1,54 +1,27 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
-
-public class Drivetrain extends Subsystem {
-
+public class Drivetrain {
     /**
      * {@value #DEADBAND_LIMIT} The limit for when to stop the motor running if the
      * motor speed is too low.
      */
     private static final double DEADBAND_LIMIT = 0.02;
 
-    private TalonFX leftFalcon;
-    private TalonFX leftSlave1;
-    private TalonFX leftSlave2;
-    private TalonFX rightFalcon;
-    private TalonFX rightSlave1;
-    private TalonFX rightSlave2;
+    private DriveModule left;
+    private DriveModule right;
 
     /**
      * Constructor
      * 
-     * @param leftFalcon1Id The CAN id of the first left falcon.
-     * @param leftFalcon2Id The CAN id of the second left falcon.
-     * @param leftFalcon3Id The CAN id of the third left falcon.
-     * @param rightFalcon1ID The CAN id of the first right falcon.
-     * @param rightFalcon2ID The CAN id of the second right falcon.
-     * @param rightFalcon3ID The CAN id of the third right falcon.
+     * @param left The left drive module
+     * @param right The right drive module
      */
-    Drivetrain(int leftFalcon1Id, int leftFalcon2Id, int  leftFalcon3Id, int  rightFalcon1Id, int  rightFalcon2Id, int  rightFalcon3Id){
-        leftFalcon = new TalonFX(leftFalcon1Id);
-        leftSlave1 = new TalonFX(leftFalcon2Id);
-        leftSlave2 = new TalonFX(leftFalcon3Id);
-        rightFalcon = new TalonFX(rightFalcon1Id);
-        rightSlave1 = new TalonFX(rightFalcon2Id);
-        rightSlave2 = new TalonFX(rightFalcon3Id);
-
-        leftFalcon.setInverted(true);
-        leftSlave1.setInverted(true);
-        leftSlave2.setInverted(true);
-
-        leftSlave1.follow(leftFalcon);
-        leftSlave2.follow(leftFalcon);
-        rightSlave1.follow(rightFalcon);
-        rightSlave2.follow(rightFalcon);
-
+    Drivetrain(DriveModule left, DriveModule right){
+        this.left = left;
+        this.right = right;
+        left.setInverted(true);
     }
 
     /**
@@ -58,7 +31,7 @@ public class Drivetrain extends Subsystem {
      */
     public void driveLeft(double speed) {
         double sp = deadband(speed);
-        leftFalcon.set(ControlMode.PercentOutput, sp);
+        left.set(sp);
     }
 
     /**
@@ -68,7 +41,7 @@ public class Drivetrain extends Subsystem {
      */
     public void driveRight(double speed) {
         double sp = deadband(speed);
-        rightFalcon.set(ControlMode.PercentOutput, sp);
+        right.set(sp);
     }
 
     /**
@@ -103,20 +76,15 @@ public class Drivetrain extends Subsystem {
      * @param trajectory
      */
     public double getLeftWheelSpeed() {
-        return leftFalcon.getSelectedSensorVelocity();
+        return left.getSpeed();
     }
 
     public double getRightWheelSpeed() {
-        return rightFalcon.getSelectedSensorVelocity();
+        return right.getSpeed();
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds(leftFalcon.getSelectedSensorVelocity(), rightFalcon.getSelectedSensorVelocity());
-    }
-
-    public void setVoltage(double lvolts, double rvolts){
-        leftFalcon.set(ControlMode.Current, lvolts);
-        rightFalcon.set(ControlMode.Current, -rvolts);
+        return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
     }
 
     /**
@@ -129,11 +97,5 @@ public class Drivetrain extends Subsystem {
      */
     public double deadband(double in) {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
-    }
-
-    @Override
-    protected void initDefaultCommand() {
-        // TODO Auto-generated method stub
-
     }
 }
