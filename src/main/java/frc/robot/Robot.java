@@ -12,10 +12,13 @@ import frc.robot.Limelight;
 import java.io.File;
 import java.nio.file.Paths;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -37,6 +40,8 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
+  DriveModule module = null;
+  Compressor compressor = null;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -61,11 +66,27 @@ public class Robot extends TimedRobot {
     shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
     System.out.println("done");
     System.out.print("Initializing drivetrain...");
-    drive = new Drivetrain(5, 6, 7, 8, 9, 10);
+    DriveModule leftModule = new DriveModule(
+      new TalonFX(5),
+      new TalonFX(6),
+      new TalonFX(7),
+      new Solenoid(2, 0)
+    );
+    DriveModule rightModule = new DriveModule(
+      new TalonFX(8),
+      new TalonFX(9),
+      new TalonFX(10),
+      new Solenoid(2, 1)
+    );
+    drive = new Drivetrain(leftModule, rightModule);
     System.out.println("done");
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
+    System.out.println("done");
+
+    System.out.print("Initializing compressor...");
+    compressor = new Compressor(2);
     System.out.println("done");
   }
 
@@ -134,5 +155,4 @@ public class Robot extends TimedRobot {
       return Paths.get(localPath(), "deploy", fileName).toString();
     }
   }
-
 }
