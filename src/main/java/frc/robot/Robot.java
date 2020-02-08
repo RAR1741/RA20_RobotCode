@@ -140,11 +140,11 @@ public class Robot extends TimedRobot {
     shooter.manualControl(speed);
 
     if (driver.getBumperPressed(Hand.kRight)) {
-      manipulation.intakeOut();
+      manipulation.intakeExtend(true);
     }
 
     if (driver.getBumperPressed(Hand.kLeft)) {
-      manipulation.intakeIn();
+      manipulation.intakeExtend(false);
     }
 
     if (driver.getBButton()) {
@@ -160,9 +160,9 @@ public class Robot extends TimedRobot {
     }
 
     if (driver.getYButton()) {
-      manipulation.intakeSpin();
+      manipulation.intakeSpin(true);
     } else {
-      manipulation.intakeStop();
+      manipulation.intakeSpin(false);
     }
 
     if (driver.getXButtonPressed()) {

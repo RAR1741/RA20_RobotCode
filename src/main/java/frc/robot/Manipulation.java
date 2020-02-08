@@ -38,37 +38,27 @@ public class Manipulation{
 
     /**
      * Rotates the intake motor.
+     * 
+     * @param spin true if it should spin, false if not.
      */
-    public void intakeSpin() {
+    public void intakeSpin(boolean spin) {
         //TODO: test if this power is right
-        intakeWheel.set(1);
+        intakeWheel.set(spin ? 1 : 0);
     }
 
     /**
-     * Stops the rotation of the intake motor.
+     * Moves the intake system.
+     * 
+     * @param extend true if it should extend, false if not.
      */
-    public void intakeStop() {
-        intakeWheel.set(0);
-    }
-
-    /**
-     * Extends the intake system.
-     */
-    public void intakeOut() {
-        intakePneumatics.set(Value.kForward);
-    }
-
-    /**
-     * Retracts the intake system.
-     */
-    public void intakeIn() {
-        intakePneumatics.set(Value.kReverse);
+    public void intakeExtend(boolean extend) {
+        intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
     }
 
     /**
      * Moves power cells down indexing system.
      * 
-     * @param load if it should load
+     * @param load true if it should load
      */
     public void indexLoad(boolean load) {
         //TODO: test if this power is right.
@@ -83,6 +73,7 @@ public class Manipulation{
     public void indexFeed(boolean feed) {
         indexFeed.set(feed ? 1: 0);
     }
+    
     /**
      * Updates the index counting.
      */
