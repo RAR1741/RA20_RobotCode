@@ -81,7 +81,9 @@ public class Manipulation{
     public void indexFeed(boolean feed) {
         indexFeed.set(feed ? 1: 0);
     }
-
+    /**
+     * Updates the index counting.
+     */
     public void updateIndex() {
         if(intakeGate.getChange(prevIntakeState))
             balls++;
@@ -91,6 +93,11 @@ public class Manipulation{
         prevIntakeState = intakeGate.getBlocked();
     }
 
+    /**
+     * Gets current amount of balls in the index system.
+     * 
+     * @return current amount of balls in the index system.
+     */
     public int getBalls() {
         return balls;
     }
