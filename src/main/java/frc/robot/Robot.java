@@ -161,6 +161,8 @@ public class Robot extends TimedRobot {
       }
 
       drive.arcadeDrive(turnInput, speedInput);
+
+      drive.getTemp();
     }
 
     if (this.photoswitchSensorToggle)

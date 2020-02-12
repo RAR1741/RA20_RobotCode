@@ -80,4 +80,9 @@ public class Drivetrain {
     public double deadband(double in) {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
     }
+
+    public void getTemp() {
+        left.getTemp("Left Motor Temperature");
+        right.getTemp("Right Motor Temperature");
+    }
 }

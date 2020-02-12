@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveModule {
   private TalonFX master;
@@ -34,5 +35,13 @@ public class DriveModule {
 
   public void setPTO(boolean engaged) {
     pto.set(engaged);
+  }
+
+  /**
+   * Adds the temperature of the motors to Smart Dashboard.
+   */
+  public void getTemp(String message) {
+    double[] temp = {master.getTemperature(), slave1.getTemperature(), slave2.getTemperature()};
+    SmartDashboard.putNumberArray(message, temp);
   }
 }
