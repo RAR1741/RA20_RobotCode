@@ -91,9 +91,9 @@ public class Drivetrain {
             } else {
                 //returns x^2 if boosted and 60% of that if not
                 if(boost){
-                    return -(((in-DEADBAND_LIMIT)*(in-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT)));
+                    return -(((in+DEADBAND_LIMIT)*(in+DEADBAND_LIMIT))/((1+DEADBAND_LIMIT)*(1+DEADBAND_LIMIT)));
                 } else {
-                    return -(((in-DEADBAND_LIMIT)*(in-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT))*0.6); 
+                    return -(((in+DEADBAND_LIMIT)*(in+DEADBAND_LIMIT))/((1+DEADBAND_LIMIT)*(1+DEADBAND_LIMIT))*0.6); 
                 }
             }
 
