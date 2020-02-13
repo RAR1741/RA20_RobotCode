@@ -160,7 +160,7 @@ public class Robot extends TimedRobot {
         limelight.setLightEnabled(false);
       }
 
-      drive.arcadeDrive(turnInput, speedInput);
+      drive.arcadeDrive(turnInput, speedInput, driver.getAButtonPressed());
     }
 
     if (this.photoswitchSensorToggle)

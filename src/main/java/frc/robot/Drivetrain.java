@@ -28,8 +28,8 @@ public class Drivetrain {
      * 
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
-    public void driveLeft(double speed){
-        double sp = deadband(speed);
+    public void driveLeft(double speed, boolean boost){
+        double sp = deadband(speed, boost);
         left.set(sp);
     }
 
@@ -38,8 +38,8 @@ public class Drivetrain {
      * 
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
-    public void driveRight(double speed){
-        double sp = deadband(speed);
+    public void driveRight(double speed, boolean boost){
+        double sp = deadband(speed, boost);
         right.set(sp);
     }
 
@@ -51,9 +51,9 @@ public class Drivetrain {
      * @param yDrive The speed to drive the drivetrain in the y direction (ranges
      *               from -1.0 to +1.0)
      */
-    public void arcadeDrive(double xDrive, double yDrive){
-        this.driveLeft(yDrive - xDrive);
-        this.driveRight(xDrive - yDrive);
+    public void arcadeDrive(double xDrive, double yDrive, boolean boost){
+        this.driveLeft(yDrive - xDrive, boost);
+        this.driveRight(xDrive - yDrive, boost);
     }
 
     /**
@@ -64,9 +64,9 @@ public class Drivetrain {
      * @param yDrive The speed to drive the right drivetrain (ranges
      *               from -1.0 to +1.0)
      */
-    public void tankDrive(double leftDrive, double rightDrive){
-        this.driveLeft(leftDrive);
-        this.driveRight(rightDrive);
+    public void tankDrive(double leftDrive, double rightDrive, boolean boost){
+        this.driveLeft(leftDrive, boost);
+        this.driveRight(rightDrive, boost);
     }
 
     /**
@@ -75,9 +75,30 @@ public class Drivetrain {
      * motors.
      *
      * @param in the input to check
+     * @param boost whether or not the boost button is being pressed 
      * @return 0.0 if {@code in} is less than abs(DEADBAND_LIMIT) else {@code in}
      */
-    public double deadband(double in) {
-        return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
+    public double deadband(double in, boolean boost) {
+        if(Math.abs(in) > DEADBAND_LIMIT){
+            if (in > 0){
+                //returns x^2 if boosted and 60% of that if not
+                if(boost){
+                    return in*in-DEADBAND_LIMIT;
+                } else {
+                    return in*in*.6-DEADBAND_LIMIT; 
+                }
+
+            } else {
+                //returns x^2 if boosted and 60% of that if not
+                if(boost){
+                    return -(in*in-DEADBAND_LIMIT);
+                } else {
+                    return -(in*in*.6-DEADBAND_LIMIT); 
+                }
+            }
+
+        } else {
+            return 0.0;
+        }
     }
 }
