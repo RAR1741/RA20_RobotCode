@@ -96,7 +96,7 @@ public class Autonomous {
       //       new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
       //       drive::getWheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
       //       new PIDController(kPDriveVel, 0, 0), // right side
-      //       // RamseteCommand passes volts to the callback
+      //       RamseteCommand passes volts to the callback
       //       drive::setVoltage, drive);
    }
 
