@@ -79,20 +79,7 @@ public class Drivetrain {
      * @return 0.0 if {@code in} is less than abs(DEADBAND_LIMIT) else {@code in}
      */
     public double deadband(double in, boolean boost) {
-        if(Math.abs(in) > DEADBAND_LIMIT){
-            double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
-
-            if (in > 0){
-                //returns x^2 if boosted and 60% of that if not
-                return boost ? out : out*0.6;
-
-            } else {
-                //returns -(x^2) if boosted and 60% of that if not
-                return boost ? -out : -out*0.6;
-            }
-
-        } else {
-            return 0.0;
-        }
+        double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
+        return Math.abs(in) > DEADBAND_LIMIT ? (in > 0 ? (boost ? out : out*0.6) : (boost ? -out : -out*0.6)) : 0.0;
     }
 }
