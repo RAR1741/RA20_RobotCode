@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drivetrain {
@@ -8,6 +10,14 @@ public class Drivetrain {
      * motor speed is too low.
      */
     private static final double DEADBAND_LIMIT = 0.02;
+    private static final double GEAR_RATIO = 18125.0/2304;
+    private static final int ENCODER_CPR = 2048;
+    private static final double CENTIMETERS_PER_INCH = 2.54;
+    private static final double WHEEL_DIAMETER_METERS = 6.0 * CENTIMETERS_PER_INCH / 100.0;
+
+    private static final double MAX_SPEED_METERS_PER_SECOND = 4.572; // About 15 feet/second
+
+    private static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.606425);
 
     private DriveModule left;
     private DriveModule right;
@@ -76,15 +86,30 @@ public class Drivetrain {
      * @param trajectory
      */
     public double getLeftWheelSpeed() {
-        return left.getSpeed();
+        return left.getRawSpeed();
     }
 
     public double getRightWheelSpeed() {
-        return right.getSpeed();
+        return right.getRawSpeed();
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
         return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
+    }
+
+    public void setChassisSpeed(ChassisSpeeds input) {
+        DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(input);
+        speeds.normalize(MAX_SPEED_METERS_PER_SECOND);
+
+        setSpeedInMetersPerSecond(left, speeds.leftMetersPerSecond);
+        setSpeedInMetersPerSecond(right, speeds.rightMetersPerSecond);
+    }
+
+    private void setSpeedInMetersPerSecond(DriveModule module, double speedInMetersPerSecond) {
+        double targetRotationsPerSecond = speedInMetersPerSecond / (WHEEL_DIAMETER_METERS * Math.PI);
+        double targetEncoderTicksPerSecond = targetRotationsPerSecond / GEAR_RATIO * ENCODER_CPR;
+
+        module.setRawSpeed(targetEncoderTicksPerSecond);
     }
 
     /**

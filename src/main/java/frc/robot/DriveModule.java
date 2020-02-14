@@ -32,15 +32,17 @@ public class DriveModule {
     master.set(TalonFXControlMode.PercentOutput, input);
   }
 
-  public void setVoltage(double volts) {
-    //master.set(
+  public void setRawSpeed(double encoderTicksPerSecond) {
+    // This is divided by 10 because velocity is in "position change / 100 ms"
+    master.set(TalonFXControlMode.Velocity, encoderTicksPerSecond / 10);
   }
 
   public void setPTO(boolean engaged) {
     pto.set(engaged);
   }
 
-  public double getSpeed() {
-    return master.getSelectedSensorVelocity();
+  public double getRawSpeed() {
+    // This is multiplied by 10 because velocity is in "position change / 100 ms"
+    return master.getSelectedSensorVelocity() * 10;
   }
 }
