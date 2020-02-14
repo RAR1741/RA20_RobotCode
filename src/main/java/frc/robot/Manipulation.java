@@ -34,6 +34,8 @@ public class Manipulation{
         this.intakePneumatics = intakePneumatics;
         this.shootGate = shootGate;
         this.intakeGate = intakeGate;
+
+        intakeWheel.setInverted(true);
     }
 
     /**
@@ -43,7 +45,7 @@ public class Manipulation{
      */
     public void setIntakeSpin(boolean spin) {
         //TODO: test if this power is right
-        intakeWheel.set(spin ? 1 : 0);
+        intakeWheel.set(spin ? 0.5 : 0);
     }
 
     /**
