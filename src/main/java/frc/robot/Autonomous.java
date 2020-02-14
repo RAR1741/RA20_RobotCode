@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 public class Autonomous {
 
    public enum AutonomousState {
-
       AimShot1, Shoot1, MoveTrench, BallCollect, MoveShoot, AimShot2, Shoot2;
    }
 
