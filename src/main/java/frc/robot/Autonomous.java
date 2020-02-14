@@ -69,7 +69,7 @@ public class Autonomous{
 
    public void MoveTrench(){
 
-      drive.tankDrive(leftDrive, rightDrive);//TODO: determine correct numbers for driving
+      drive.tankDrive(0, 0);//TODO: determine correct numbers for driving
       //wait();//TODO: determine correct time interval
       drive.tankDrive(0, 0);
       state = AutonomousState.BallCollect;
@@ -89,7 +89,7 @@ public class Autonomous{
    }
 
    public void MoveShoot(){
-      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
+      drive.tankDrive(0, 0);//TODO: Determine correct numbers for driving
       //wait();
       drive.tankDrive(0, 0);
       state = AutonomousState.AimShot2;
