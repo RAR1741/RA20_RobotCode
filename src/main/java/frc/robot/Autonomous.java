@@ -25,7 +25,6 @@ public class Autonomous{
    private double motorPower;
    private double degrees;
    private boolean done = false;
-   private int pcCount = 0;
 
    //TODO: determine correct target speeds
    private double targetSpeedMax; 
@@ -53,17 +52,17 @@ public class Autonomous{
    }
 
    public void Shoot1(){
-
       shooter.autoControl(targetSpeed);
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
-         manipulation.indexFeed(true);
-         manipulation.indexLoad(true);
-         //wait();//TODO: determine correct time interval
-         manipulation.indexLoad(false);
-         manipulation.indexFeed(false);
+         manipulation.setIndexFeed(true);
+         manipulation.setIndexLoad(true);
+      }
+      if (manipulation.getBalls() == 0) {
+         manipulation.setIndexLoad(false);
+         manipulation.setIndexFeed(false);
          shooter.autoControl(0);
-         }
-      done = true;
+         done = true;
+      }
    }
 
    public void MoveTrench(){
@@ -72,14 +71,13 @@ public class Autonomous{
    }
 
    public void BallGrab(){
-
-      manipulation.intakeOut();
-      manipulation.intakeSpin();
-      if (pcCount < 5) {
+      manipulation.setIntakeExtend(true);
+      manipulation.setIntakeSpin(true);
+      if (manipulation.getBalls() < 5) {
          //pcDetection.approach(pcDetection.getX());
       } else {
-         manipulation.intakeStop();
-         manipulation.intakeIn();
+         manipulation.setIntakeSpin(false);
+         manipulation.setIntakeExtend(false);
          state = AutonomousState.MoveShoot;
       }
    }
@@ -96,17 +94,18 @@ public class Autonomous{
    }
 
    public void Shoot2(){
-
+      manipulation.updateIndex();
       shooter.autoControl(targetSpeed);
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
-         manipulation.indexFeed(true);
-         manipulation.indexLoad(true);
-         //wait();//TODO: determine correct time interval
-         manipulation.indexLoad(false);
-         manipulation.indexFeed(false);
+         manipulation.setIndexFeed(true);
+         manipulation.setIndexLoad(true);
+      }
+      if (manipulation.getBalls() == 0) {
+         manipulation.setIndexLoad(false);
+         manipulation.setIndexFeed(false);
          shooter.autoControl(0);
-         }
-      done = true;
+         done = true;
+      }
    }
 
    public boolean Auto(){
