@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
   boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
   boolean powercellDetectorToggle = true;
+  boolean autonomousToggle = true;
   boolean navXToggle = true;
 
 
@@ -93,14 +94,6 @@ public class Robot extends TimedRobot {
       System.out.println("done");
     } else {
       System.out.println("Vision system (limelight) disabled. Skipping initialization...");
-    }
-
-    if(this.manipulationToggle) {
-      System.out.print("Initializing manipulation...");
-      manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
-      System.out.println("done");
-    } else {
-      System.out.println("Manipulation disabled. Skipping initialization...");
     }
 
     if (this.photoswitchSensorToggle) {
@@ -171,17 +164,12 @@ public class Robot extends TimedRobot {
     driver = new XboxController(0);
     System.out.println("done");
 
-    System.out.print("Initializing Autonomous...");
-    autonomous = new Autonomous(drive, limelight, shooter, manipulation);
-
-    if (this.navXToggle) {
-      System.out.print("Initializing gyro system (NavX)...");
-      gyro = new AHRS(SPI.Port.kMXP);
-      gyro.enableLogging(false);
-
+    if (this.autonomousToggle) {
+      System.out.print("Initializing Autonomous...");
+      autonomous = new Autonomous(drive, limelight, shooter, manipulation);
       System.out.println("done");
     } else {
-      System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+      System.out.println("Sutonomous disabled. Skipping initialization...");
     }
 
     System.out.print("Initializing driver interface...");
@@ -203,8 +191,10 @@ public class Robot extends TimedRobot {
     detector.update();
     limelight.update();
     manipulation.updateIndex();
-    if (autonomous.Auto()) {
-      System.out.println("Autonomous Done");
+    if(this.autonomousToggle) {
+      if (autonomous.Auto()) {
+        System.out.println("Autonomous Done");
+      }
     }
   }
 
