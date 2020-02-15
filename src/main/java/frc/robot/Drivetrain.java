@@ -82,9 +82,9 @@ public class Drivetrain {
     }
 
     /**
-     * Cools Falcon temperature.
+     * Cools drivetrain motors.
      */
-    public void coolFalconTemp() {
+    public void coolMotors() {
         left.coolTemp();
         right.coolTemp();
     }
