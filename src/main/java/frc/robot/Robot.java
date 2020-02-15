@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
     
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(11, MotorType.kBrushless), new CANSparkMax(12, MotorType.kBrushless));
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
