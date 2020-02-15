@@ -183,6 +183,7 @@ public class Robot extends TimedRobot {
           } else if (driver.getYButtonPressed()) {
             limelight.setLightEnabled(false);
     }
+  }
 
     if (this.shooterToggle) {
       double speed = 0;
@@ -244,10 +245,10 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(turnInput, speedInput);
     }
 
-    if (this.photoswitchSensorToggle){
+    if (this.photoswitchSensorToggle) {
       SmartDashboard.putBoolean("LightClear", light.getClear());
     }
-      
+  }
     
 
   @Override
