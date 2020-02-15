@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   public boolean boost = false;
   private static final double DEADBAND_LIMIT = 0;
 
-  public double deadband(double in) {
+  public static double deadband(double in) {
     double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
     return Math.abs(in) > DEADBAND_LIMIT ? (in > 0 ? out : -out) : 0.0;
   }
