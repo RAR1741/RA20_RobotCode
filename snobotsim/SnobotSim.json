@@ -9,7 +9,7 @@
         "KauaiLabs_navX_FRC"
     ],
     "snobot_sim": {
-        "version_number": "2020-0.0.1",
+        "version_number": "2020-0.0.4",
         "libraries": {
             "java": [
                 "com.snobot.simulator:snobot_sim_gui:${version_number}",
@@ -17,7 +17,8 @@
                 "com.snobot.simulator:snobot_sim_joysticks:${version_number}",
                 "com.snobot.simulator:snobot_sim_utilities:${version_number}",
 
-                "edu.wpi.first.ntcore:ntcore-jni:${wpilibVersion}:${nativeclassifier}"
+                "edu.wpi.first.ntcore:ntcore-jni:${wpilibVersion}:${nativeclassifier}",
+                "edu.wpi.first.hal:hal-jni:${wpilibVersion}:${nativeclassifier}"
             ],
             "jni": [
                 "edu.wpi.first.wpiutil:wpiutil-cpp:${wpilibVersion}:${nativeclassifier}@zip",
