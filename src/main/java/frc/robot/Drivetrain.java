@@ -7,6 +7,7 @@ public class Drivetrain {
      * motor speed is too low.
      */
     private static final double DEADBAND_LIMIT = 0.02;
+    public static final double POWER_CAP = 0.6;
 
     private DriveModule left;
     private DriveModule right;
@@ -28,8 +29,8 @@ public class Drivetrain {
      * 
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
-    public void driveLeft(double speed, boolean boost){
-        double sp = deadband(speed, boost);
+    public void driveLeft(double speed){
+        double sp = speed;
         left.set(sp);
     }
 
@@ -38,8 +39,8 @@ public class Drivetrain {
      * 
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
-    public void driveRight(double speed, boolean boost){
-        double sp = deadband(speed, boost);
+    public void driveRight(double speed){
+        double sp = speed;
         right.set(sp);
     }
 
@@ -52,8 +53,8 @@ public class Drivetrain {
      *               from -1.0 to +1.0)
      */
     public void arcadeDrive(double xDrive, double yDrive, boolean boost){
-        this.driveLeft(yDrive - xDrive, boost);
-        this.driveRight(xDrive - yDrive, boost);
+        this.driveLeft(boost(yDrive - xDrive, boost));
+        this.driveRight(boost(xDrive - yDrive, boost));
     }
 
     /**
@@ -65,8 +66,8 @@ public class Drivetrain {
      *               from -1.0 to +1.0)
      */
     public void tankDrive(double leftDrive, double rightDrive, boolean boost){
-        this.driveLeft(leftDrive, boost);
-        this.driveRight(rightDrive, boost);
+        this.driveLeft(boost(leftDrive, boost));
+        this.driveRight(boost(rightDrive, boost));
     }
 
     /**
@@ -78,8 +79,9 @@ public class Drivetrain {
      * @param boost whether or not the boost button is being pressed 
      * @return 0.0 if {@code in} is less than abs(DEADBAND_LIMIT) else {@code in}
      */
-    public double deadband(double in, boolean boost) {
-        double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
-        return Math.abs(in) > DEADBAND_LIMIT ? (in > 0 ? (boost ? out : out*0.6) : (boost ? -out : -out*0.6)) : 0.0;
+
+    private double boost(double in, boolean boost){
+        return boost ? 1.0 : 0.6;
     }
+
 }

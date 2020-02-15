@@ -49,6 +49,14 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
 
+  public boolean boost = false;
+  private static final double DEADBAND_LIMIT = 0;
+
+  public double deadband(double in) {
+    double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
+    return Math.abs(in) > DEADBAND_LIMIT ? (in > 0 ? out : -out) : 0.0;
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -151,8 +159,8 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = driver.getX(Hand.kRight);
-      double speedInput = driver.getY(Hand.kLeft);
+      double turnInput = deadband(driver.getX(Hand.kRight));
+      double speedInput = deadband(driver.getY(Hand.kLeft));
 
       if (driver.getXButtonPressed()) {
         limelight.setLightEnabled(true);
@@ -163,8 +171,9 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(turnInput, speedInput, driver.getAButtonPressed());
     }
 
-    if (this.photoswitchSensorToggle)
+    if (this.photoswitchSensorToggle){
       SmartDashboard.putBoolean("LightClear", light.getClear());
+    }
   }
 
   @Override
@@ -187,4 +196,5 @@ public class Robot extends TimedRobot {
       return Paths.get(localPath(), "deploy", fileName).toString();
     }
   }
+
 }
