@@ -47,8 +47,6 @@ public class Robot extends TimedRobot {
   DriveModule module = null;
   Compressor compressor = null;
 
-  InputScaler joystickDeadband = new Deadband(0.01);
-
   // Booleans for toggling different things...
   boolean limelightToggle = true;
   boolean photoswitchSensorToggle = true;
@@ -58,10 +56,12 @@ public class Robot extends TimedRobot {
 
   public boolean boost = false;
   private static final double DEADBAND_LIMIT = 0.01;
+  InputScaler joystickDeadband = new Deadband(DEADBAND_LIMIT);
+  InputScaler joystickSquared = new SquaredInput(DEADBAND_LIMIT);
 
-  public static double deadband(double in) {
-    double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
-    return Math.abs(in) > DEADBAND_LIMIT ? (in > 0 ? out : -out) : 0.0;
+  public double deadband(double in) {
+    double out = joystickSquared.scale(in);
+    return joystickDeadband.scale(out);
   }
 
   /**
@@ -174,8 +174,8 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = joystickDeadband.scale(driver.getX(Hand.kRight));
-      double speedInput = joystickDeadband.scale(driver.getY(Hand.kLeft));
+      double turnInput = deadband(driver.getX(Hand.kRight));
+      double speedInput = deadband(driver.getY(Hand.kLeft));
 
       if (driver.getXButtonPressed()) {
         limelight.setLightEnabled(true);
