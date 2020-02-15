@@ -68,6 +68,16 @@ public class PowercellDetection {
 
         Arrays.sort(targets, new sortByArea());
     }
+
+    /**
+     * Gets the target at the given index.
+     * 
+     * @param index index of the target.
+     * @return target at the given index.
+     */
+    public Target getTarget(int index) {
+        return targets[index];
+    }
 }
 
 class sortByArea implements Comparator<Target> {
