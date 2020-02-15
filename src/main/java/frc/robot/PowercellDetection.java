@@ -14,16 +14,13 @@ public class PowercellDetection {
     private double[] boxes;
     private Target[] targets;
 
-    private Drivetrain drive;
-
     NetworkTable detectionTable;
 
     /**
      * Constructor
      */
-    public PowercellDetection (Drivetrain drive) {
+    public PowercellDetection () {
         detectionTable = NetworkTableInstance.getDefault().getTable("ML");
-        this.drive = drive;
     }
 
     /**
@@ -42,17 +39,6 @@ public class PowercellDetection {
      */
     public int getNumber() {
         return nb;
-    }
-
-    /**
-     * Moves the robot to intercept powercells
-     * 
-     * @param x target X-coordinate
-     */
-    public void approachPC(double x) {
-        //TODO: Determine division variable for percent of screen
-        drive.driveLeft(x >= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - targets[0].getArea())/SCREEN_AREA)/4);
-        drive.driveRight(x <= 0 ? 0.75 : 0.75 * ((SCREEN_AREA - targets[0].getArea())/SCREEN_AREA)/4);
     }
 
     /**
@@ -77,6 +63,26 @@ public class PowercellDetection {
      */
     public Target getTarget(int index) {
         return targets[index];
+    }
+
+    /**
+     * Gets perentage of the screen taken up by given target.
+     * 
+     * @param target target powercell.
+     * @return percentage of screen taken up by the target.
+     */
+    public double getAreaPercent(Target target) {
+        return target.getArea()/SCREEN_AREA;
+    }
+
+    /**
+     * Gets percentage of the screen not taken up by given target.
+     * 
+     * @param target target powercell.
+     * @return percentage of screen not taken up by the target.
+     */
+    public double getInvertedAreaPercent(Target target) {
+        return (SCREEN_AREA - target.getArea())/SCREEN_AREA;
     }
 }
 

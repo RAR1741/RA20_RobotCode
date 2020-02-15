@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor light;
+  PowercellDetection detector;
   DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
   boolean photoswitchSensorToggle = true;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
+  boolean powerellDetectorToggle = true;
   boolean navXToggle = true;
 
   /**
@@ -80,7 +82,15 @@ public class Robot extends TimedRobot {
     } else {
       System.out.println("Photoswitch disabled. Skipping initialization...");
     }
-    
+
+    if (this.powerellDetectorToggle) {
+      System.out.print("Initializing powercell detection...");
+      detector = new PowercellDetection();
+      System.out.println("done");
+    } else {
+      System.out.println("Powercell detection disabled. Skipping initialization...");
+    }
+
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
       shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
@@ -103,7 +113,7 @@ public class Robot extends TimedRobot {
         new TalonFX(10),
         new Solenoid(2, 1)
       );
-      drive = new Drivetrain(leftModule, rightModule);
+      drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
@@ -143,6 +153,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (this.limelightToggle)
       limelight.update();
+
+    if (this.powerellDetectorToggle)
+      detector.update();
 
     if (this.shooterToggle) {
       double speed = 0;
