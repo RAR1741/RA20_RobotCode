@@ -1,14 +1,6 @@
 package frc.robot;
 
 public class Drivetrain {
-    
-    /**
-     * {@value #DEADBAND_LIMIT} The limit for when to stop the motor running if the
-     * motor speed is too low.
-     */
-    private static final double DEADBAND_LIMIT = 0.02;
-    public static final double POWER_CAP = 0.6;
-
     private DriveModule left;
     private DriveModule right;
 
@@ -52,9 +44,9 @@ public class Drivetrain {
      * @param yDrive The speed to drive the drivetrain in the y direction (ranges
      *               from -1.0 to +1.0)
      */
-    public void arcadeDrive(double xDrive, double yDrive, boolean boost){
-        this.driveLeft(boost(yDrive - xDrive, boost));
-        this.driveRight(boost(xDrive - yDrive, boost));
+    public void arcadeDrive(double xDrive, double yDrive){
+        this.driveLeft(yDrive - xDrive);
+        this.driveRight(xDrive - yDrive);
     }
 
     /**
@@ -65,23 +57,8 @@ public class Drivetrain {
      * @param yDrive The speed to drive the right drivetrain (ranges
      *               from -1.0 to +1.0)
      */
-    public void tankDrive(double leftDrive, double rightDrive, boolean boost){
-        this.driveLeft(boost(leftDrive, boost));
-        this.driveRight(boost(rightDrive, boost));
+    public void tankDrive(double leftDrive, double rightDrive){
+        this.driveLeft(leftDrive);
+        this.driveRight(rightDrive);
     }
-
-    /**
-     * Normalizes the input to 0.0 if it is below the value set by
-     * {@link #DEADBAND_LIMIT} This is primarily used for reducing the strain on
-     * motors.
-     *
-     * @param in the input to check
-     * @param boost whether or not the boost button is being pressed 
-     * @return 0.0 if {@code in} is less than abs(DEADBAND_LIMIT) else {@code in}
-     */
-
-    private double boost(double in, boolean boost){
-        return boost ? 1.0 : 0.6;
-    }
-
 }

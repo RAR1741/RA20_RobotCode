@@ -54,10 +54,11 @@ public class Robot extends TimedRobot {
   boolean drivetrainToggle = true;
   boolean navXToggle = true;
 
-  public boolean boost = false;
   private static final double DEADBAND_LIMIT = 0.01;
+  private static final double SPEED_CAP = 0.6;
   InputScaler joystickDeadband = new Deadband(DEADBAND_LIMIT);
   InputScaler joystickSquared = new SquaredInput(DEADBAND_LIMIT);
+  BoostInput boost = new BoostInput(SPEED_CAP);
 
   public double deadband(double in) {
     double out = joystickSquared.scale(in);
@@ -177,13 +178,17 @@ public class Robot extends TimedRobot {
       double turnInput = deadband(driver.getX(Hand.kRight));
       double speedInput = deadband(driver.getY(Hand.kLeft));
 
+      // Limit speed input to a lower percentage unless boost mode is on
+      boost.setEnabled(driver.getAButton());
+      speedInput = boost.scale(speedInput);
+
       if (driver.getXButtonPressed()) {
         limelight.setLightEnabled(true);
       } else if (driver.getYButtonPressed()) {
         limelight.setLightEnabled(false);
       }
 
-      drive.arcadeDrive(turnInput, speedInput, driver.getAButtonPressed());
+      drive.arcadeDrive(turnInput, speedInput);
     }
 
     if (this.photoswitchSensorToggle){
