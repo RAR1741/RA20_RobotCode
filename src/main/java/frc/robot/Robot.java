@@ -12,6 +12,9 @@ import frc.robot.Limelight;
 import java.io.File;
 import java.nio.file.Paths;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
@@ -34,6 +37,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   private Toml config;
+  AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor light;
   DigitalInput lightInput;
@@ -48,6 +52,7 @@ public class Robot extends TimedRobot {
   boolean photoswitchSensorToggle = true;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
+  boolean navXToggle = true;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -104,6 +109,14 @@ public class Robot extends TimedRobot {
       System.out.println("Drivetrain disabled. Skipping initialization...");
     }
 
+  if (this.navXToggle) {
+    System.out.print("Initializing gyro system (NavX)...");
+    gyro = new AHRS(SPI.Port.kMXP);
+    gyro.enableLogging(false);
+    System.out.println("done");
+  } else {
+    System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+  }
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
