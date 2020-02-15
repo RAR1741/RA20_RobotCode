@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   boolean photoswitchSensorToggle = true;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
-  boolean powerellDetectorToggle = true;
+  boolean powercellDetectorToggle = true;
   boolean navXToggle = true;
 
   /**
@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
       System.out.println("Photoswitch disabled. Skipping initialization...");
     }
 
-    if (this.powerellDetectorToggle) {
+    if (this.powercellDetectorToggle) {
       System.out.print("Initializing powercell detection...");
       detector = new PowercellDetection();
       System.out.println("done");
@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
     if (this.limelightToggle)
       limelight.update();
 
-    if (this.powerellDetectorToggle)
+    if (this.powercellDetectorToggle)
       detector.update();
 
     if (this.shooterToggle) {
