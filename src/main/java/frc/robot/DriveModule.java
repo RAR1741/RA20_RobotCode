@@ -43,7 +43,9 @@ public class DriveModule {
   }
 
   /**
-   * Adds the temperature of the motors to Smart Dashboard.
+   * Gets temperature of givien motor.
+   * 
+   * @param motor motor that's temperature is gotten.
    */
   private double getTemp(TalonFX motor) {
     return motor.getTemperature();
