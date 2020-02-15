@@ -96,4 +96,12 @@ public class Manipulation{
     public int getBalls() {
         return balls;
     }
+
+    /**
+     * Sets balls to given number.
+     * @param balls amount
+     */
+    public void setBalls(int balls) {
+        this.balls = balls;
+    }
 }

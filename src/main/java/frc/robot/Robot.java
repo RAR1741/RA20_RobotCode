@@ -195,13 +195,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
+    manipulation.setBalls(3);
   }
 
   @Override
   public void autonomousPeriodic() {
-
-    // pcDetection.update();
+    detector.update();
     limelight.update();
     manipulation.updateIndex();
     if (autonomous.Auto()) {
