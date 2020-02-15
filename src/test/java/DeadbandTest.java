@@ -20,4 +20,10 @@ public class DeadbandTest {
   public void testDeadbandLimitsCloseToZero() {
     assertEquals(0.0, Robot.deadband(0.005), CLOSE_ENOUGH);
   }
+
+  // This tests that we don't do input scaling. But we DO do input scaling.
+  // @Test
+  // public void testDeadBandHalf() {
+  //   assertEquals(0.5, Robot.deadband(0.5), CLOSE_ENOUGH);
+  // }
 }
