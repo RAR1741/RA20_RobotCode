@@ -48,7 +48,6 @@ public class Autonomous{
    }
 
    public void AimShot1(){
-
       //autoAim.run();
       state = AutonomousState.Shoot1;
    }
@@ -68,10 +67,7 @@ public class Autonomous{
    }
 
    public void MoveTrench(){
-
-      drive.tankDrive(leftDrive, rightDrive);//TODO: determine correct numbers for driving
-      //wait();//TODO: determine correct time interval
-      drive.tankDrive(0, 0);
+      //TODO: Add trajectory based movement.
       state = AutonomousState.BallCollect;
    }
 
@@ -89,9 +85,7 @@ public class Autonomous{
    }
 
    public void MoveShoot(){
-      drive.tankDrive(leftDrive, rightDrive);//TODO: Determine correct numbers for driving
-      //wait();
-      drive.tankDrive(0, 0);
+      //TODO: Add trajectory based movement.
       state = AutonomousState.AimShot2;
    }
 
