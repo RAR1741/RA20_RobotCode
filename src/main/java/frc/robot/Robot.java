@@ -217,7 +217,7 @@ public class Robot extends TimedRobot {
 
     if (this.manipulationToggle) {
       manipulation.setIntakeExtend(driver.getBumperPressed(Hand.kRight));
-      manipulation.setIntakeExtend(driver.getBumperPressed(Hand.kLeft));
+      manipulation.setIntakeExtend(!driver.getBumperPressed(Hand.kLeft));
 
       manipulation.setIntakeSpin(driver.getYButton());
 
