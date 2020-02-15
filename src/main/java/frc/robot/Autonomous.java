@@ -74,7 +74,7 @@ public class Autonomous{
       manipulation.setIntakeExtend(true);
       manipulation.setIntakeSpin(true);
       if (manipulation.getBalls() < 5) {
-         //pcDetection.approach(pcDetection.getX());
+         drive.approachPowercell();
       } else {
          manipulation.setIntakeSpin(false);
          manipulation.setIntakeExtend(false);

@@ -43,12 +43,13 @@ public class Robot extends TimedRobot {
   PhotoswitchSensor lightIntake;
   DigitalInput lightShootInput;
   DigitalInput lightIntakeInput;
+  PowercellDetection detector;
+  DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
   Manipulation manipulation = null;
   Autonomous autonomous;
-  //PowercellDetection detector = null;
   DriveModule module = null;
   Compressor compressor = null;
 
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
+  boolean powercellDetectorToggle = true;
   boolean navXToggle = true;
 
 
@@ -83,8 +85,6 @@ public class Robot extends TimedRobot {
    */
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
-
-    //detector = new PowercellDetection();
 
     if (this.limelightToggle) {
       System.out.print("Initializing vision system (limelight)...");
@@ -114,6 +114,14 @@ public class Robot extends TimedRobot {
       System.out.println("Photoswitches disabled. Skipping initialization...");
     }
 
+    if (this.powercellDetectorToggle) {
+      System.out.print("Initializing powercell detection...");
+      detector = new PowercellDetection();
+      System.out.println("done");
+    } else {
+      System.out.println("Powercell detection disabled. Skipping initialization...");
+    }
+
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
       shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
@@ -132,9 +140,19 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
-      drive = new Drivetrain(leftModule, rightModule);
+      DriveModule leftModule = new DriveModule(
+        new TalonFX(5),
+        new TalonFX(6),
+        new TalonFX(7),
+        new Solenoid(2, 0)
+      );
+      DriveModule rightModule = new DriveModule(
+        new TalonFX(8),
+        new TalonFX(9),
+        new TalonFX(10),
+        new Solenoid(2, 1)
+      );
+      drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
@@ -205,6 +223,9 @@ public class Robot extends TimedRobot {
         limelight.setLightEnabled(false);
       }
     }
+
+    if (this.powercellDetectorToggle)
+      detector.update();
 
     if (this.shooterToggle) {
       double speed = 0;

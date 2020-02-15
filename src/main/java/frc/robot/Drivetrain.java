@@ -10,17 +10,21 @@ public class Drivetrain {
 
     private DriveModule left;
     private DriveModule right;
+    private PowercellDetection detector;
 
     /**
      * Constructor
      * 
      * @param left The left drive module
      * @param right The right drive module
+     * @param detector The powercell detection object.
      */
-    Drivetrain(DriveModule left, DriveModule right){
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector){
         this.left = left;
         this.right = right;
         left.setInverted(true);
+
+        this.detector = detector;
     }
 
     /**
@@ -79,5 +83,14 @@ public class Drivetrain {
      */
     public double deadband(double in) {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
+    }
+
+    /**
+     * Moves the robot to intercept powercells
+     */
+    public void approachPowercell() {
+        //TODO: Determine division variable for percent of screen
+        driveLeft(detector.getTarget(0).getCenterX() >= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
+        driveRight(detector.getTarget(0).getCenterX() <= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
     }
 }
