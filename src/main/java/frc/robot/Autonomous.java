@@ -25,7 +25,6 @@ public class Autonomous {
    private Drivetrain drive;
    private Limelight limelight;
    private Shooter shooter;
-   // private PowercellDetection pcDetection;
 
    private double error;
    private double motorPower;
@@ -75,21 +74,21 @@ public class Autonomous {
       state = AutonomousState.Shoot1;
    }
 
-   public void Shoot1() {
+   public void Shoot1(){
       shooter.autoControl(targetSpeed);
-      if (shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin) {
-         manipulation.indexFeed(true);
-         manipulation.indexLoad(true);
-         // wait();//TODO: determine correct time interval
-         manipulation.indexLoad(false);
-         manipulation.indexFeed(false);
-         shooter.autoControl(0);
+      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
+         manipulation.setIndexFeed(true);
+         manipulation.setIndexLoad(true);
       }
-      done = true;
+      if (manipulation.getBalls() == 0) {
+         manipulation.setIndexLoad(false);
+         manipulation.setIndexFeed(false);
+         shooter.autoControl(0);
+         done = true;
+      }
    }
 
    public void MoveTrench() {
-
       // RamseteCommand ramseteCommand = new RamseteCommand(
       //       TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), start,
       //       new RamseteController(kRamseteB, kRamseteZeta),
@@ -100,23 +99,20 @@ public class Autonomous {
       //       drive::setVoltage, drive);
    }
 
-   public void BallGrab() {
-
-      manipulation.intakeOut();
-      manipulation.intakeSpin();
-      if (pcCount < 5) {
-         // pcDetection.approach(pcDetection.getX());
+   public void BallGrab(){
+      manipulation.setIntakeExtend(true);
+      manipulation.setIntakeSpin(true);
+      if (manipulation.getBalls() < 5) {
+         drive.approachPowercell();
       } else {
-         manipulation.intakeStop();
-         manipulation.intakeIn();
+         manipulation.setIntakeSpin(false);
+         manipulation.setIntakeExtend(false);
          state = AutonomousState.MoveShoot;
       }
    }
 
-   public void MoveShoot() {
-      // drive.tankDrive(leftDrive, rightDrive);// TODO: Determine correct numbers for driving
-      // wait();
-      drive.tankDrive(0, 0);
+   public void MoveShoot(){
+      //TODO: Add trajectory based movement.
       state = AutonomousState.AimShot2;
    }
 
@@ -125,18 +121,19 @@ public class Autonomous {
       state = AutonomousState.Shoot2;
    }
 
-   public void Shoot2() {
-
+   public void Shoot2(){
+      manipulation.updateIndex();
       shooter.autoControl(targetSpeed);
-      if (shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin) {
-         manipulation.indexFeed(true);
-         manipulation.indexLoad(true);
-         // wait();//TODO: determine correct time interval
-         manipulation.indexLoad(false);
-         manipulation.indexFeed(false);
-         shooter.autoControl(0);
+      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
+         manipulation.setIndexFeed(true);
+         manipulation.setIndexLoad(true);
       }
-      done = true;
+      if (manipulation.getBalls() == 0) {
+         manipulation.setIndexLoad(false);
+         manipulation.setIndexFeed(false);
+         shooter.autoControl(0);
+         done = true;
+      }
    }
 
    public boolean Auto() {
