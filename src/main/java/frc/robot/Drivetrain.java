@@ -81,8 +81,11 @@ public class Drivetrain {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
     }
 
-    public void getTemp() {
-        left.getTemp("Left Motor Temperature");
-        right.getTemp("Right Motor Temperature");
+    /**
+     * Cools Falcon temperature.
+     */
+    public void coolFalconTemp() {
+        left.coolTemp();
+        right.coolTemp();
     }
 }

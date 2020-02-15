@@ -3,22 +3,27 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveModule {
   private TalonFX master;
   private TalonFX slave1;
   private TalonFX slave2;
 
+  private Solenoid cooler;
+
   private Solenoid pto;
 
-  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid pto) {
+  private final double MAX_TEMP = 35; //TODO: Determine optimal temperature
+
+  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid pto, Solenoid cooler) {
     this.master = master;
     this.slave1 = slave1;
     this.slave2 = slave2;
 
     this.slave1.follow(this.master);
     this.slave2.follow(this.master);
+
+    this.cooler = cooler;
 
     this.pto = pto;
   }
@@ -40,8 +45,14 @@ public class DriveModule {
   /**
    * Adds the temperature of the motors to Smart Dashboard.
    */
-  public void getTemp(String message) {
-    double[] temp = {master.getTemperature(), slave1.getTemperature(), slave2.getTemperature()};
-    SmartDashboard.putNumberArray(message, temp);
+  public double getTemp(TalonFX motor) {
+    return motor.getTemperature();
+  }
+
+  /**
+   * Cools falcons using pneumatic coolers if above recommended temperature.
+   */
+  public void coolTemp() {
+    cooler.set(getTemp(master) > MAX_TEMP || getTemp(slave1) > MAX_TEMP || getTemp(slave2) > MAX_TEMP);
   }
 }
