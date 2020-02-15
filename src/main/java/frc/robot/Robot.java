@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
+  XboxController operator = null;
   DriveModule module = null;
   Compressor compressor = null;
 
@@ -53,6 +54,8 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
   boolean navXToggle = true;
+
+  double targetAngle = 0;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -120,6 +123,7 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
+    operator = new XboxController(1);
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
@@ -146,21 +150,26 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       double speed = 0;
+      double shooterAngleSpeed = 0;
 
-      if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * driver.getY(Hand.kRight);
-      } else if (driver.getAButton()) {
-        speed = 1;
+      if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
+        speed = -1 * operator.getY(Hand.kRight);
+        shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
 
-      shooter.manualControl(speed);
+      if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
+        shooter.reHome();
+      }
+
+      shooter.manualControl(speed, shooterAngleSpeed);
 
       SmartDashboard.putNumber("ShooterPower", speed);
       SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+      SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
     }
 
     if (this.drivetrainToggle) {
