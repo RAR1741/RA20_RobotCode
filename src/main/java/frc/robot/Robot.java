@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   boolean navXToggle = true;
 
   public boolean boost = false;
-  private static final double DEADBAND_LIMIT = 0;
+  private static final double DEADBAND_LIMIT = 0.01;
 
   public static double deadband(double in) {
     double out = ((Math.abs(in)-DEADBAND_LIMIT)*(Math.abs(in)-DEADBAND_LIMIT))/((1-DEADBAND_LIMIT)*(1-DEADBAND_LIMIT));
