@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
   boolean autonomousToggle = true;
   boolean manipulationToggle = true;
   boolean powercellDetectorToggle = true;
+  boolean autonomousToggle = true;
   boolean navXToggle = true;
 
 
@@ -98,14 +99,6 @@ public class Robot extends TimedRobot {
       System.out.println("done");
     } else {
       System.out.println("Vision system (limelight) disabled. Skipping initialization...");
-    }
-
-    if(this.manipulationToggle) {
-      System.out.print("Initializing manipulation...");
-      manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
-      System.out.println("done");
-    } else {
-      System.out.println("Manipulation disabled. Skipping initialization...");
     }
 
     if (this.photoswitchSensorToggle) {
@@ -167,9 +160,6 @@ public class Robot extends TimedRobot {
     driver = new XboxController(0);
     System.out.println("done");
 
-    System.out.print("Initializing Autonomous...");
-    autonomous = new Autonomous(drive, limelight, shooter, manipulation);
-
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
     System.out.println("done");
@@ -197,7 +187,9 @@ public class Robot extends TimedRobot {
     detector.update();
     limelight.update();
     manipulation.updateIndex();
+
     if (this.autonomousToggle) {
+
       if (autonomous.Auto()) {
         System.out.println("Autonomous Done");
       }
