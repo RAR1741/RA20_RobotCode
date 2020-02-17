@@ -58,7 +58,6 @@ public class Robot extends TimedRobot {
   boolean photoswitchSensorToggle = true;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
-  boolean autonomousToggle = true;
   boolean manipulationToggle = true;
   boolean powercellDetectorToggle = true;
   boolean autonomousToggle = true;
