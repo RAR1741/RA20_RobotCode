@@ -166,6 +166,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("ShooterPower", speed);
       SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
       SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
+      SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
       SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
       SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
       SmartDashboard.putString("ShooterState", shooter.getState().toString());

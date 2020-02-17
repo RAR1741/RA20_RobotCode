@@ -34,7 +34,8 @@ public class Shooter {
     angleMotor.getPIDController().setP(1.0);
     angleMotor.getPIDController().setI(0.0);
     angleMotor.getPIDController().setD(0.0);
-    angleMotor.getEncoder().setPositionConversionFactor(2.7); // TODO: Get the real conversion factor from Mr. Coulumbe
+    angleMotor.getEncoder().setPositionConversionFactor(0.3765); // TODO: Get the real conversion factor from Mr.
+                                                                 // Coulumbe
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
     state = State.HomingDown;
@@ -111,6 +112,10 @@ public class Shooter {
    */
   public double getAngleInDegrees() {
     return angleMotor.getEncoder().getPosition();
+  }
+
+  public double getEncoderCount() {
+    return angleMotor.getEncoder().getPosition() / angleMotor.getEncoder().getPositionConversionFactor();
   }
 
   /**
