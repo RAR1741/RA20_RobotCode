@@ -29,16 +29,18 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   XboxController driver = null;
 
+  double speed = 0;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-    System.out.print("Initializing vision system (limelight)...");
-    limelight = new Limelight();
-    limelight.setLightEnabled(false);
-    System.out.println("done");
+    // System.out.print("Initializing vision system (limelight)...");
+    // limelight = new Limelight();
+    // limelight.setLightEnabled(false);
+    // System.out.println("done");
 
     System.out.print("Initializing shooter...");
     shooter = new Shooter(new CANSparkMax(3, MotorType.kBrushless), new CANSparkMax(4, MotorType.kBrushless));
@@ -63,8 +65,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    limelight.update();
-    double speed = 0;
+    // limelight.update();
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = -1 * driver.getY(Hand.kRight);
     } else if (driver.getAButton()) {
@@ -73,20 +74,21 @@ public class Robot extends TimedRobot {
       speed += 0.5;
     }
 
-    if (Math.abs(speed) < 0.1) {
-      speed = 0;
-    }
+    // if (Math.abs(speed) < 0.1) {
+    // speed = 0;
+    // }
 
-    shooter.manualControl(driver.getBButton() ? speed : 0);
+    shooter.manualControl((driver.getBButton() ? speed : 0), (driver.getXButton() ? driver.getY(Hand.kLeft) : 0));
 
-    if (driver.getXButtonPressed()) {
-      limelight.setLightEnabled(true);
-    } else if (driver.getYButtonPressed()) {
-      limelight.setLightEnabled(false);
-    }
+    // if (driver.getXButtonPressed()) {
+    // limelight.setLightEnabled(true);
+    // } else if (driver.getYButtonPressed()) {
+    // limelight.setLightEnabled(false);
+    // }
 
     SmartDashboard.putNumber("ShooterPower", speed);
     SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+    SmartDashboard.putNumber("AnglePower", driver.getY(Hand.kLeft));
   }
 
   @Override

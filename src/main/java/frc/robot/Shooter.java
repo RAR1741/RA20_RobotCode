@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 
 public class Shooter {
-  private final double DEGREES_PER_REVOLUTION = 1.0; //TODO: Determine degrees per revolution of the angle motor.
-  private final double REVOLUTIONS_PER_ENCODER = 1/42.0;
+  private final double DEGREES_PER_REVOLUTION = 1.0; // TODO: Determine degrees per revolution of the angle motor.
+  private final double REVOLUTIONS_PER_ENCODER = 1 / 42.0;
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
@@ -13,7 +13,7 @@ public class Shooter {
   /**
    * Constructor
    * 
-   * @param launcher CAN Id for the launcher motor.
+   * @param launcher   CAN Id for the launcher motor.
    * @param angleMotor CAN Id for the angle motor.
    */
   public Shooter(CANSparkMax launcher, CANSparkMax angleMotor) {
@@ -33,8 +33,9 @@ public class Shooter {
    * 
    * @param power the power at which the shooter spins.
    */
-  public void manualControl(double power) {
+  public void manualControl(double power, double anglePower) {
     launcher.set(power);
+    angleMotor.set(anglePower);
   }
 
   /**
@@ -61,6 +62,6 @@ public class Shooter {
    * @param degrees degrees to which the angle motor will be turned.
    */
   public void setAngle(double degrees) {
-    angleMotor.getPIDController().setReference(degrees * (1/DEGREES_PER_REVOLUTION), ControlType.kPosition);
+    angleMotor.getPIDController().setReference(degrees * (1 / DEGREES_PER_REVOLUTION), ControlType.kPosition);
   }
 }
