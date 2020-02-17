@@ -2,13 +2,23 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 
 public class Shooter {
-  private final double DEGREES_PER_REVOLUTION = 1.0; // TODO: Determine degrees per revolution of the angle motor.
-  private final double REVOLUTIONS_PER_ENCODER = 1 / 42.0;
+  private static final double HOMING_SPEED_DOWN = -0.3; // Speed at which we seek downward during homing
+  private static final double HOME_POSITION = 0.0; // Angle at lower limit switch
+  private static final double POSITION_TOLERANCE = 0.01; // Limit of being "close enough" on the angle
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
+
+  private double targetAngle;
+
+  public enum State {
+    HomingDown, Idle, MovingToAngle, ManualControl
+  }
+
+  private State state;
 
   /**
    * Constructor
@@ -24,8 +34,10 @@ public class Shooter {
     angleMotor.getPIDController().setP(1.0);
     angleMotor.getPIDController().setI(0.0);
     angleMotor.getPIDController().setD(0.0);
+    angleMotor.getEncoder().setPositionConversionFactor(2.7); // TODO: Get the real conversion factor from Mr. Coulumbe
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
+    state = State.HomingDown;
   }
 
   /**
@@ -33,9 +45,54 @@ public class Shooter {
    * 
    * @param power the power at which the shooter spins.
    */
-  public void manualControl(double power, double anglePower) {
+  public void manualControl(double power, double angleMotorPower) {
+    state = State.ManualControl;
     launcher.set(power);
-    angleMotor.set(anglePower);
+    angleMotor.set(angleMotorPower);
+  }
+
+  public double getTargetAngle() {
+    return targetAngle;
+  }
+
+  public boolean onTarget() {
+    double error = angleMotor.getEncoder().getPosition() - targetAngle;
+    return Math.abs(error) < POSITION_TOLERANCE;
+  }
+
+  /**
+   * Run main state machine for semi-autonomous control of the robot.
+   */
+  public void update() {
+    switch (state) {
+    case HomingDown:
+      angleMotor.set(HOMING_SPEED_DOWN);
+
+      if (angleMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get()) {
+        // We've reached the lower limit of the screw assembly, we're now at a
+        // known position. Set the absolute position to the encoder so we can deal
+        // with easier units.
+        angleMotor.set(0);
+        angleMotor.getEncoder().setPosition(HOME_POSITION);
+        state = State.Idle;
+      }
+      break;
+    case Idle:
+      // Idle!
+      break;
+    case MovingToAngle:
+      if (onTarget()) {
+        state = State.Idle;
+      }
+      break;
+    case ManualControl:
+      // Nothing
+      break;
+    }
+  }
+
+  public void reHome() {
+    state = State.HomingDown;
   }
 
   /**
@@ -50,10 +107,10 @@ public class Shooter {
   /**
    * Gets the angle the angle motor is turned
    * 
-   * @return degrees the angle motor is turned/
+   * @return degrees the angle motor is turned to
    */
-  public double getAngleDegree() {
-    return angleMotor.getEncoder().getPosition() * REVOLUTIONS_PER_ENCODER * DEGREES_PER_REVOLUTION;
+  public double getAngleInDegrees() {
+    return angleMotor.getEncoder().getPosition();
   }
 
   /**
@@ -62,6 +119,18 @@ public class Shooter {
    * @param degrees degrees to which the angle motor will be turned.
    */
   public void setAngle(double degrees) {
-    angleMotor.getPIDController().setReference(degrees * (1 / DEGREES_PER_REVOLUTION), ControlType.kPosition);
+    angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
+  }
+
+  public boolean getReverseLimit() {
+    return angleMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+  }
+
+  public boolean getForwardLimit() {
+    return angleMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+  }
+
+  public State getState() {
+    return state;
   }
 }
