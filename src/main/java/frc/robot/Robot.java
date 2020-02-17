@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-
 import frc.robot.Limelight;
 
 import com.revrobotics.CANSparkMax;
@@ -69,14 +68,16 @@ public class Robot extends TimedRobot {
     if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
       speed = -1 * driver.getY(Hand.kRight);
     } else if (driver.getAButton()) {
-      speed = 1;
+      speed -= 0.5;
+    } else if (driver.getYButton()) {
+      speed += 0.5;
     }
 
     if (Math.abs(speed) < 0.1) {
       speed = 0;
     }
 
-    shooter.manualControl(speed);
+    shooter.manualControl(driver.getBButton() ? speed : 0);
 
     if (driver.getXButtonPressed()) {
       limelight.setLightEnabled(true);
