@@ -124,6 +124,7 @@ public class Shooter {
    * @param degrees degrees to which the angle motor will be turned.
    */
   public void setAngle(double degrees) {
+    state = State.MovingToAngle;
     angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
   }
 
