@@ -37,7 +37,7 @@ public class Shooter {
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
     angleMotor.getPIDController().setOutputRange(-0.5, 0.5);
 
-    launcher.getPIDController().setP(1.0);
+    launcher.getPIDController().setP(0.25);
     launcher.getPIDController().setI(0.0);
     launcher.getPIDController().setD(0.0);
     launcher.getEncoder().setVelocityConversionFactor(1.5);

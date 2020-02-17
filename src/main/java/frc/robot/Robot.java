@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * operator.getY(Hand.kRight);
+        speed = operator.getY(Hand.kRight);
         shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
 
@@ -154,13 +154,19 @@ public class Robot extends TimedRobot {
         speed = 0;
       }
 
-      if (operator.getXButtonPressed()) {
-        shooter.setAngle(20.0);
+      if (operator.getXButton()) {
+        shooter.setLauncherRPM(3500);
+      } else {
+        shooter.setLauncherRPM(0);
       }
 
-      if (operator.getYButtonPressed()) {
-        shooter.setAngle(30.0);
-      }
+      // if (operator.getXButtonPressed()) {
+      // shooter.setAngle(20.0);
+      // }
+
+      // if (operator.getYButtonPressed()) {
+      // shooter.setAngle(30.0);
+      // }
 
       if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
         shooter.reHome();
