@@ -44,15 +44,20 @@ public class Robot extends TimedRobot {
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
+  XboxController operator = null;
   DriveModule module = null;
   Compressor compressor = null;
 
   // Booleans for toggling different things...
-  boolean limelightToggle = true;
-  boolean photoswitchSensorToggle = true;
+  boolean limelightToggle = false;
+  boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
-  boolean drivetrainToggle = true;
-  boolean navXToggle = true;
+  boolean drivetrainToggle = false;
+  boolean navXToggle = false;
+
+  double targetAngle = 0;
+
+  double speed = 0;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -80,10 +85,10 @@ public class Robot extends TimedRobot {
     } else {
       System.out.println("Photoswitch disabled. Skipping initialization...");
     }
-    
+
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(2, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -91,39 +96,30 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(
-        new TalonFX(5),
-        new TalonFX(6),
-        new TalonFX(7),
-        new Solenoid(2, 0)
-      );
-      DriveModule rightModule = new DriveModule(
-        new TalonFX(8),
-        new TalonFX(9),
-        new TalonFX(10),
-        new Solenoid(2, 1)
-      );
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
       drive = new Drivetrain(leftModule, rightModule);
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
     }
 
-  if (this.navXToggle) {
-    System.out.print("Initializing gyro system (NavX)...");
-    gyro = new AHRS(SPI.Port.kMXP);
-    gyro.enableLogging(false);
-    System.out.println("done");
-  } else {
-    System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
-  }
+    if (this.navXToggle) {
+      System.out.print("Initializing gyro system (NavX)...");
+      gyro = new AHRS(SPI.Port.kMXP);
+      gyro.enableLogging(false);
+      System.out.println("done");
+    } else {
+      System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+    }
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
+    operator = new XboxController(1);
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
-    compressor = new Compressor(2);
+    // compressor = new Compressor(2);
     System.out.println("done");
   }
 
@@ -137,6 +133,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // shooter.reHome();
   }
 
   @Override
@@ -146,21 +143,33 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       double speed = 0;
+      double shooterAngleSpeed = 0;
 
-      if (driver.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * driver.getY(Hand.kRight);
-      } else if (driver.getAButton()) {
-        speed = 1;
+      if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
+        speed = -1 * operator.getY(Hand.kRight);
+        shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
 
-      shooter.manualControl(speed);
+      if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
+        shooter.reHome();
+      }
+
+      if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
+        shooter.manualControl(speed, shooterAngleSpeed);
+      }
+      shooter.update();
 
       SmartDashboard.putNumber("ShooterPower", speed);
       SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+      SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
+      SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
+      SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
+      SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
+      SmartDashboard.putString("ShooterState", shooter.getState().toString());
     }
 
     if (this.drivetrainToggle) {
