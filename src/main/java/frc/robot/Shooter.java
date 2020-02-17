@@ -36,6 +36,11 @@ public class Shooter {
     angleMotor.getPIDController().setD(0.0);
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
 
+    launcher.getPIDController().setP(1.0);
+    launcher.getPIDController().setI(0.0);
+    launcher.getPIDController().setD(0.0);
+    launcher.getEncoder().setVelocityConversionFactor(1.5);
+
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
     state = State.HomingDown;
   }
@@ -93,6 +98,10 @@ public class Shooter {
 
   public void reHome() {
     state = State.HomingDown;
+  }
+
+  public void setLauncherRPM(double rpm) {
+    launcher.getPIDController().setReference(rpm, ControlType.kVelocity);
   }
 
   /**
