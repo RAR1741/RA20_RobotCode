@@ -35,6 +35,7 @@ public class Shooter {
     angleMotor.getPIDController().setI(0.0);
     angleMotor.getPIDController().setD(0.0);
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
+    angleMotor.getPIDController().setOutputRange(-0.5, 0.5);
 
     launcher.getPIDController().setP(1.0);
     launcher.getPIDController().setI(0.0);
@@ -98,6 +99,10 @@ public class Shooter {
 
   public void reHome() {
     state = State.HomingDown;
+  }
+
+  public double getAngleMotorCurrent() {
+    return angleMotor.getOutputCurrent();
   }
 
   public double getAngleMotorTemp() {

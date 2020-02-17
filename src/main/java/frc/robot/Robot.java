@@ -154,6 +154,14 @@ public class Robot extends TimedRobot {
         speed = 0;
       }
 
+      if (operator.getXButtonPressed()) {
+        shooter.setAngle(20.0);
+      }
+
+      if (operator.getYButtonPressed()) {
+        shooter.setAngle(30.0);
+      }
+
       if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
         shooter.reHome();
       }
@@ -171,6 +179,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
       SmartDashboard.putString("ShooterState", shooter.getState().toString());
       SmartDashboard.putNumber("ShooterAngleTemp", shooter.getAngleMotorTemp());
+      SmartDashboard.putNumber("ShooterAngleCurrent", shooter.getAngleMotorCurrent());
     }
 
     if (this.drivetrainToggle) {
