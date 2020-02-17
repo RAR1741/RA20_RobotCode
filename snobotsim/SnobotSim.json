@@ -9,7 +9,7 @@
         "KauaiLabs_navX_FRC"
     ],
     "snobot_sim": {
-        "version_number": "2020-0.0.2",
+        "version_number": "2020-0.0.4",
         "libraries": {
             "java": [
                 "com.snobot.simulator:snobot_sim_gui:${version_number}",

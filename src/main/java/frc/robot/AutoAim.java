@@ -47,7 +47,7 @@ public class AutoAim {
 
             case AIM_ANGLE:
                 aimAngle(limelight.getTargetVertical());
-                if (Math.abs(degrees * REVOLUTIONS_PER_DEGREE * ENCODERS_PER_REVOLUTION - shooter.getAngleDegree()) < 1)
+                if (Math.abs(degrees - shooter.getAngleInDegrees()) < 1)
                     state = AutoAimState.IDLE;
                 break;
 
