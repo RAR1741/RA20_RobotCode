@@ -7,7 +7,7 @@ import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 public class Shooter {
   private static final double HOMING_SPEED_DOWN = -0.3; // Speed at which we seek downward during homing
   private static final double HOME_POSITION = 0.0; // Angle at lower limit switch
-  private static final double POSITION_TOLERANCE = 0.01; // Limit of being "close enough" on the angle
+  private static final double POSITION_TOLERANCE = 0.05; // Limit of being "close enough" on the angle
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
@@ -31,7 +31,7 @@ public class Shooter {
     this.angleMotor = angleMotor;
     launcher.setInverted(true);
 
-    angleMotor.getPIDController().setP(1.0);
+    angleMotor.getPIDController().setP(1);
     angleMotor.getPIDController().setI(0.0);
     angleMotor.getPIDController().setD(0.0);
     angleMotor.getEncoder().setPositionConversionFactor(0.3765); // TODO: Get the real conversion factor from Mr.
@@ -125,7 +125,8 @@ public class Shooter {
    */
   public void setAngle(double degrees) {
     state = State.MovingToAngle;
-    angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
+    targetAngle = degrees;
+    angleMotor.getPIDController().setReference(targetAngle, ControlType.kPosition);
   }
 
   public boolean getReverseLimit() {
