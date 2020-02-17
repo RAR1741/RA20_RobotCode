@@ -170,6 +170,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
       SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
       SmartDashboard.putString("ShooterState", shooter.getState().toString());
+      SmartDashboard.putNumber("ShooterAngleTemp", shooter.getAngleMotorTemp());
     }
 
     if (this.drivetrainToggle) {

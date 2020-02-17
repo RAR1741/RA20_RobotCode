@@ -100,6 +100,10 @@ public class Shooter {
     state = State.HomingDown;
   }
 
+  public double getAngleMotorTemp() {
+    return angleMotor.getMotorTemperature();
+  }
+
   public void setLauncherRPM(double rpm) {
     launcher.getPIDController().setReference(rpm, ControlType.kVelocity);
   }
