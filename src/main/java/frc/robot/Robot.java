@@ -158,10 +158,6 @@ public class Robot extends TimedRobot {
         shooter.reHome();
       }
 
-      if (operator.getXButton()) {
-        shooter.setAngle(25);
-      }
-
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
         shooter.manualControl(speed, shooterAngleSpeed);
       }
