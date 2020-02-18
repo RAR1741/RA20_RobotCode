@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless), lightShoot);
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -204,7 +204,7 @@ public class Robot extends TimedRobot {
     }
 
     if (this.photoswitchSensorToggle)
-      SmartDashboard.putBoolean("LightClear", light.getClear());
+      SmartDashboard.putBoolean("LightBlocked", lightShoot.getBlocked());
   }
 
   @Override
