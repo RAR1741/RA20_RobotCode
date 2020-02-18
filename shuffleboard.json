@@ -10,32 +10,36 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "0,0": {
+          "7,1": {
             "size": [
-              1,
-              1
+              3,
+              2
             ],
             "content": {
-              "_type": "Simple Dial",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ShooterPower",
               "_title": "ShooterPower",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Visuals/Show value": true
+              "Graph/Visible time": 30.0,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Visible data/SmartDashboard/ShooterPower": true
             }
           },
-          "1,0": {
+          "3,1": {
             "size": [
-              1,
-              1
+              4,
+              4
             ],
             "content": {
-              "_type": "Simple Dial",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ShooterRPM",
               "_title": "ShooterRPM",
-              "Range/Min": 0.0,
-              "Range/Max": 10000.0,
-              "Visuals/Show value": true
+              "Graph/Visible time": 30.0,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 8000.0,
+              "Y-axis/Lower bound": -8000.0,
+              "Visible data/SmartDashboard/ShooterRPM": true
             }
           },
           "2,0": {
@@ -82,6 +86,124 @@
               "_title": "LimelightTargeted",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ShooterAngle",
+              "_title": "ShooterAngle"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ShooterAngleEncoder",
+              "_title": "ShooterAngleEncoder"
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ShooterAngleForwardLimit",
+              "_title": "ShooterAngleForwardLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ShooterAngleReverseLimit",
+              "_title": "ShooterAngleReverseLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ShooterState",
+              "_title": "ShooterState"
+            }
+          },
+          "0,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ShooterAngleTemp",
+              "_title": "ShooterAngleTemp",
+              "Graph/Visible time": 30.0,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Visible data/SmartDashboard/ShooterAngleTemp": true
+            }
+          },
+          "0,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ShooterAngleCurrent",
+              "_title": "ShooterAngleCurrent",
+              "Graph/Visible time": 30.0,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Visible data/SmartDashboard/ShooterAngleCurrent": true
+            }
+          },
+          "7,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ShooterCurrent",
+              "_title": "ShooterCurrent",
+              "Graph/Visible time": 30.0,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Visible data/SmartDashboard/ShooterCurrent": true
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ShooterRPM",
+              "_title": "SmartDashboard/ShooterRPM"
             }
           }
         }
@@ -186,9 +308,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.400000095367432,
+    "x": -0.800000011920929,
     "y": 0.0,
-    "width": 997.5999755859375,
-    "height": 560.7999877929688
+    "width": 1552.800048828125,
+    "height": 830.4000244140625
   }
 }
