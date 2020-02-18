@@ -37,8 +37,8 @@
               "_title": "ShooterRPM",
               "Graph/Visible time": 30.0,
               "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 8000.0,
-              "Y-axis/Lower bound": -8000.0,
+              "Y-axis/Upper bound": 1000.0,
+              "Y-axis/Lower bound": -5000.0,
               "Visible data/SmartDashboard/ShooterRPM": true
             }
           },
@@ -203,7 +203,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ShooterRPM",
-              "_title": "SmartDashboard/ShooterRPM"
+              "_title": "/SmartDashboard/ShooterRPM"
             }
           }
         }
