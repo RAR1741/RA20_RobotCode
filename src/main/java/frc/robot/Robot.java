@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
   private Toml config;
   AHRS gyro;
   Limelight limelight;
-  PhotoswitchSensor light;
-  DigitalInput lightInput;
+  PhotoswitchSensor lightShoot;
+  DigitalInput lightShootInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
@@ -79,8 +79,8 @@ public class Robot extends TimedRobot {
 
     if (this.photoswitchSensorToggle) {
       System.out.print("Initializing photoswitch...");
-      lightInput = new DigitalInput(0);
-      light = new PhotoswitchSensor(lightInput);
+      lightShootInput = new DigitalInput(0);
+      lightShoot = new PhotoswitchSensor(lightShootInput);
       System.out.println("done");
     } else {
       System.out.println("Photoswitch disabled. Skipping initialization...");
