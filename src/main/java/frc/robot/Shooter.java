@@ -40,11 +40,11 @@ public class Shooter {
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
     angleMotor.getPIDController().setOutputRange(-0.5, 0.5);
 
-    launcher.getPIDController().setP(0.0008);
+    launcher.getPIDController().setP(0.0004);
     launcher.getPIDController().setI(0.0);
     launcher.getPIDController().setD(0.0);
     launcher.getEncoder().setPositionConversionFactor(1.0);
-    launcher.getEncoder().setVelocityConversionFactor(1.0);
+    launcher.getEncoder().setVelocityConversionFactor(1.5);
     launcher.setClosedLoopRampRate(3.0);
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
@@ -116,6 +116,7 @@ public class Shooter {
 
   public void setLauncherRPM(double rpm) {
     rampRPM(rpm);
+    // TODO: Determine why this is necessary. Magic.
     launcher.getPIDController().setReference(rpm * 1.23, ControlType.kVelocity);
   }
 
