@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
       }
 
       if (operator.getXButton()) {
-        shooter.setLauncherRPM(3500);
+        shooter.setLauncherRPM(-3500);
       } else {
         shooter.setLauncherRPM(0);
       }
@@ -172,9 +172,10 @@ public class Robot extends TimedRobot {
         shooter.reHome();
       }
 
-      if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
-        shooter.manualControl(speed, shooterAngleSpeed);
-      }
+      // if (shooter.getState() == Shooter.State.Idle || shooter.getState() ==
+      // Shooter.State.ManualControl) {
+      // shooter.manualControl(speed, shooterAngleSpeed);
+      // }
       shooter.update();
 
       SmartDashboard.putNumber("ShooterPower", speed);
@@ -186,6 +187,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("ShooterState", shooter.getState().toString());
       SmartDashboard.putNumber("ShooterAngleTemp", shooter.getAngleMotorTemp());
       SmartDashboard.putNumber("ShooterAngleCurrent", shooter.getAngleMotorCurrent());
+      SmartDashboard.putNumber("ShooterCurrent", shooter.getLauncherMotorCurrent());
     }
 
     if (this.drivetrainToggle) {

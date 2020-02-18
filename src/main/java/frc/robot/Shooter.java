@@ -37,10 +37,12 @@ public class Shooter {
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
     angleMotor.getPIDController().setOutputRange(-0.5, 0.5);
 
-    launcher.getPIDController().setP(0.25);
+    launcher.getPIDController().setP(0.0008);
     launcher.getPIDController().setI(0.0);
     launcher.getPIDController().setD(0.0);
-    launcher.getEncoder().setVelocityConversionFactor(1.5);
+    launcher.getEncoder().setPositionConversionFactor(1.0);
+    launcher.getEncoder().setVelocityConversionFactor(1.0);
+    launcher.setClosedLoopRampRate(3.0);
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
     state = State.HomingDown;
@@ -110,7 +112,11 @@ public class Shooter {
   }
 
   public void setLauncherRPM(double rpm) {
-    launcher.getPIDController().setReference(rpm, ControlType.kVelocity);
+    launcher.getPIDController().setReference(rpm * 1.23, ControlType.kVelocity);
+  }
+
+  public double getLauncherMotorCurrent() {
+    return launcher.getOutputCurrent();
   }
 
   /**
