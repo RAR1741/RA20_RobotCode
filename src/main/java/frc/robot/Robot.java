@@ -203,8 +203,10 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(turnInput, speedInput);
     }
 
-    if (this.photoswitchSensorToggle)
+    if (this.photoswitchSensorToggle) {
       SmartDashboard.putBoolean("LightBlocked", lightShoot.getBlocked());
+      lightShoot.update();
+    }
   }
 
   @Override

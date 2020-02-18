@@ -120,7 +120,7 @@ public class Shooter {
   }
 
   private void rampRPM(double rpm) {
-    rpm = light.getBlocked() ? (rpm * 1.5) : rpm;
+    rpm = light.getBlocked() ? (rpm * 1.5) : rpm; // TODO: Determine modifier.
   }
 
   public double getLauncherMotorCurrent() {
