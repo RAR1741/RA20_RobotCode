@@ -115,13 +115,17 @@ public class Shooter {
   }
 
   public void setLauncherRPM(double rpm) {
-    rampRPM(rpm);
     // TODO: Determine why this is necessary. Magic.
-    launcher.getPIDController().setReference(rpm * 1.23, ControlType.kVelocity);
+    double finalRPM = rpm * 1.23 * getRampMultiplier();
+    launcher.getPIDController().setReference(finalRPM, ControlType.kVelocity);
   }
 
-  private void rampRPM(double rpm) {
-    rpm = light.getBlocked() ? (rpm * 1.5) : rpm; // TODO: Determine modifier.
+  /**
+   * Gets the multiplier for rpm if the photoswitch sensor is blocked.
+   * @return multiplier for rpm if the photoswitch sensor is blocked.
+   */
+  private double getRampMultiplier() {
+    return light.getBlocked() ? 1.5 : 1; // TODO: Determine multiplier.
   }
 
   public double getLauncherMotorCurrent() {
