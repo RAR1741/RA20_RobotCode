@@ -115,7 +115,12 @@ public class Shooter {
   }
 
   public void setLauncherRPM(double rpm) {
+    rampRPM(rpm);
     launcher.getPIDController().setReference(rpm * 1.23, ControlType.kVelocity);
+  }
+
+  private void rampRPM(double rpm) {
+    rpm = light.getBlocked() ? (rpm * 1.5) : rpm;
   }
 
   public double getLauncherMotorCurrent() {
