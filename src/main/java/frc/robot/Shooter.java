@@ -11,6 +11,7 @@ public class Shooter {
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
+  PhotoswitchSensor light = null;
 
   private double targetAngle;
 
@@ -26,10 +27,12 @@ public class Shooter {
    * @param launcher   CAN Id for the launcher motor.
    * @param angleMotor CAN Id for the angle motor.
    */
-  public Shooter(CANSparkMax launcher, CANSparkMax angleMotor) {
+  public Shooter(CANSparkMax launcher, CANSparkMax angleMotor, PhotoswitchSensor light) {
     this.launcher = launcher;
     this.angleMotor = angleMotor;
     launcher.setInverted(true);
+
+    this.light = light;
 
     angleMotor.getPIDController().setP(1);
     angleMotor.getPIDController().setI(0.0);

@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
   private Toml config;
   AHRS gyro;
   Limelight limelight;
-  PhotoswitchSensor light;
-  DigitalInput lightInput;
+  PhotoswitchSensor lightShoot;
+  DigitalInput lightShootInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
@@ -79,8 +79,8 @@ public class Robot extends TimedRobot {
 
     if (this.photoswitchSensorToggle) {
       System.out.print("Initializing photoswitch...");
-      lightInput = new DigitalInput(0);
-      light = new PhotoswitchSensor(lightInput);
+      lightShootInput = new DigitalInput(0);
+      lightShoot = new PhotoswitchSensor(lightShootInput);
       System.out.println("done");
     } else {
       System.out.println("Photoswitch disabled. Skipping initialization...");
@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless), lightShoot);
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -204,7 +204,7 @@ public class Robot extends TimedRobot {
     }
 
     if (this.photoswitchSensorToggle)
-      SmartDashboard.putBoolean("LightClear", light.getClear());
+      SmartDashboard.putBoolean("LightBlocked", lightShoot.getBlocked());
   }
 
   @Override
