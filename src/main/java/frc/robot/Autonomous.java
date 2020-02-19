@@ -76,7 +76,7 @@ public class Autonomous {
    }
 
    public void Shoot1(){
-      shooter.autoControl(targetSpeed);
+      // shooter.autoControl(targetSpeed); // TODO: Add PID control of shooter motor speed;
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.setIndexFeed(true);
          manipulation.setIndexLoad(true);
@@ -84,7 +84,7 @@ public class Autonomous {
       if (manipulation.getBalls() == 0) {
          manipulation.setIndexLoad(false);
          manipulation.setIndexFeed(false);
-         shooter.autoControl(0);
+         // shooter.autoControl(0);
          done = true;
       }
    }
@@ -124,7 +124,7 @@ public class Autonomous {
 
    public void Shoot2(){
       manipulation.updateIndex();
-      shooter.autoControl(targetSpeed);
+      // shooter.autoControl(targetSpeed);
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.setIndexFeed(true);
          manipulation.setIndexLoad(true);
@@ -132,7 +132,7 @@ public class Autonomous {
       if (manipulation.getBalls() == 0) {
          manipulation.setIndexLoad(false);
          manipulation.setIndexFeed(false);
-         shooter.autoControl(0);
+         // shooter.autoControl(0);
          done = true;
       }
    }
