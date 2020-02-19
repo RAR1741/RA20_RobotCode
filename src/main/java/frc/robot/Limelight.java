@@ -75,6 +75,13 @@ public class Limelight {
         return this.tvert;
     }
 
+    /**
+     * @return current target x-coordinate in degrees.
+     */
+    public double getTargetXDegrees() {
+        return this.tx * 1; // TODO: Determine modifier.
+    }
+
     public void setLightEnabled(boolean enabled) {
         limelightTable.getEntry("ledMode").forceSetNumber(enabled ? 3: 1);
     }
