@@ -66,7 +66,7 @@ public class AutoAim {
      * Aims the shooter angle to the appropriate angle, based on distance, to the power port.
      */
     private void AimAngle() {
-        degrees = 0; //TODO: Use a table from testing to create an equation to plug this into
+        degrees = 1 *limelight.getTargetVertical(); //TODO: Use a table from testing to create an equation to plug this into
         shooter.setAngle(degrees);
         if (getWithinTolerance(degrees, shooter.getAngleInDegrees(), 1)) {
             state = AutoAimState.IDLE;
