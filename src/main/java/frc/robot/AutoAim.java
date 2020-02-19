@@ -38,16 +38,10 @@ public class AutoAim {
 
             case AIM_X:
                 AimX();
-                if (getWithinTolerance(0, limelight.getTargetX(), 1)) {
-                    state = AutoAimState.AIM_ANGLE;
-                }
                 break;
 
             case AIM_ANGLE:
                 AimAngle();
-                if (getWithinTolerance(degrees, shooter.getAngleInDegrees(), 1)) {
-                    state = AutoAimState.IDLE;
-                }
                 break;
 
             case IDLE:
@@ -63,6 +57,9 @@ public class AutoAim {
         motorPower = .5 * error;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
+        if (getWithinTolerance(0, limelight.getTargetX(), 1)) {
+            state = AutoAimState.AIM_ANGLE;
+        }
     }
 
     /**
@@ -71,6 +68,9 @@ public class AutoAim {
     private void AimAngle() {
         degrees = 0; //TODO: Use a table from testing to create an equation to plug this into
         shooter.setAngle(degrees);
+        if (getWithinTolerance(degrees, shooter.getAngleInDegrees(), 1)) {
+            state = AutoAimState.IDLE;
+        }
     }
 
     /**
