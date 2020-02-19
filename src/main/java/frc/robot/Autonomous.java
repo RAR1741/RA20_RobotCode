@@ -48,20 +48,15 @@ public class Autonomous{
 
    public void AimShot1(){
       //autoAim.run();
+      manipulation.setIndexLoad(true);
       state = AutonomousState.Shoot1;
    }
 
    public void Shoot1(){
       shooter.autoControl(targetSpeed);
-      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
-         manipulation.setIndexFeed(true);
-         manipulation.setIndexLoad(true);
-      }
-      if (manipulation.getBalls() == 0) {
-         manipulation.setIndexLoad(false);
-         manipulation.setIndexFeed(false);
-         shooter.autoControl(0);
-         done = true;
+      shoot();
+      if (getDoneShooting()) {
+         state = AutonomousState.MoveTrench;
       }
    }
 
@@ -73,11 +68,8 @@ public class Autonomous{
    public void BallGrab(){
       manipulation.setIntakeExtend(true);
       manipulation.setIntakeSpin(true);
-      if (manipulation.getBalls() < 5) {
-         drive.approachPowercell();
-      } else {
-         manipulation.setIntakeSpin(false);
-         manipulation.setIntakeExtend(false);
+      drive.approachPowercell();
+      if (getDoneCollecting()) {
          state = AutonomousState.MoveShoot;
       }
    }
@@ -90,21 +82,56 @@ public class Autonomous{
    public void AimShot2(){
 
       //autoAim.run();
+      manipulation.setIndexLoad(true);
       state = AutonomousState.Shoot2;
    }
 
    public void Shoot2(){
       manipulation.updateIndex();
       shooter.autoControl(targetSpeed);
+      shoot();
+      if (getDoneShooting()) {
+         state = AutonomousState.MoveTrench;
+      }
+   }
+
+   /**
+    * Brings shooter up to speed and shoots.
+    */
+   private void shoot() {
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.setIndexFeed(true);
-         manipulation.setIndexLoad(true);
       }
+   }
+
+   /**
+    * Gets if done shooting and stops shooting if so.
+
+    * @return true if done shooting, false if not done shooting.
+    */
+   private boolean getDoneShooting() {
       if (manipulation.getBalls() == 0) {
          manipulation.setIndexLoad(false);
          manipulation.setIndexFeed(false);
          shooter.autoControl(0);
-         done = true;
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   /**
+    * Gets if done collecting powercells.
+
+    * @return true if done collecting, false if not done.
+    */
+   private boolean getDoneCollecting() {
+      if (manipulation.getBalls() >= 5) {
+         manipulation.setIntakeSpin(false);
+         manipulation.setIntakeExtend(false);
+         return true;
+      } else {
+         return false;
       }
    }
 
