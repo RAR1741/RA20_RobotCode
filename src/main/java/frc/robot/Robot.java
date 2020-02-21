@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
   DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
+  AutoAim aim;
   XboxController driver = null;
   XboxController operator = null;
   DriveModule module = null;
@@ -54,6 +55,7 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = false;
   boolean navXToggle = false;
+  boolean autoAimToggle = false;
 
   double targetAngle = 0;
 
@@ -111,6 +113,14 @@ public class Robot extends TimedRobot {
       System.out.println("done");
     } else {
       System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+    }
+
+    if (this.autoAimToggle) {
+      System.out.print("Initializing automatic aiming system...");
+      aim = new AutoAim(drive, limelight, shooter, gyro);
+      System.out.println("done");
+    } else {
+      System.out.println("Automatic aiming disabled. Skipping initialization...");
     }
 
     System.out.print("Initializing driver interface...");
