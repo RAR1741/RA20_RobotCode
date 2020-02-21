@@ -32,7 +32,7 @@ public class AutoAim {
      * @param gyro gyro object.
      */
     public AutoAim(Drivetrain drive, Limelight limelight, Shooter shooter, AHRS gyro) {
-        state = AutoAimState.SET_ANGLES;
+        state = AutoAimState.IDLE;
         this.drive = drive;
         this.limelight = limelight;
         this.shooter = shooter;
@@ -43,6 +43,7 @@ public class AutoAim {
      * Runs Automatic Aiming state machine.
      */
     public void run() {
+        state = AutoAimState.SET_ANGLES;
         switch(state) {
 
             case SET_ANGLES:
@@ -104,6 +105,10 @@ public class AutoAim {
      */
     private boolean getWithinTolerance(double goal, double current, double tolerance) {
         return Math.abs(goal - current) < tolerance;
+    }
+
+    public void stopAiming() {
+        state = AutoAimState.IDLE;
     }
     
 }

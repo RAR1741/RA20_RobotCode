@@ -57,6 +57,8 @@ public class Robot extends TimedRobot {
   boolean navXToggle = false;
   boolean autoAimToggle = false;
 
+  boolean aiming = false;
+
   double targetAngle = 0;
 
   double speed = 0;
@@ -197,6 +199,18 @@ public class Robot extends TimedRobot {
 
     if (this.photoswitchSensorToggle)
       SmartDashboard.putBoolean("LightClear", light.getClear());
+
+    if (this.autoAimToggle) {
+      if (operator.getYButtonPressed() && !aiming && limelight.isTargetVisible()) {
+        aim.run();
+        aiming = true;
+      } else if (operator.getYButtonPressed() && aiming) {
+        aim.stopAiming();
+        aiming = false;
+      }
+
+
+    }
   }
 
   @Override
