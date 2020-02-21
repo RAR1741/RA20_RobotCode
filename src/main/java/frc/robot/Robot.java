@@ -150,8 +150,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (this.limelightToggle)
+    if (this.limelightToggle) {
       limelight.update();
+      if (driver.getXButtonPressed()) {
+        limelight.setLightEnabled(true);
+      } else if (driver.getYButtonPressed()) {
+        limelight.setLightEnabled(false);
+      }
+    }
 
     if (this.shooterToggle) {
       double speed = 0;
@@ -170,7 +176,7 @@ public class Robot extends TimedRobot {
         shooter.reHome();
       }
 
-      if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
+      if ((shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) && !aiming) {
         shooter.manualControl(speed, shooterAngleSpeed);
       }
       shooter.update();
@@ -188,19 +194,19 @@ public class Robot extends TimedRobot {
       double turnInput = driver.getX(Hand.kRight);
       double speedInput = driver.getY(Hand.kLeft);
 
-      if (driver.getXButtonPressed()) {
-        limelight.setLightEnabled(true);
-      } else if (driver.getYButtonPressed()) {
-        limelight.setLightEnabled(false);
+      if (!aiming) {
+        drive.arcadeDrive(turnInput, speedInput);
       }
-
-      drive.arcadeDrive(turnInput, speedInput);
     }
 
     if (this.photoswitchSensorToggle)
       SmartDashboard.putBoolean("LightClear", light.getClear());
 
     if (this.autoAimToggle) {
+      if(aim.getState() == AutoAim.AutoAimState.IDLE){
+        aiming = false;
+      }
+
       if (operator.getYButtonPressed() && !aiming && limelight.isTargetVisible()) {
         aim.run();
         aiming = true;
@@ -208,8 +214,6 @@ public class Robot extends TimedRobot {
         aim.stopAiming();
         aiming = false;
       }
-
-
     }
   }
 

@@ -107,8 +107,18 @@ public class AutoAim {
         return Math.abs(goal - current) < tolerance;
     }
 
+    /**
+     * Stops the aiming process.
+     */
     public void stopAiming() {
         state = AutoAimState.IDLE;
+    }
+
+    /**
+     * Gets the aiming state.
+     */
+    public AutoAimState getState() {
+        return state;
     }
     
 }
