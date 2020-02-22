@@ -75,7 +75,7 @@ public class AutoAim {
      * Aims to robot to the X-coordinate of the power port.
      */
     private void AimX() {
-        error = limelight.getTargetX() * 1;
+        error = (gyroDegrees - gyro.getYaw())/29.8;
         motorPower = .5 * error;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
