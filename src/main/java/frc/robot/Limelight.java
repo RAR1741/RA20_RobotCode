@@ -7,8 +7,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
 
-    private final int IMG_WIDTH = 640;
-    private final int CAM_FOV = 60;
+    // TODO: Get proper dimension varibles.
+    private final int IMG_WIDTH = 1;
+    private final int CAM_FOV = 1;
 
     private double tv;
     private double tx;
