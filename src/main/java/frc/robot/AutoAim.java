@@ -67,7 +67,7 @@ public class AutoAim {
      * Sets degrees to turn the robot to.
      */
     private void SetAngles() {
-        gyroDegrees = gyro.getYaw() - limelight.getTargetXDegrees();
+        gyroDegrees = gyro.getYaw() + limelight.getTargetXDegrees();
         state = AutoAimState.AIM_X;
     }
 
@@ -120,5 +120,4 @@ public class AutoAim {
     public AutoAimState getState() {
         return state;
     }
-    
 }

@@ -7,6 +7,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
 
+    private final int IMG_WIDTH = 640;
+    private final int CAM_FOV = 60;
+
     private double tv;
     private double tx;
     private double ty;
@@ -54,6 +57,8 @@ public class Limelight {
         return this.tx;
     }
 
+
+
     /**
      * @return current target y-coordinate.
      */
@@ -79,7 +84,8 @@ public class Limelight {
      * @return current target x-coordinate in degrees.
      */
     public double getTargetXDegrees() {
-        return this.tx * 1; // TODO: Determine modifier.
+        double turn = this.tx - (IMG_WIDTH/2);
+        return turn/(IMG_WIDTH/CAM_FOV);
     }
 
     public void setLightEnabled(boolean enabled) {
