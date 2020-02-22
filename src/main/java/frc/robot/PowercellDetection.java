@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class PowercellDetection {
-
     private final double SCREEN_AREA = 1; // TODO: Determine area camera view.
 
     private int nb;
