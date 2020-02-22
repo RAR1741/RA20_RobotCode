@@ -63,7 +63,7 @@ public class PowercellDetection {
      * @return target at the given index.
      */
     public Target getTarget(int index) {
-        return (getNumber() > 0) ? targets[index] : new Target(0, 0, 0, 0);
+        return (index < getNumber()) ? targets[index] : new Target(0, 0, 0, 0);
     }
 
     /**
