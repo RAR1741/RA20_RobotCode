@@ -1,6 +1,9 @@
 package frc.robot;
 
 public class Target {
+
+    private final double SCREEN_AREA = 76800;
+
     private double topLeftX;
     private double topLeftY;
     private double bottomRightX;
@@ -33,5 +36,23 @@ public class Target {
      */
     public double getArea() {
         return (bottomRightX -topLeftX) * (topLeftY - bottomRightY);
+    }
+
+    /**
+     * Gets perentage of the screen taken up by the target.
+
+     * @return percentage of screen taken up by the target.
+     */
+    public double getAreaPercent() {
+        return getArea()/SCREEN_AREA;
+    }
+
+    /**
+     * Gets percentage of the screen not taken up by the target.
+     * 
+     * @return percentage of screen not taken up by the target.
+     */
+    public double getInvertedAreaPercent() {
+        return (SCREEN_AREA - getArea())/SCREEN_AREA;
     }
 }

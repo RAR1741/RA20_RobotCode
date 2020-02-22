@@ -8,8 +8,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class PowercellDetection {
 
-    private final double SCREEN_AREA = 76800;
-    
     private int nb;
     private double[] boxes;
     private Target[] targets;
@@ -63,26 +61,6 @@ public class PowercellDetection {
      */
     public Target getTarget(int index) {
         return targets[index];
-    }
-
-    /**
-     * Gets perentage of the screen taken up by given target.
-     * 
-     * @param target target powercell.
-     * @return percentage of screen taken up by the target.
-     */
-    public double getAreaPercent(Target target) {
-        return target.getArea()/SCREEN_AREA;
-    }
-
-    /**
-     * Gets percentage of the screen not taken up by given target.
-     * 
-     * @param target target powercell.
-     * @return percentage of screen not taken up by the target.
-     */
-    public double getInvertedAreaPercent(Target target) {
-        return (SCREEN_AREA - target.getArea())/SCREEN_AREA;
     }
 }
 

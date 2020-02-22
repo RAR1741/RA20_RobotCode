@@ -92,7 +92,7 @@ public class Drivetrain {
      */
     public void approachPC(double x) {
         //TODO: Determine division variable for percent of screen
-        driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
-        driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
+        driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
+        driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
     }
 }
