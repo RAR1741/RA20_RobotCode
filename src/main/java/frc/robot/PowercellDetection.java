@@ -7,8 +7,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class PowercellDetection {
-
-    private final double SCREEN_AREA = 1; //TODO: Determine area camera view.
+    private final double SCREEN_AREA = 1; // TODO: Determine area camera view.
 
     private int nb;
     private double[] boxes;
@@ -19,7 +18,7 @@ public class PowercellDetection {
     /**
      * Constructor
      */
-    public PowercellDetection () {
+    public PowercellDetection() {
         detectionTable = NetworkTableInstance.getDefault().getTable("ML");
     }
 
@@ -27,8 +26,8 @@ public class PowercellDetection {
      * Updates variables.
      */
     public void update() {
-        this.nb = (int)detectionTable.getEntry("nb_objects").getDouble(0);
-        this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0});
+        this.nb = (int) detectionTable.getEntry("nb_objects").getDouble(0);
+        this.boxes = detectionTable.getEntry("boxes").getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0 });
         this.sortTargets(this.boxes);
     }
 
@@ -42,14 +41,15 @@ public class PowercellDetection {
     }
 
     /**
-     * Sorts an array of box coordinates into a 2-D array sorted by decending area of those boxes.
+     * Sorts an array of box coordinates into a 2-D array sorted by decending area
+     * of those boxes.
      * 
      * @param boxes array of box coordinates.
      */
     private void sortTargets(double[] boxes) {
         targets = new Target[nb];
-        for (int i = 0; i < nb; i++){
-            targets[i] = new Target(boxes[i * 4 + 1], boxes[i * 4 + 2], boxes[i * 4 + 3], boxes[i * 4 + 4]);
+        for (int i = 0; i < nb; i++) {
+            targets[i] = new Target(boxes[i * 4 + 0], boxes[i * 4 + 1], boxes[i * 4 + 2], boxes[i * 4 + 3]);
         }
 
         Arrays.sort(targets, new sortByArea());
@@ -62,7 +62,7 @@ public class PowercellDetection {
      * @return target at the given index.
      */
     public Target getTarget(int index) {
-        return targets[index];
+        return (index < getNumber()) ? targets[index] : new Target(0, 0, 0, 0);
     }
 
     /**
@@ -72,7 +72,7 @@ public class PowercellDetection {
      * @return percentage of screen taken up by the target.
      */
     public double getAreaPercent(Target target) {
-        return target.getArea()/SCREEN_AREA;
+        return target.getArea() / SCREEN_AREA;
     }
 
     /**
@@ -82,12 +82,12 @@ public class PowercellDetection {
      * @return percentage of screen not taken up by the target.
      */
     public double getInvertedAreaPercent(Target target) {
-        return (SCREEN_AREA - target.getArea())/SCREEN_AREA;
+        return (SCREEN_AREA - target.getArea()) / SCREEN_AREA;
     }
 }
 
 class sortByArea implements Comparator<Target> {
     public int compare(Target a, Target b) {
-        return (int)(b.getArea() - a.getArea());
+        return (int) (b.getArea() - a.getArea());
     }
 }

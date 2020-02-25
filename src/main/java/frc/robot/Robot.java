@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
   DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
+  AutoAim aim;
   XboxController driver = null;
   Manipulation manipulation = null;
   Autonomous autonomous;
@@ -55,19 +56,21 @@ public class Robot extends TimedRobot {
   Compressor compressor = null;
 
   // Booleans for toggling different things...
-  boolean limelightToggle = false;
-  boolean photoswitchSensorToggle = false;
+  boolean limelightToggle = true;
+  boolean photoswitchSensorToggle = true;
+  boolean powercellDetectorToggle = true;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
-  boolean powercellDetectorToggle = true;
   boolean autonomousToggle = true;
   boolean navXToggle = true;
+  boolean autoAimToggle = true;
+
+  boolean aiming = false;
 
   double targetAngle = 0;
 
   double speed = 0;
-
 
   /**
    * CAN ID's:
@@ -121,7 +124,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(11, MotorType.kBrushless), new CANSparkMax(12, MotorType.kBrushless));
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -152,6 +155,14 @@ public class Robot extends TimedRobot {
       System.out.println("done");
     } else {
       System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+    }
+
+    if (this.autoAimToggle) {
+      System.out.print("Initializing automatic aiming system...");
+      aim = new AutoAim(drive, limelight, shooter, gyro);
+      System.out.println("done");
+    } else {
+      System.out.println("Automatic aiming disabled. Skipping initialization...");
     }
 
     System.out.print("Initializing driver interface...");
@@ -229,7 +240,7 @@ public class Robot extends TimedRobot {
         shooter.reHome();
       }
 
-      if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
+      if ((shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) && !aiming) {
         shooter.manualControl(speed, shooterAngleSpeed);
       }
       shooter.update();
@@ -262,13 +273,23 @@ public class Robot extends TimedRobot {
       double turnInput = driver.getX(Hand.kRight);
       double speedInput = driver.getY(Hand.kLeft);
 
-      if (driver.getXButtonPressed()) {
-        limelight.setLightEnabled(true);
-      } else if (driver.getYButtonPressed()) {
-        limelight.setLightEnabled(false);
+      if (!aiming) {
+        drive.arcadeDrive(turnInput, speedInput);
+      }
+    }
+
+    if (this.autoAimToggle) {
+      if(aim.getState() == AutoAim.AutoAimState.IDLE){
+        aiming = false;
       }
 
-      drive.arcadeDrive(turnInput, speedInput);
+      if (operator.getYButtonPressed() && !aiming && limelight.isTargetVisible()) {
+        aim.run();
+        aiming = true;
+      } else if (operator.getYButtonPressed() && aiming) {
+        aim.stopAiming();
+        aiming = false;
+      }
     }
   }
 

@@ -87,10 +87,12 @@ public class Drivetrain {
 
     /**
      * Moves the robot to intercept powercells
+     * 
+     ** @param x target X-coordinate
      */
-    public void approachPowercell() {
+    public void approachPowercell(double x) {
         //TODO: Determine division variable for percent of screen
-        driveLeft(detector.getTarget(0).getCenterX() >= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
-        driveRight(detector.getTarget(0).getCenterX() <= 0 ? 0.75 : (0.75 * (detector.getInvertedAreaPercent(detector.getTarget(0))/4)));
+        driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
+        driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
     }
 }
