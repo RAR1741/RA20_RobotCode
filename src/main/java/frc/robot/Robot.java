@@ -221,10 +221,11 @@ public class Robot extends TimedRobot {
       }
 
       if (operator.getYButtonPressed() && !aiming && limelight.isTargetVisible()) {
+        aim.resetState();
         aim.run();
         aiming = true;
       } else if (operator.getYButtonPressed() && aiming) {
-        aim.stopAiming();
+        aim.stopState();
         aiming = false;
       }
     }

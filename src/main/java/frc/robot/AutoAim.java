@@ -43,7 +43,6 @@ public class AutoAim {
      * Runs Automatic Aiming state machine.
      */
     public void run() {
-        state = AutoAimState.SET_ANGLES;
         switch(state) {
 
             case SET_ANGLES:
@@ -108,9 +107,16 @@ public class AutoAim {
     }
 
     /**
-     * Stops the aiming process.
+     * Resets the state machine.
      */
-    public void stopAiming() {
+    public void resetState() {
+        state = AutoAimState.SET_ANGLES;
+    }
+
+    /**
+     * Stops the state machine
+     */
+    public void stopState() {
         state = AutoAimState.IDLE;
     }
 
