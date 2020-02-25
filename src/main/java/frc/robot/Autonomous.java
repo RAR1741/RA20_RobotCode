@@ -16,12 +16,8 @@ public class Autonomous{
    private AutoAim autoAim;
    private Manipulation manipulation;
    private Drivetrain drive;
-   private Limelight limelight;
    private Shooter shooter;
    
-   private double error;
-   private double motorPower;
-   private double degrees;
    private boolean done = false;
 
    //TODO: determine correct target speeds
@@ -31,15 +27,13 @@ public class Autonomous{
    
    /**
     * @param drive        drivetrain object.
-    * @param limelight    limelight object.
     * @param shooter      shooter object.
     * @param manipulation manipulation object.
     * @param autoaim      autoAim object.
     */
-   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation, AutoAim autoAim) {
+   public Autonomous(Drivetrain drive, Shooter shooter, Manipulation manipulation, AutoAim autoAim) {
       state = AutonomousState.AimShot1;
       this.drive = drive;
-      this.limelight = limelight;
       this.shooter = shooter;
       this.manipulation = manipulation;
       this.autoAim = autoAim;

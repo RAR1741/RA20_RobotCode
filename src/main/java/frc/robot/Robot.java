@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
 
     if (this.autonomousToggle) {
       System.out.print("Initializing Autonomous...");
-      autonomous = new Autonomous(drive, limelight, shooter, manipulation, aim);
+      autonomous = new Autonomous(drive, shooter, manipulation, aim);
       System.out.println("done");
     } else {
       System.out.println("Sutonomous disabled. Skipping initialization...");
