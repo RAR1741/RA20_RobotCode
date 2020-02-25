@@ -190,6 +190,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     manipulation.setBalls(3);
+    aim.resetState();
   }
 
   @Override

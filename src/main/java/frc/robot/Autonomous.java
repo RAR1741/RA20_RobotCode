@@ -77,6 +77,7 @@ public class Autonomous{
 
    public void MoveShoot(){
       //TODO: Add trajectory based movement.
+      autoAim.resetState();
       state = AutonomousState.AimShot2;
    }
 
