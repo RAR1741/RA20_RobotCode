@@ -107,9 +107,16 @@ public class AutoAim {
     }
 
     /**
-     * Stops the aiming process.
+     * Resets the state machine.
      */
-    public void stopAiming() {
+    public void resetState() {
+        autoAimState = AutoAimState.SET_ANGLES;
+    }
+
+    /**
+     * Stops the state machine
+     */
+    public void stopState() {
         autoAimState = AutoAimState.IDLE;
     }
 
