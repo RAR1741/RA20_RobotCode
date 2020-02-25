@@ -16,7 +16,7 @@ public class AutoAim {
         IDLE;
     }
 
-    private AutoAimState state;
+    private AutoAimState autoAimState;
     private Drivetrain drive;
     private Limelight limelight;
     private Shooter shooter;
@@ -32,7 +32,7 @@ public class AutoAim {
      * @param gyro gyro object.
      */
     public AutoAim(Drivetrain drive, Limelight limelight, Shooter shooter, AHRS gyro) {
-        state = AutoAimState.IDLE;
+        autoAimState = AutoAimState.IDLE;
         this.drive = drive;
         this.limelight = limelight;
         this.shooter = shooter;
@@ -43,8 +43,7 @@ public class AutoAim {
      * Runs Automatic Aiming state machine.
      */
     public void run() {
-        state = AutoAimState.SET_ANGLES;
-        switch(state) {
+        switch(autoAimState) {
 
             case SET_ANGLES:
                 SetAngles();
@@ -68,7 +67,7 @@ public class AutoAim {
      */
     private void SetAngles() {
         gyroDegrees = gyro.getYaw() + limelight.getTargetXDegrees();
-        state = AutoAimState.AIM_X;
+        autoAimState = AutoAimState.AIM_X;
     }
 
     /**
@@ -80,7 +79,7 @@ public class AutoAim {
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
         if (getWithinTolerance(gyroDegrees, gyro.getYaw(), 1)) {
-            state = AutoAimState.AIM_ANGLE;
+            autoAimState = AutoAimState.AIM_ANGLE;
         }
     }
 
@@ -91,7 +90,7 @@ public class AutoAim {
         angleDegrees = 1 *limelight.getTargetVertical(); //TODO: Use a table from testing to create an equation to plug this into
         shooter.setAngle(angleDegrees);
         if (getWithinTolerance(angleDegrees, shooter.getAngleInDegrees(), 1)) {
-            state = AutoAimState.IDLE;
+            autoAimState = AutoAimState.IDLE;
         }
     }
 
@@ -111,13 +110,13 @@ public class AutoAim {
      * Stops the aiming process.
      */
     public void stopAiming() {
-        state = AutoAimState.IDLE;
+        autoAimState = AutoAimState.IDLE;
     }
 
     /**
      * Gets the aiming state.
      */
     public AutoAimState getState() {
-        return state;
+        return autoAimState;
     }
 }

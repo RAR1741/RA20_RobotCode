@@ -3,7 +3,6 @@ package frc.robot;
 public class Autonomous{
 
    public enum AutonomousState{
-      
       AimShot1,
       Shoot1,
       MoveTrench,
@@ -14,12 +13,11 @@ public class Autonomous{
    }
 
    private AutonomousState state;
-   //private AutoAim autoAim;
+   private AutoAim autoAim;
    private Manipulation manipulation;
    private Drivetrain drive;
    private Limelight limelight;
    private Shooter shooter;
-   //private PowercellDetection pcDetection;
    
    private double error;
    private double motorPower;
@@ -32,24 +30,27 @@ public class Autonomous{
    private double targetSpeed;
    
    /**
-    * @param drive        drive train object.
+    * @param drive        drivetrain object.
     * @param limelight    limelight object.
     * @param shooter      shooter object.
     * @param manipulation manipulation object.
+    * @param autoaim      autoAim object.
     */
-   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
-
+   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation, AutoAim autoAim) {
       state = AutonomousState.AimShot1;
       this.drive = drive;
       this.limelight = limelight;
       this.shooter = shooter;
       this.manipulation = manipulation;
+      this.autoAim = autoAim;
    }
 
    public void AimShot1(){
-      //autoAim.run();
+      autoAim.run();
       manipulation.setIndexLoad(true);
-      state = AutonomousState.Shoot1;
+      if (getDoneAiming()) {
+         state = AutonomousState.Shoot1;
+      }
    }
 
    public void Shoot1(){
@@ -80,10 +81,11 @@ public class Autonomous{
    }
 
    public void AimShot2(){
-
-      //autoAim.run();
+      autoAim.run();
       manipulation.setIndexLoad(true);
-      state = AutonomousState.Shoot2;
+      if (getDoneAiming()) {
+         state = AutonomousState.Shoot2;
+      }
    }
 
    public void Shoot2(){
@@ -91,7 +93,7 @@ public class Autonomous{
       shooter.autoControl(targetSpeed);
       shoot();
       if (getDoneShooting()) {
-         state = AutonomousState.MoveTrench;
+         done = true;
       }
    }
 
@@ -101,6 +103,19 @@ public class Autonomous{
    private void shoot() {
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.setIndexFeed(true);
+      }
+   }
+
+   /**
+    * Gets if done aiming.
+
+    * @return true if done aiming, false if not done aiming.
+    */
+   private boolean getDoneAiming() {
+      if (autoAim.getState() == AutoAim.AutoAimState.IDLE) {
+         return true;
+      } else {
+         return false;
       }
    }
 
