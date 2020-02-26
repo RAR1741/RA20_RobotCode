@@ -49,6 +49,7 @@ public class Shooter {
     state = State.ManualControl;
     launcher.set(power);
     angleMotor.set(angleMotorPower);
+
   }
 
   public double getTargetAngle() {

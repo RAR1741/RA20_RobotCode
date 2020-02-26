@@ -13,22 +13,24 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
-public class Autonomous {
+public class Autonomous{
 
-   public enum AutonomousState {
-      AimShot1, Shoot1, MoveTrench, BallCollect, MoveShoot, AimShot2, Shoot2;
+   public enum AutonomousState{
+      AimShot1,
+      Shoot1,
+      MoveTrench,
+      BallCollect,
+      MoveShoot,
+      AimShot2,
+      Shoot2;
    }
 
    private AutonomousState state;
-   // private AutoAim autoAim;
+   private AutoAim autoAim;
    private Manipulation manipulation;
    private Drivetrain drive;
-   private Limelight limelight;
    private Shooter shooter;
-
-   private double error;
-   private double motorPower;
-   private double degrees;
+   
    private boolean done = false;
    private double targetRPM; // TODO: determine correct target RPM
    private TrajectoryConfig config;
@@ -57,35 +59,32 @@ public class Autonomous {
    private double targetSpeed;
 
    /**
-    * @param drive        drive train object.
-    * @param limelight    limelight object.
+    * @param drive        drivetrain object.
     * @param shooter      shooter object.
     * @param manipulation manipulation object.
+    * @param autoaim      autoAim object.
     */
-   public Autonomous(Drivetrain drive, Limelight limelight, Shooter shooter, Manipulation manipulation) {
+   public Autonomous(Drivetrain drive, Shooter shooter, Manipulation manipulation, AutoAim autoAim) {
       state = AutonomousState.AimShot1;
       this.drive = drive;
-      this.limelight = limelight;
       this.shooter = shooter;
       this.manipulation = manipulation;
+      this.autoAim = autoAim;
    }
 
-   public void AimShot1() {
-      // autoAim.run();
-      state = AutonomousState.Shoot1;
+   public void AimShot1(){
+      autoAim.run();
+      manipulation.setIndexLoad(true);
+      if (getDoneAiming()) {
+         state = AutonomousState.Shoot1;
+      }
    }
 
    public void Shoot1(){
-      // shooter.autoControl(targetSpeed); // TODO: Add PID control of shooter motor speed;
-      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
-         manipulation.setIndexFeed(true);
-         manipulation.setIndexLoad(true);
-      }
-      if (manipulation.getBalls() == 0) {
-         manipulation.setIndexLoad(false);
-         manipulation.setIndexFeed(false);
-         // shooter.autoControl(0);
-         done = true;
+      // shooter.autoControl(targetSpeed);
+      shoot();
+      if (getDoneShooting()) {
+         state = AutonomousState.MoveTrench;
       }
    }
 
@@ -103,37 +102,87 @@ public class Autonomous {
    public void BallGrab(){
       manipulation.setIntakeExtend(true);
       manipulation.setIntakeSpin(true);
-      if (manipulation.getBalls() < 5) {
-         drive.approachPowercell();
-      } else {
-         manipulation.setIntakeSpin(false);
-         manipulation.setIntakeExtend(false);
+      drive.approachPowercell();
+      if (getDoneCollecting()) {
          state = AutonomousState.MoveShoot;
       }
    }
 
    public void MoveShoot(){
       //TODO: Add trajectory based movement.
+      autoAim.resetState();
       state = AutonomousState.AimShot2;
    }
 
-   public void AimShot2() {
-      // autoAim.run();
-      state = AutonomousState.Shoot2;
+   public void AimShot2(){
+      autoAim.run();
+      manipulation.setIndexLoad(true);
+      if (getDoneAiming()) {
+         state = AutonomousState.Shoot2;
+      }
    }
 
    public void Shoot2(){
       manipulation.updateIndex();
       // shooter.autoControl(targetSpeed);
+      shoot();
+      if (getDoneShooting()) {
+         done = true;
+      }
+   }
+
+   /**
+    * Brings shooter up to speed and shoots.
+    */
+   private void shoot() {
       if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
          manipulation.setIndexFeed(true);
-         manipulation.setIndexLoad(true);
       }
+   }
+
+   /**
+    * Gets if done aiming.
+
+    * @return true if done aiming, false if not done aiming.
+    */
+   private boolean getDoneAiming() {
+      if (autoAim.getState() == AutoAim.AutoAimState.IDLE) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   /**
+    * Gets if done shooting and stops shooting if so.
+
+    * @return true if done shooting, false if not done shooting.
+    */
+   private boolean getDoneShooting() {
       if (manipulation.getBalls() == 0) {
          manipulation.setIndexLoad(false);
          manipulation.setIndexFeed(false);
          // shooter.autoControl(0);
          done = true;
+         // shooter.autoControl(0);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   /**
+    * Gets if done collecting powercells.
+
+    * @return true if done collecting, false if not done.
+    */
+   private boolean getDoneCollecting() {
+      if (manipulation.getBalls() >= 5) {
+         manipulation.setIntakeSpin(false);
+         manipulation.setIntakeExtend(false);
+         return true;
+      } else {
+         return false;
       }
    }
 
