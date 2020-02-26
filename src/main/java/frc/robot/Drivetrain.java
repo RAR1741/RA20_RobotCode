@@ -86,6 +86,14 @@ public class Drivetrain {
     }
 
     /**
+     * Cools drivetrain motors.
+     */
+    public void coolMotors() {
+        left.coolTemp();
+        right.coolTemp();
+    }
+
+    /*
      * Moves the robot to intercept powercells
      * 
      * @param x target X-coordinate

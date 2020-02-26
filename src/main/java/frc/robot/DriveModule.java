@@ -9,15 +9,21 @@ public class DriveModule {
   private TalonFX slave1;
   private TalonFX slave2;
 
+  private Solenoid cooler;
+
   private Solenoid pto;
 
-  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid pto) {
+  private final double MAX_TEMP = 35; //TODO: Determine optimal temperature
+
+  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid pto, Solenoid cooler) {
     this.master = master;
     this.slave1 = slave1;
     this.slave2 = slave2;
 
     this.slave1.follow(this.master);
     this.slave2.follow(this.master);
+
+    this.cooler = cooler;
 
     this.pto = pto;
   }
@@ -34,5 +40,21 @@ public class DriveModule {
 
   public void setPTO(boolean engaged) {
     pto.set(engaged);
+  }
+
+  /**
+   * Gets temperature of givien motor.
+   * 
+   * @param motor motor that's temperature is gotten.
+   */
+  private double getTemp(TalonFX motor) {
+    return motor.getTemperature();
+  }
+
+  /**
+   * Cools falcons using pneumatic coolers if above recommended temperature.
+   */
+  public void coolTemp() {
+    cooler.set(getTemp(master) > MAX_TEMP || getTemp(slave1) > MAX_TEMP || getTemp(slave2) > MAX_TEMP);
   }
 }

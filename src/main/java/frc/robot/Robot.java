@@ -23,6 +23,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -102,8 +103,22 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
+      Solenoid pto = new Solenoid(2,0);
+      DriveModule leftModule = new DriveModule(
+        new TalonFX(5),
+        new TalonFX(6),
+        new TalonFX(7),
+        pto,
+        new Solenoid(2, 4)
+      );
+      DriveModule rightModule = new DriveModule(
+        new TalonFX(8),
+        new TalonFX(9),
+        new TalonFX(10),
+        pto,
+        new Solenoid(2, 5)
+      );
+
       drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
@@ -192,6 +207,8 @@ public class Robot extends TimedRobot {
       }
 
       drive.arcadeDrive(turnInput, speedInput);
+
+      drive.coolMotors();
     }
 
     if (this.photoswitchSensorToggle)
