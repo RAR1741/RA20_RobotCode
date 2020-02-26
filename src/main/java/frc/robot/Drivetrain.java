@@ -10,17 +10,21 @@ public class Drivetrain {
 
     private DriveModule left;
     private DriveModule right;
+    private PowercellDetection detector;
 
     /**
      * Constructor
      * 
      * @param left The left drive module
      * @param right The right drive module
+     * @param detector The powercell detection object.
      */
-    Drivetrain(DriveModule left, DriveModule right){
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector){
         this.left = left;
         this.right = right;
         left.setInverted(true);
+
+        this.detector = detector;
     }
 
     /**
@@ -87,5 +91,16 @@ public class Drivetrain {
     public void coolMotors() {
         left.coolTemp();
         right.coolTemp();
+    }
+
+    /*
+     * Moves the robot to intercept powercells
+     * 
+     * @param x target X-coordinate
+     */
+    public void approachPC(double x) {
+        //TODO: Determine division variable for percent of screen
+        driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
+        driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
     }
 }
