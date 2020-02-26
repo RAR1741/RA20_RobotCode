@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor light;
+  PowercellDetection detector;
   DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
@@ -52,12 +53,9 @@ public class Robot extends TimedRobot {
   boolean limelightToggle = false;
   boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
-  boolean drivetrainToggle = false;
-  boolean navXToggle = false;
-
-  double targetAngle = 0;
-
-  double speed = 0;
+  boolean drivetrainToggle = true;
+  boolean powercellDetectorToggle = true;
+  boolean navXToggle = true;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -86,6 +84,14 @@ public class Robot extends TimedRobot {
       System.out.println("Photoswitch disabled. Skipping initialization...");
     }
 
+    if (this.powercellDetectorToggle) {
+      System.out.print("Initializing powercell detection...");
+      detector = new PowercellDetection();
+      System.out.println("done");
+    } else {
+      System.out.println("Powercell detection disabled. Skipping initialization...");
+    }
+
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
       shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
@@ -98,7 +104,7 @@ public class Robot extends TimedRobot {
       System.out.print("Initializing drivetrain...");
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
       DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
-      drive = new Drivetrain(leftModule, rightModule);
+      drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
@@ -141,6 +147,9 @@ public class Robot extends TimedRobot {
     if (this.limelightToggle) {
       limelight.update();
     }
+
+    if (this.powercellDetectorToggle)
+      detector.update();
 
     if (this.shooterToggle) {
       double speed = 0;
