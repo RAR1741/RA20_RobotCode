@@ -1,9 +1,5 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-
 public class Drivetrain {
     
     /**
@@ -12,40 +8,23 @@ public class Drivetrain {
      */
     private static final double DEADBAND_LIMIT = 0.02;
 
-    private CANSparkMax leftNeo;
-    private CANSparkMax leftSlave1;
-    private CANSparkMax leftSlave2;
-    private CANSparkMax rightNeo;
-    private CANSparkMax rightSlave1;
-    private CANSparkMax rightSlave2;
+    private DriveModule left;
+    private DriveModule right;
+    private PowercellDetection detector;
 
     /**
      * Constructor
      * 
-     * @param leftNeo1ID The CAN id of the first left neo
-     * @param leftNeo2ID The CAN id of the second left neo
-     * @param leftNeo3ID The CAN id of the third left neo
-     * @param rightNeo1ID The CAN id of the first right neo.
-     * @param rightNeo2ID The CAN id of the second right neo.
-     * @param rightNeo3ID The CAN id of the third right neo.
+     * @param left The left drive module
+     * @param right The right drive module
+     * @param detector The powercell detection object.
      */
-    Drivetrain(int leftNeo1ID, int leftNeo2ID, int leftNeo3ID, int rightNeo1ID, int rightNeo2ID, int rightNeo3ID){
-        leftNeo = new CANSparkMax(leftNeo1ID, MotorType.kBrushless);
-        leftSlave1 = new CANSparkMax(leftNeo2ID, MotorType.kBrushless);
-        leftSlave2 = new CANSparkMax(leftNeo3ID, MotorType.kBrushless);
-        rightNeo = new CANSparkMax(rightNeo1ID, MotorType.kBrushless);
-        rightSlave1 = new CANSparkMax(rightNeo2ID, MotorType.kBrushless);
-        rightSlave2 = new CANSparkMax(rightNeo3ID, MotorType.kBrushless);
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector){
+        this.left = left;
+        this.right = right;
+        left.setInverted(true);
 
-        leftNeo.setInverted(true);
-        leftSlave1.setInverted(true);
-        leftSlave2.setInverted(true);
-
-        leftSlave1.follow(leftNeo);
-        leftSlave2.follow(leftNeo);
-        rightSlave1.follow(rightNeo);
-        rightSlave2.follow(rightNeo);
-
+        this.detector = detector;
     }
 
     /**
@@ -55,7 +34,7 @@ public class Drivetrain {
      */
     public void driveLeft(double speed){
         double sp = deadband(speed);
-        leftNeo.set(sp);
+        left.set(sp);
     }
 
     /**
@@ -65,7 +44,7 @@ public class Drivetrain {
      */
     public void driveRight(double speed){
         double sp = deadband(speed);
-        rightNeo.set(sp);
+        right.set(sp);
     }
 
     /**
@@ -104,5 +83,16 @@ public class Drivetrain {
      */
     public double deadband(double in) {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
+    }
+
+    /**
+     * Moves the robot to intercept powercells
+     * 
+     * @param x target X-coordinate
+     */
+    public void approachPC(double x) {
+        //TODO: Determine division variable for percent of screen
+        driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
+        driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
     }
 }
