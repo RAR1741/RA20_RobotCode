@@ -136,9 +136,9 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
-      drive = new Drivetrain(leftModule, rightModule, detector);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 4));
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 5));
+      drive = new Drivetrain(leftModule, rightModule, detector, new Solenoid(2, 3));
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
