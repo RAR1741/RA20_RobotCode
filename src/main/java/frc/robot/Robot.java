@@ -64,20 +64,12 @@ public class Robot extends TimedRobot {
   boolean manipulationToggle = true;
   boolean navXToggle = true;
   boolean powercellDetectorToggle = true;
-  
+
   /**
    * CAN ID's:
    * 
-   * PDP -> 1
-   * PCM -> 2
-   * Climber -> 4
-   * Drive -> 5-10
-   * Shooter -> 11
-   * Shooter Hood -> 12
-   * Intake -> 13
-   * Index -> 14
-   * Index -> 15
-   * Pull Index -> 16 (Possible)
+   * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
+   * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
    * 
    * 
    * 
@@ -85,17 +77,15 @@ public class Robot extends TimedRobot {
    * 
    * PCM Channels:
    * 
-   * Drivetrain PTO's -> 0
-   * Manipulation Forward -> 1
-   * Manipulation Reverse -> 2
+   * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
   @Override
   public void robotInit() {
     /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
     if (this.limelightToggle) {
@@ -107,9 +97,11 @@ public class Robot extends TimedRobot {
       System.out.println("Vision system (limelight) disabled. Skipping initialization...");
     }
 
-    if(this.manipulationToggle) {
+    if (this.manipulationToggle) {
       System.out.print("Initializing manipulation...");
-      manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
+      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless), new DoubleSolenoid(1, 2),
+          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15, MotorType.kBrushless), lightShoot, lightIntake,
+          new CANSparkMax(16, MotorType.kBrushless));
       System.out.println("done");
     } else {
       System.out.println("Manipulation disabled. Skipping initialization...");
@@ -187,12 +179,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (this.limelightToggle){
+    if (this.limelightToggle) {
       limelight.update();
 
       if (driver.getXButtonPressed())
         limelight.setLightEnabled(true);
-      else if (driver.getYButtonPressed()) 
+      else if (driver.getYButtonPressed())
         limelight.setLightEnabled(false);
     }
 
@@ -240,8 +232,9 @@ public class Robot extends TimedRobot {
       manipulation.setIndexFeed(driver.getBButton());
 
       manipulation.setIndexLoad(driver.getXButton());
-    }
 
+      manipulation.setIndexPull(driver.getAButton());
+    }
 
     if (this.drivetrainToggle) {
       double turnInput = driver.getX(Hand.kRight);
@@ -264,7 +257,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-
 
   public static String localPath(String... paths) {
     File localPath = edu.wpi.first.wpilibj.Filesystem.getOperatingDirectory();
