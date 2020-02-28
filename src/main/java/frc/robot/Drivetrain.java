@@ -158,7 +158,20 @@ public class Drivetrain {
         } else {
             sweepState = SweepState.SWEEP_LEFT;
         }
+    }
 
+    /**
+     * Resets to the state to setting the angle.
+     */
+    public void resetState() {
+        sweepState = SweepState.SET_ANGLE;
+    }
+
+    /**
+     * Sets the state to idle.
+     */
+    public void stopSweep() {
+        sweepState = SweepState.IDLE;
     }
 
     /**
