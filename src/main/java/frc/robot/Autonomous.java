@@ -2,12 +2,14 @@ package frc.robot;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
@@ -46,7 +48,7 @@ public class Autonomous{
    private double ksVolts;
    private double kvVoltSecondsPerMeter;
    private double kaVoltSecondsSquaredPerMeter;
-   private Object kDriveKinematics;
+   private DifferentialDriveKinematics kDriveKinematics;
    private double kRamseteZeta;
    private double kRamseteB;
    private double kPDriveVel;
@@ -89,15 +91,17 @@ public class Autonomous{
    }
 
    public void MoveTrench() {
-      // RamseteCommand ramseteCommand = new RamseteCommand(
-      //       TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), start,
-      //       new RamseteController(kRamseteB, kRamseteZeta),
-      //       new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
-      //       drive::getWheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
-      //       new PIDController(kPDriveVel, 0, 0), // right side
-      //       RamseteCommand passes volts to the callback
-      //       drive::setVoltage, drive);
+      RamseteCommand ramseteCommand = new RamseteCommand(
+            TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), startSupplier,
+            new RamseteController(kRamseteB, kRamseteZeta),
+            new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
+            drive.wheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
+            new PIDController(kPDriveVel, 0, 0), // right side
+            drive.setVoltageBiConsumer, drive);
    }
+
+   Supplier<Pose2d> startSupplier = () -> start;
+
 
    public void BallGrab(){
       manipulation.setIntakeExtend(true);

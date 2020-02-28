@@ -32,6 +32,10 @@ public class DriveModule {
     master.set(TalonFXControlMode.PercentOutput, input);
   }
 
+  public void setVoltage(double voltage) {
+    master.set(TalonFXControlMode.PercentOutput, voltage*(master.getMotorOutputPercent()/master.getMotorOutputVoltage()));
+  }
+
   public void setRawSpeed(double encoderTicksPerSecond) {
     // This is divided by 10 because velocity is in "position change / 100 ms"
     master.set(TalonFXControlMode.Velocity, encoderTicksPerSecond / 10);

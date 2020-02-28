@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class Drivetrain {
     /**
@@ -101,6 +103,8 @@ public class Drivetrain {
         return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
     }
 
+    Supplier<DifferentialDriveWheelSpeeds> wheelSpeeds  = () -> getWheelSpeeds();
+
     public void setChassisSpeed(ChassisSpeeds input) {
         DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(input);
         speeds.normalize(MAX_SPEED_METERS_PER_SECOND);
@@ -108,6 +112,13 @@ public class Drivetrain {
         setSpeedInMetersPerSecond(left, speeds.leftMetersPerSecond);
         setSpeedInMetersPerSecond(right, speeds.rightMetersPerSecond);
     }
+
+    public void setVoltage(double leftVoltage, double rightVoltage) {
+        left.setVoltage(leftVoltage);
+        right.setVoltage(rightVoltage);
+    }
+
+    BiConsumer<Double, Double> setVoltageBiConsumer = (leftVoltage, rightVoltage) -> setVoltage(leftVoltage, rightVoltage);
 
     private void setSpeedInMetersPerSecond(DriveModule module, double speedInMetersPerSecond) {
         double targetRotationsPerSecond = speedInMetersPerSecond / (WHEEL_DIAMETER_METERS * Math.PI);
