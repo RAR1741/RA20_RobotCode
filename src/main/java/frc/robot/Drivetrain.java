@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 public class Drivetrain {
     
     /**
@@ -8,9 +10,22 @@ public class Drivetrain {
      */
     private static final double DEADBAND_LIMIT = 0.02;
 
+    private enum SweepState {
+        SET_ANGLE,
+        SWEEP_LEFT,
+        SWEEP_RIGHT,
+        IDLE;
+    }
+
+    private SweepState sweepState;
+
     private DriveModule left;
     private DriveModule right;
     private PowercellDetection detector;
+    private Limelight limelight;
+    private AHRS gyro;
+
+    private double gyroAngle;
 
     /**
      * Constructor
@@ -19,12 +34,16 @@ public class Drivetrain {
      * @param right The right drive module
      * @param detector The powercell detection object.
      */
-    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector){
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector, Limelight limelight, AHRS gyro){
         this.left = left;
         this.right = right;
         left.setInverted(true);
 
         this.detector = detector;
+        this.limelight = limelight;
+        this.gyro = gyro;
+
+        sweepState = SweepState.IDLE;
     }
 
     /**
@@ -83,6 +102,76 @@ public class Drivetrain {
      */
     public double deadband(double in) {
         return Math.abs(in) > DEADBAND_LIMIT ? in : 0.0;
+    }
+
+    /**
+     * Runs the sweeping procedure.
+     */
+    public void sweep() {
+        switch(sweepState) {
+            
+            case SET_ANGLE:
+                sweepAngle();
+                break;
+
+            case SWEEP_LEFT:
+                sweepLeft();
+                break;
+
+            case SWEEP_RIGHT:
+                sweepRight();
+                break;
+
+            case IDLE:
+                break;
+        }
+    }
+
+    /**
+     * Sets home gyro angle.
+     */
+    private void sweepAngle() {
+        gyroAngle = gyro.getAngle();
+        sweepState = SweepState.SWEEP_LEFT;
+    }
+
+    /**
+     * Sweeps to the left 80 degrees.
+     */
+    private void sweepLeft() {
+        if (gyro.getAngle() < gyroAngle + 80) {
+            driveLeft(-0.50);
+            driveRight(0.50);
+        } else {
+            sweepState = SweepState.SWEEP_RIGHT;
+        }
+    }
+
+    /**
+     * Sweeps to the right 80 degrees.
+
+     */
+    private void sweepRight() {
+        if (gyro.getAngle() > gyroAngle - 80) {
+            driveLeft(0.50);
+            driveRight(-0.50);
+        } else {
+            sweepState = SweepState.SWEEP_LEFT;
+        }
+    }
+
+    /**
+     * Resets to the state to setting the angle.
+     */
+    public void resetState() {
+        sweepState = SweepState.SET_ANGLE;
+    }
+
+    /**
+     * Sets the state to idle.
+     */
+    public void stopSweep() {
+        sweepState = SweepState.IDLE;
     }
 
     /**
