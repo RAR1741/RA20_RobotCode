@@ -1,5 +1,20 @@
 package frc.robot;
 
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 public class Autonomous{
 
    public enum AutonomousState{
@@ -19,12 +34,32 @@ public class Autonomous{
    private Shooter shooter;
    
    private boolean done = false;
+   private double targetRPM; // TODO: determine correct target RPM
+   private TrajectoryConfig config;
+   private TrajectoryGenerator tGenerator;
+   private Pose2d start;
+   private Pose2d end;
+   private List<Translation2d> interiorWaypoints;
 
-   //TODO: determine correct target speeds
-   private double targetSpeedMax; 
+   /**
+    * TODO: get measurements for trajectories
+    * https://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/characterizing-drive.html
+    */
+   private double ksVolts;
+   private double kvVoltSecondsPerMeter;
+   private double kaVoltSecondsSquaredPerMeter;
+   private DifferentialDriveKinematics kDriveKinematics;
+   private double kRamseteZeta;
+   private double kRamseteB;
+   private double kPDriveVel;
+   
+   private int pcCount = 0;
+
+   // TODO: determine correct target speeds
+   private double targetSpeedMax;
    private double targetSpeedMin;
    private double targetSpeed;
-   
+
    /**
     * @param drive        drivetrain object.
     * @param shooter      shooter object.
@@ -48,17 +83,25 @@ public class Autonomous{
    }
 
    public void Shoot1(){
-      shooter.autoControl(targetSpeed);
+      // shooter.autoControl(targetSpeed);
       shoot();
       if (getDoneShooting()) {
          state = AutonomousState.MoveTrench;
       }
    }
 
-   public void MoveTrench(){
-      //TODO: Add trajectory based movement.
-      state = AutonomousState.BallCollect;
+   public void MoveTrench() {
+      RamseteCommand ramseteCommand = new RamseteCommand(
+            TrajectoryUtil.fromPathweaverJson(Paths.get("MoveTrenchS.json")), startSupplier,
+            new RamseteController(kRamseteB, kRamseteZeta),
+            new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter), kDriveKinematics,
+            drive.wheelSpeeds, new PIDController(kPDriveVel, 0, 0), // left side
+            new PIDController(kPDriveVel, 0, 0), // right side
+            drive.setVoltageBiConsumer, drive);
    }
+
+   Supplier<Pose2d> startSupplier = () -> start;
+
 
    public void BallGrab(){
       manipulation.setIntakeExtend(true);
@@ -85,7 +128,7 @@ public class Autonomous{
 
    public void Shoot2(){
       manipulation.updateIndex();
-      shooter.autoControl(targetSpeed);
+      // shooter.autoControl(targetSpeed);
       shoot();
       if (getDoneShooting()) {
          done = true;
@@ -123,7 +166,9 @@ public class Autonomous{
       if (manipulation.getBalls() == 0) {
          manipulation.setIndexLoad(false);
          manipulation.setIndexFeed(false);
-         shooter.autoControl(0);
+         // shooter.autoControl(0);
+         done = true;
+         // shooter.autoControl(0);
          return true;
       } else {
          return false;
@@ -145,35 +190,35 @@ public class Autonomous{
       }
    }
 
-   public boolean Auto(){
+   public boolean Auto() {
 
-      switch(state){
+      switch (state) {
 
-         case AimShot1:
+      case AimShot1:
          AimShot1();
          break;
 
-         case Shoot1:
+      case Shoot1:
          Shoot1();
          break;
 
-         case MoveTrench:
+      case MoveTrench:
          MoveTrench();
          break;
 
-         case BallCollect:
+      case BallCollect:
          BallGrab();
          break;
 
-         case MoveShoot:
+      case MoveShoot:
          MoveShoot();
          break;
 
-         case AimShot2:
+      case AimShot2:
          AimShot2();
          break;
 
-         case Shoot2:
+      case Shoot2:
          Shoot2();
          break;
       }

@@ -51,9 +51,6 @@ public class Shooter {
     angleMotor.set(angleMotorPower);
 
   }
-  public void autoControl(double power) {
-    launcher.set(power);
-  }
 
   public double getTargetAngle() {
     return targetAngle;

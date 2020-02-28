@@ -85,6 +85,10 @@ public class Robot extends TimedRobot {
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
   @Override
   public void robotInit() {
     /**
@@ -130,14 +134,6 @@ public class Robot extends TimedRobot {
       System.out.println("Shooter disabled. Skipping initialization...");
     }
 
-    if (this.manipulationToggle) {
-      System.out.print("Initializing manipulation...");
-      manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
-      System.out.println("done");
-    } else {
-      System.out.println("Manipulation disabled. Skipping initialization...");
-    }
-
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
@@ -170,17 +166,17 @@ public class Robot extends TimedRobot {
     operator = new XboxController(1);
     System.out.println("done");
 
+    System.out.print("Initializing driver interface...");
+    driver = new XboxController(0);
+    System.out.println("done");
+
     if (this.autonomousToggle) {
       System.out.print("Initializing Autonomous...");
       autonomous = new Autonomous(drive, shooter, manipulation, aim);
       System.out.println("done");
     } else {
-      System.out.println("Sutonomous disabled. Skipping initialization...");
+      System.out.println("Autonomous disabled. Skipping initialization.");
     }
-
-    System.out.print("Initializing driver interface...");
-    driver = new XboxController(0);
-    System.out.println("done");
 
     System.out.print("Initializing compressor...");
     // compressor = new Compressor(2);
@@ -198,7 +194,9 @@ public class Robot extends TimedRobot {
     detector.update();
     limelight.update();
     manipulation.updateIndex();
-    if(this.autonomousToggle) {
+
+    if (this.autonomousToggle) {
+
       if (autonomous.Auto()) {
         System.out.println("Autonomous Done");
       }
