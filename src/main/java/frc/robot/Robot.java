@@ -59,11 +59,11 @@ public class Robot extends TimedRobot {
   // Booleans for toggling different things...
   boolean limelightToggle = false;
   boolean photoswitchSensorToggle = false;
-  boolean shooterToggle = true;
-  boolean drivetrainToggle = true;
+  boolean shooterToggle = false;
+  boolean drivetrainToggle = false;
   boolean manipulationToggle = true;
-  boolean navXToggle = true;
-  boolean powercellDetectorToggle = true;
+  boolean navXToggle = false;
+  boolean powercellDetectorToggle = false;
 
   /**
    * CAN ID's:
@@ -99,9 +99,15 @@ public class Robot extends TimedRobot {
 
     if (this.manipulationToggle) {
       System.out.print("Initializing manipulation...");
-      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless), new DoubleSolenoid(1, 2),
+      // manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
+      // new DoubleSolenoid(1, 2),
+      // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
+      // MotorType.kBrushless), lightShoot, lightIntake,
+      // new CANSparkMax(16, MotorType.kBrushless));
+      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15, MotorType.kBrushless), lightShoot, lightIntake,
           new CANSparkMax(16, MotorType.kBrushless));
+
       System.out.println("done");
     } else {
       System.out.println("Manipulation disabled. Skipping initialization...");

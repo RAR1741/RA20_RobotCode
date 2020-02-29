@@ -30,12 +30,12 @@ public class Manipulation {
      * @param indexPull        The CAN id of the spark for pulling balls into the
      *                         shooter
      */
-    Manipulation(CANSparkMax intakeWheel, DoubleSolenoid intakePneumatics, CANSparkMax indexLoad, CANSparkMax indexFeed,
-            PhotoswitchSensor shootGate, PhotoswitchSensor intakeGate, CANSparkMax indexPull) {
+    Manipulation(CANSparkMax intakeWheel, CANSparkMax indexLoad, CANSparkMax indexFeed, PhotoswitchSensor shootGate,
+            PhotoswitchSensor intakeGate, CANSparkMax indexPull) {
         this.intakeWheel = intakeWheel;
         this.indexLoad = indexLoad;
         this.indexFeed = indexFeed;
-        this.intakePneumatics = intakePneumatics;
+        // this.intakePneumatics = intakePneumatics;
         this.shootGate = shootGate;
         this.intakeGate = intakeGate;
         this.indexPull = indexPull;
@@ -59,7 +59,7 @@ public class Manipulation {
      * @param extend true if it should extend, false if not.
      */
     public void setIntakeExtend(boolean extend) {
-        intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
+        // intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
     }
 
     /**
