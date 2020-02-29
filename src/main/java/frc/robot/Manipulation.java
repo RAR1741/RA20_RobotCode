@@ -31,14 +31,14 @@ public class Manipulation {
      *                         shooter
      */
     Manipulation(CANSparkMax intakeWheel, CANSparkMax indexLoad, CANSparkMax indexFeed, PhotoswitchSensor shootGate,
-            PhotoswitchSensor intakeGate, CANSparkMax indexPull) {
+            PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;
         this.indexLoad = indexLoad;
         this.indexFeed = indexFeed;
         // this.intakePneumatics = intakePneumatics;
         this.shootGate = shootGate;
         this.intakeGate = intakeGate;
-        this.indexPull = indexPull;
+        // this.indexPull = indexPull;
 
         intakeWheel.setInverted(true);
     }
@@ -50,7 +50,7 @@ public class Manipulation {
      */
     public void setIntakeSpin(boolean spin) {
         // TODO: test if this power is right
-        intakeWheel.set(spin ? 0.5 : 0);
+        intakeWheel.set(spin ? -0.5 : 0);
     }
 
     /**
@@ -69,20 +69,25 @@ public class Manipulation {
      */
     public void setIndexLoad(boolean load) {
         // TODO: test if this power is right.
-        indexLoad.set(load ? 0.5 : 0);
+        indexLoad.set(load ? 0.25 : 0);
     }
 
     /**
      * Feeds power cells into the scoring system.
      * 
-     * @param feed if it should feed the shooter power cells.
+     * @param power the power thr motor pull turn at.
      */
-    public void setIndexFeed(boolean feed) {
-        indexFeed.set(feed ? 1 : 0);
+    public void setIndexFeed(double power) {
+        indexFeed.set(power);
     }
 
     public void setIndexPull(boolean pull) {
-        indexPull.set(pull ? 1 : 0);
+        // indexPull.set(pull ? 1 : 0);
+    }
+
+    public void shootAllTheThings(boolean fire) {
+        indexFeed.set(fire ? 0.75 : 0);
+        indexLoad.set(fire ? 0.75 : 0);
     }
 
     /**

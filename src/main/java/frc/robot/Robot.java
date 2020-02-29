@@ -59,8 +59,8 @@ public class Robot extends TimedRobot {
   // Booleans for toggling different things...
   boolean limelightToggle = false;
   boolean photoswitchSensorToggle = false;
-  boolean shooterToggle = false;
-  boolean drivetrainToggle = false;
+  boolean shooterToggle = true;
+  boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
   boolean navXToggle = false;
   boolean powercellDetectorToggle = false;
@@ -105,8 +105,8 @@ public class Robot extends TimedRobot {
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
       manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
-          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15, MotorType.kBrushless), lightShoot, lightIntake,
-          new CANSparkMax(16, MotorType.kBrushless));
+          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
+          lightIntake);
 
       System.out.println("done");
     } else {
@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(11, MotorType.kBrushless), new CANSparkMax(12, MotorType.kBrushless));
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
       System.out.print("Initializing drivetrain...");
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 4));
       DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 5));
-      drive = new Drivetrain(leftModule, rightModule, detector, new Solenoid(2, 3));
+      drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
       System.out.println("Drivetrain disabled. Skipping initialization...");
@@ -230,21 +230,27 @@ public class Robot extends TimedRobot {
     }
 
     if (this.manipulationToggle) {
-      manipulation.setIntakeExtend(driver.getBumperPressed(Hand.kRight));
-      manipulation.setIntakeExtend(!driver.getBumperPressed(Hand.kLeft));
+      // manipulation.setIntakeExtend(operator.getBumperPressed(Hand.kRight));
+      // manipulation.setIntakeExtend(!operator.getBumperPressed(Hand.kLeft));
 
-      manipulation.setIntakeSpin(driver.getYButton());
+      if (operator.getBumper(Hand.kRight)) {
+        manipulation.shootAllTheThings(true);
+      } else {
+        manipulation.setIntakeSpin(operator.getYButton());
 
-      manipulation.setIndexFeed(driver.getBButton());
+        manipulation.setIndexFeed(operator.getBButton() ? 0.25 : (operator.getAButton() ? -0.25 : 0));
 
-      manipulation.setIndexLoad(driver.getXButton());
+        manipulation.setIndexLoad(operator.getXButton());
+      }
 
-      manipulation.setIndexPull(driver.getAButton());
+      // manipulation.setIndexPull(driver.getAButton());
     }
 
     if (this.drivetrainToggle) {
       double turnInput = driver.getX(Hand.kRight);
       double speedInput = driver.getY(Hand.kLeft);
+      // double leftInput = driver.getY(Hand.kLeft);
+      // double rightInput = driver.getY(Hand.kRight);
 
       if (driver.getXButtonPressed()) {
         limelight.setLightEnabled(true);
@@ -252,6 +258,7 @@ public class Robot extends TimedRobot {
         limelight.setLightEnabled(false);
       }
 
+      // drive.tankDrive(leftInput, rightInput);
       drive.arcadeDrive(turnInput, speedInput);
     }
   }
