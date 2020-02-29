@@ -9,9 +9,9 @@ public class DriveModule {
   private TalonFX slave1;
   private TalonFX slave2;
 
-  private Solenoid cooling;
+  private Solenoid pto;
 
-  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid cooling) { //TODO: changed the pto pneumatics to cooling. ptos will be declared seperate
+  DriveModule(TalonFX master, TalonFX slave1, TalonFX slave2, Solenoid pto) {
     this.master = master;
     this.slave1 = slave1;
     this.slave2 = slave2;
@@ -19,7 +19,7 @@ public class DriveModule {
     this.slave1.follow(this.master);
     this.slave2.follow(this.master);
 
-    this.cooling = cooling;
+    this.pto = pto;
   }
 
   public void setInverted(boolean isInverted) {
@@ -32,4 +32,7 @@ public class DriveModule {
     master.set(TalonFXControlMode.PercentOutput, input);
   }
 
+  public void setPTO(boolean engaged) {
+    pto.set(engaged);
+  }
 }

@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Solenoid;
-
 public class Drivetrain {
     
     /**
@@ -13,7 +11,6 @@ public class Drivetrain {
     private DriveModule left;
     private DriveModule right;
     private PowercellDetection detector;
-    private Solenoid pto;
 
     /**
      * Constructor
@@ -22,13 +19,12 @@ public class Drivetrain {
      * @param right The right drive module
      * @param detector The powercell detection object.
      */
-    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector, Solenoid pto){
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector){
         this.left = left;
         this.right = right;
         left.setInverted(true);
 
         this.detector = detector;
-        this.pto = pto;
     }
 
     /**
@@ -98,9 +94,5 @@ public class Drivetrain {
         //TODO: Determine division variable for percent of screen
         driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
         driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent()/4)));
-    }
-
-    public void setPTO(boolean engaged) {
-        pto.set(engaged);
     }
 }
