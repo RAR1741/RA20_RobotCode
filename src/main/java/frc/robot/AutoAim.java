@@ -9,6 +9,8 @@ public class AutoAim {
     private double angleDegrees;
     private double gyroDegrees;
 
+    private boolean sweeping;
+
     public enum AutoAimState {
         SET_ANGLES,
         AIM_X,
@@ -66,8 +68,18 @@ public class AutoAim {
      * Sets degrees to turn the robot to.
      */
     private void SetAngles() {
-        gyroDegrees = gyro.getYaw() + limelight.getTargetXDegrees();
-        state = AutoAimState.AIM_X;
+        if (limelight.isTargetVisible()) {
+            sweeping = false;
+            drive.stopSweep();
+            gyroDegrees = gyro.getYaw() + limelight.getTargetXDegrees();
+            state = AutoAimState.AIM_X;
+        } else {
+            if (!sweeping) {
+                drive.resetState();
+            }
+            sweeping = true;
+            drive.sweep();
+        }
     }
 
     /**
