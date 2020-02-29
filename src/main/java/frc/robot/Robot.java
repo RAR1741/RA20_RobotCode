@@ -191,11 +191,10 @@ public class Robot extends TimedRobot {
       limelight.update();
     }
 
-      if (driver.getXButtonPressed())
-        limelight.setLightEnabled(true);
-      else if (driver.getYButtonPressed()) 
-        limelight.setLightEnabled(false);
-    }
+    if (driver.getXButtonPressed())
+      limelight.setLightEnabled(true);
+    else if (driver.getYButtonPressed()) 
+      limelight.setLightEnabled(false);
 
     if (this.powercellDetectorToggle) {
       detector.update();
@@ -237,7 +236,13 @@ public class Robot extends TimedRobot {
 
       manipulation.setIntakeSpin(driver.getYButton());
 
-      manipulation.setIndexFeed(driver.getBButton());
+      if(operator.getBButton()) {
+        manipulation.setIndexFeed(1);
+      } else if (operator.getXButton()) {
+        manipulation.setIndexFeed(-1);
+      } else {
+        manipulation.setIndexFeed(0);
+      }
 
       manipulation.setIndexLoad(driver.getXButton());
     }

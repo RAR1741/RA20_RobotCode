@@ -70,10 +70,10 @@ public class Manipulation{
     /**
      * Feeds power cells into the scoring system.
      * 
-     * @param feed if it should feed the shooter power cells.
+     * @param power the power the motor should move at.
      */
-    public void setIndexFeed(boolean feed) {
-        indexFeed.set(feed ? 1: 0);
+    public void setIndexFeed(double power) {
+        indexFeed.set(power);
     }
     
     /**
