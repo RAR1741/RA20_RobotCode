@@ -8,6 +8,8 @@
 package frc.robot;
 
 import frc.robot.Limelight;
+import frc.robot.Shooter;
+import frc.robot.Manipulation;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -20,6 +22,8 @@ import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -39,12 +43,15 @@ public class Robot extends TimedRobot {
   private Toml config;
   AHRS gyro;
   Limelight limelight;
-  PhotoswitchSensor light;
+  PhotoswitchSensor lightShoot;
+  PhotoswitchSensor lightIntake;
+  DigitalInput lightShootInput;
+  DigitalInput lightIntakeInput;
   PowercellDetection detector;
-  DigitalInput lightInput;
   Shooter shooter = null;
   Drivetrain drive = null;
   XboxController driver = null;
+  Manipulation manipulation = null;
   XboxController operator = null;
   DriveModule module = null;
   Compressor compressor = null;
@@ -54,16 +61,41 @@ public class Robot extends TimedRobot {
   boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
-  boolean powercellDetectorToggle = true;
+  boolean manipulationToggle = true;
   boolean navXToggle = true;
-
+  boolean powercellDetectorToggle = true;
+  
   /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
+   * CAN ID's:
+   * 
+   * PDP -> 1
+   * PCM -> 2
+   * Climber -> 4
+   * Drive -> 5-10
+   * Shooter -> 11
+   * Shooter Hood -> 12
+   * Intake -> 13
+   * Index -> 14
+   * Index -> 15
+   * Pull Index -> 16 (Possible)
+   * 
+   * 
+   * 
+   * 
+   * 
+   * PCM Channels:
+   * 
+   * Drivetrain PTO's -> 0
+   * Manipulation Forward -> 1
+   * Manipulation Reverse -> 2
    */
 
   @Override
   public void robotInit() {
+    /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
     if (this.limelightToggle) {
@@ -75,13 +107,23 @@ public class Robot extends TimedRobot {
       System.out.println("Vision system (limelight) disabled. Skipping initialization...");
     }
 
-    if (this.photoswitchSensorToggle) {
-      System.out.print("Initializing photoswitch...");
-      lightInput = new DigitalInput(0);
-      light = new PhotoswitchSensor(lightInput);
+    if(this.manipulationToggle) {
+      System.out.print("Initializing manipulation...");
+      manipulation = new Manipulation(new Talon(13), new DoubleSolenoid(1, 2), new Talon(14), new Talon(15), lightShoot, lightIntake);
       System.out.println("done");
     } else {
-      System.out.println("Photoswitch disabled. Skipping initialization...");
+      System.out.println("Manipulation disabled. Skipping initialization...");
+    }
+
+    if (this.photoswitchSensorToggle) {
+      System.out.print("Initializing photoswitches...");
+      lightShootInput = new DigitalInput(0);
+      lightShoot = new PhotoswitchSensor(lightShootInput);
+      lightIntakeInput = new DigitalInput(1);
+      lightIntake = new PhotoswitchSensor(lightIntakeInput);
+      System.out.println("done");
+    } else {
+      System.out.println("Photoswitches disabled. Skipping initialization...");
     }
 
     if (this.powercellDetectorToggle) {
@@ -114,6 +156,7 @@ public class Robot extends TimedRobot {
       System.out.print("Initializing gyro system (NavX)...");
       gyro = new AHRS(SPI.Port.kMXP);
       gyro.enableLogging(false);
+
       System.out.println("done");
     } else {
       System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
@@ -148,8 +191,15 @@ public class Robot extends TimedRobot {
       limelight.update();
     }
 
-    if (this.powercellDetectorToggle)
+      if (driver.getXButtonPressed())
+        limelight.setLightEnabled(true);
+      else if (driver.getYButtonPressed()) 
+        limelight.setLightEnabled(false);
+    }
+
+    if (this.powercellDetectorToggle) {
       detector.update();
+    }
 
     if (this.shooterToggle) {
       double speed = 0;
@@ -181,6 +231,18 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("ShooterState", shooter.getState().toString());
     }
 
+    if (this.manipulationToggle) {
+      manipulation.setIntakeExtend(driver.getBumperPressed(Hand.kRight));
+      manipulation.setIntakeExtend(!driver.getBumperPressed(Hand.kLeft));
+
+      manipulation.setIntakeSpin(driver.getYButton());
+
+      manipulation.setIndexFeed(driver.getBButton());
+
+      manipulation.setIndexLoad(driver.getXButton());
+    }
+
+
     if (this.drivetrainToggle) {
       double turnInput = driver.getX(Hand.kRight);
       double speedInput = driver.getY(Hand.kLeft);
@@ -202,6 +264,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 
   public static String localPath(String... paths) {
     File localPath = edu.wpi.first.wpilibj.Filesystem.getOperatingDirectory();
