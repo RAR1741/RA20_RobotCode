@@ -7,29 +7,18 @@
 
 package frc.robot;
 
-import frc.robot.Limelight;
-import frc.robot.Shooter;
-import frc.robot.Manipulation;
-
 import java.io.File;
 import java.nio.file.Paths;
-
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -78,16 +67,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   * 
+   *
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   * 
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
+   *
    * PCM Channels:
-   * 
+   *
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
@@ -258,36 +247,26 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-<<<<<<< HEAD
       double turnInput = deadband(driver.getX(Hand.kRight));
       double speedInput = deadband(driver.getY(Hand.kLeft));
 
       // Limit speed input to a lower percentage unless boost mode is on
       boost.setEnabled(driver.getAButton());
       speedInput = boost.scale(speedInput);
-=======
-      double turnInput = driver.getX(Hand.kRight);
-      double speedInput = driver.getY(Hand.kLeft);
-      // double leftInput = driver.getY(Hand.kLeft);
-      // double rightInput = driver.getY(Hand.kRight);
->>>>>>> master
+
+      // drive.tankDrive(leftInput, rightInput);
+      drive.arcadeDrive(turnInput, speedInput);
 
       if (driver.getXButtonPressed()) {
         limelight.setLightEnabled(true);
       } else if (driver.getYButtonPressed()) {
         limelight.setLightEnabled(false);
       }
-
-      // drive.tankDrive(leftInput, rightInput);
-      drive.arcadeDrive(turnInput, speedInput);
     }
-<<<<<<< HEAD
 
-    if (this.photoswitchSensorToggle){
+    if (this.photoswitchSensorToggle) {
       SmartDashboard.putBoolean("LightClear", light.getClear());
     }
-=======
->>>>>>> master
   }
 
   @Override
