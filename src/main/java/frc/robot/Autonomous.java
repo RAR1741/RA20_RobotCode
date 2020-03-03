@@ -5,11 +5,7 @@ public class Autonomous{
    public enum AutonomousState{
       AimShot1,
       Shoot1,
-      MoveTrench,
-      BallCollect,
-      MoveShoot,
-      AimShot2,
-      Shoot2;
+      Move;
    }
 
    private AutonomousState state;
@@ -24,6 +20,9 @@ public class Autonomous{
    private double targetSpeedMax; 
    private double targetSpeedMin;
    private double targetSpeed;
+
+   private double leftPosition;
+   private double rightPosition;
    
    /**
     * @param drive        drivetrain object.
@@ -51,43 +50,15 @@ public class Autonomous{
       shooter.autoControl(targetSpeed);
       shoot();
       if (getDoneShooting()) {
-         state = AutonomousState.MoveTrench;
+         state = AutonomousState.Move;
       }
    }
 
-   public void MoveTrench(){
-      //TODO: Add trajectory based movement.
-      state = AutonomousState.BallCollect;
-   }
-
-   public void BallGrab(){
-      manipulation.setIntakeExtend(true);
-      manipulation.setIntakeSpin(true);
-      drive.approachPowercell();
-      if (getDoneCollecting()) {
-         state = AutonomousState.MoveShoot;
-      }
-   }
-
-   public void MoveShoot(){
-      //TODO: Add trajectory based movement.
-      autoAim.resetState();
-      state = AutonomousState.AimShot2;
-   }
-
-   public void AimShot2(){
-      autoAim.run();
-      manipulation.setIndexLoad(true);
-      if (getDoneAiming()) {
-         state = AutonomousState.Shoot2;
-      }
-   }
-
-   public void Shoot2(){
-      manipulation.updateIndex();
-      shooter.autoControl(targetSpeed);
-      shoot();
-      if (getDoneShooting()) {
+   public void Move(){
+      leftPosition = drive.getLeftPosition() - 500;
+      rightPosition = drive.getRightPosition() - 500;
+      drive.setPositions(leftPosition, rightPosition);
+      if (getDoneMoving()) {
          done = true;
       }
    }
@@ -103,7 +74,7 @@ public class Autonomous{
 
    /**
     * Gets if done aiming.
-
+    * 
     * @return true if done aiming, false if not done aiming.
     */
    private boolean getDoneAiming() {
@@ -116,7 +87,7 @@ public class Autonomous{
 
    /**
     * Gets if done shooting and stops shooting if so.
-
+    * 
     * @return true if done shooting, false if not done shooting.
     */
    private boolean getDoneShooting() {
@@ -131,14 +102,12 @@ public class Autonomous{
    }
 
    /**
-    * Gets if done collecting powercells.
+    * Gets if done moving and stops if so.
 
-    * @return true if done collecting, false if not done.
+    * @return true if done moving, false if not done moving.
     */
-   private boolean getDoneCollecting() {
-      if (manipulation.getBalls() >= 5) {
-         manipulation.setIntakeSpin(false);
-         manipulation.setIntakeExtend(false);
+   private boolean getDoneMoving() {
+      if (Math.abs(leftPosition - drive.getLeftPosition()) <= 50 && Math.abs(rightPosition - drive.getRightPosition()) <= 50) {
          return true;
       } else {
          return false;
@@ -157,24 +126,8 @@ public class Autonomous{
          Shoot1();
          break;
 
-         case MoveTrench:
-         MoveTrench();
-         break;
-
-         case BallCollect:
-         BallGrab();
-         break;
-
-         case MoveShoot:
-         MoveShoot();
-         break;
-
-         case AimShot2:
-         AimShot2();
-         break;
-
-         case Shoot2:
-         Shoot2();
+         case Move:
+         Move();
          break;
       }
       return done;

@@ -67,6 +67,35 @@ public class Drivetrain {
     }
 
     /**
+     * Drives to given positions.
+     * 
+     * @param leftPosition position of left drive module.
+     * @param rightPosition position of right drive module.
+     */
+    public void setPositions(double leftPosition, double rightPosition){
+        left.setPosition(leftPosition);
+        right.setPosition(rightPosition);
+    }
+
+    /**
+     * Gets position of left drive module.
+     * 
+     * @return position of left drive module.
+     */
+    public double getLeftPosition(){
+        return left.getPosition();
+    }
+
+    /**
+     * Gets position of right drive module.
+     * 
+     * @return position of right drive module.
+     */
+    public double getRightPosition(){
+        return right.getPosition();
+    }
+
+    /**
      * Drives the robot with an arcade style drive
      *
      * @param xDrive The speed to drive the drivetrain in the x direction (ranges

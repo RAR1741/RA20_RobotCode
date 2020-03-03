@@ -32,6 +32,14 @@ public class DriveModule {
     master.set(TalonFXControlMode.PercentOutput, input);
   }
 
+  public void setPosition(double position) {
+    master.set(TalonFXControlMode.Position, position);
+  }
+
+  public double getPosition() {
+    return master.getSelectedSensorPosition();
+  }
+
   public void setPTO(boolean engaged) {
     pto.set(engaged);
   }
