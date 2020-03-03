@@ -37,7 +37,8 @@ public class Shooter {
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
-    state = State.HomingDown;
+    // state = State.HomingDown;
+    state = State.Idle;
   }
 
   /**
@@ -65,29 +66,29 @@ public class Shooter {
    */
   public void update() {
     switch (state) {
-    case HomingDown:
-      angleMotor.set(HOMING_SPEED_DOWN);
+      case HomingDown:
+        angleMotor.set(HOMING_SPEED_DOWN);
 
-      if (angleMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get()) {
-        // We've reached the lower limit of the screw assembly, we're now at a
-        // known position. Set the absolute position to the encoder so we can deal
-        // with easier units.
-        angleMotor.set(0);
-        angleMotor.getEncoder().setPosition(HOME_POSITION);
-        state = State.Idle;
-      }
-      break;
-    case Idle:
-      // Idle!
-      break;
-    case MovingToAngle:
-      if (onTarget()) {
-        state = State.Idle;
-      }
-      break;
-    case ManualControl:
-      // Nothing
-      break;
+        if (angleMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get()) {
+          // We've reached the lower limit of the screw assembly, we're now at a
+          // known position. Set the absolute position to the encoder so we can deal
+          // with easier units.
+          angleMotor.set(0);
+          angleMotor.getEncoder().setPosition(HOME_POSITION);
+          state = State.Idle;
+        }
+        break;
+      case Idle:
+        // Idle!
+        break;
+      case MovingToAngle:
+        if (onTarget()) {
+          state = State.Idle;
+        }
+        break;
+      case ManualControl:
+        // Nothing
+        break;
     }
   }
 
