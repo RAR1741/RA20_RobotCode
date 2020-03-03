@@ -7,18 +7,30 @@
 
 package frc.robot;
 
+import frc.robot.Limelight;
+import frc.robot.Shooter;
+import frc.robot.Manipulation;
+
 import java.io.File;
 import java.nio.file.Paths;
+
+
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -265,7 +277,8 @@ public class Robot extends TimedRobot {
     }
 
     if (this.photoswitchSensorToggle) {
-      SmartDashboard.putBoolean("LightClear", light.getClear());
+      // FIXME..?
+      // SmartDashboard.putBoolean("LightClear", light.getClear());
     }
   }
 
