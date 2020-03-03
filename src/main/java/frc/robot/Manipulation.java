@@ -1,8 +1,8 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import com.revrobotics.CANSparkMax;
 
 public class Manipulation {
 
@@ -20,7 +20,7 @@ public class Manipulation {
 
     /**
      * Constructor
-     *
+     * 
      * @param intakeWheel      The CAN id of the spark for the intake system
      * @param intakePneumatics The intake solenoid
      * @param indexLoad        The CAN id of the spark for the index loader
@@ -45,7 +45,7 @@ public class Manipulation {
 
     /**
      * Rotates the intake motor.
-     *
+     * 
      * @param spin true if it should spin, false if not.
      */
     public void setIntakeSpin(boolean spin) {
@@ -55,7 +55,7 @@ public class Manipulation {
 
     /**
      * Moves the intake system.
-     *
+     * 
      * @param extend true if it should extend, false if not.
      */
     public void setIntakeExtend(boolean extend) {
@@ -64,7 +64,7 @@ public class Manipulation {
 
     /**
      * Moves power cells down indexing system.
-     *
+     * 
      * @param load true if it should load
      */
     public void setIndexLoad(boolean load) {
@@ -74,7 +74,7 @@ public class Manipulation {
 
     /**
      * Feeds power cells into the scoring system.
-     *
+     * 
      * @param power the power thr motor pull turn at.
      */
     public void setIndexFeed(double power) {
@@ -104,7 +104,7 @@ public class Manipulation {
 
     /**
      * Gets current amount of balls in the index system.
-     *
+     * 
      * @return current amount of balls in the index system.
      */
     public int getBalls() {

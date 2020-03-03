@@ -7,22 +7,29 @@
 
 package frc.robot;
 
+import frc.robot.Limelight;
+import frc.robot.Shooter;
+import frc.robot.Manipulation;
+
 import java.io.File;
 import java.nio.file.Paths;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -60,16 +67,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   *
+   * 
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   *
-   *
-   *
-   *
-   *
+   * 
+   * 
+   * 
+   * 
+   * 
    * PCM Channels:
-   *
+   * 
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
@@ -187,11 +194,6 @@ public class Robot extends TimedRobot {
         limelight.setLightEnabled(false);
     }
 
-    if (driver.getXButtonPressed())
-      limelight.setLightEnabled(true);
-    else if (driver.getYButtonPressed())
-      limelight.setLightEnabled(false);
-
     if (this.powercellDetectorToggle) {
       detector.update();
     }
@@ -204,6 +206,7 @@ public class Robot extends TimedRobot {
         speed = -1 * operator.getY(Hand.kRight);
         shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
+
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
