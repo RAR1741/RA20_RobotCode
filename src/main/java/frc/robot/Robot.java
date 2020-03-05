@@ -195,9 +195,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    detector.update();
     limelight.update();
-    manipulation.updateIndex();
     if(this.autonomousToggle) {
       if (autonomous.Auto()) {
         System.out.println("Autonomous Done");

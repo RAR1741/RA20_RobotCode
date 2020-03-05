@@ -1,8 +1,12 @@
 package frc.robot;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Autonomous{
 
    public enum AutonomousState{
+      StartTimer,
       AimShot1,
       Shoot1,
       Move;
@@ -13,7 +17,9 @@ public class Autonomous{
    private Manipulation manipulation;
    private Drivetrain drive;
    private Shooter shooter;
-   
+
+   private Timer timer;
+
    private boolean done = false;
 
    //TODO: determine correct target speeds
@@ -23,7 +29,7 @@ public class Autonomous{
 
    private double leftPosition;
    private double rightPosition;
-   
+
    /**
     * @param drive        drivetrain object.
     * @param shooter      shooter object.
@@ -36,6 +42,16 @@ public class Autonomous{
       this.shooter = shooter;
       this.manipulation = manipulation;
       this.autoAim = autoAim;
+      timer = new Timer();
+   }
+
+   private void StartTimer() {
+      timer.schedule(new TimerTask() {
+         @Override
+         public void run() {
+            state = AutonomousState.Move;
+         }
+      }, 10*1000);
    }
 
    public void AimShot1(){
@@ -49,9 +65,6 @@ public class Autonomous{
    public void Shoot1(){
       shooter.autoControl(targetSpeed);
       shoot();
-      if (getDoneShooting()) {
-         state = AutonomousState.Move;
-      }
    }
 
    public void Move(){
@@ -74,10 +87,10 @@ public class Autonomous{
 
    /**
     * Gets if done aiming.
-    * 
+
     * @return true if done aiming, false if not done aiming.
     */
-   private boolean getDoneAiming() {
+    private boolean getDoneAiming() {
       if (autoAim.getState() == AutoAim.AutoAimState.IDLE) {
          return true;
       } else {
@@ -86,23 +99,7 @@ public class Autonomous{
    }
 
    /**
-    * Gets if done shooting and stops shooting if so.
-    * 
-    * @return true if done shooting, false if not done shooting.
-    */
-   private boolean getDoneShooting() {
-      if (manipulation.getBalls() == 0) {
-         manipulation.setIndexLoad(false);
-         manipulation.setIndexFeed(false);
-         shooter.autoControl(0);
-         return true;
-      } else {
-         return false;
-      }
-   }
-
-   /**
-    * Gets if done moving and stops if so.
+    * Gets if done moving.
 
     * @return true if done moving, false if not done moving.
     */
@@ -117,6 +114,10 @@ public class Autonomous{
    public boolean Auto(){
 
       switch(state){
+
+         case StartTimer:
+         StartTimer();
+         break;
 
          case AimShot1:
          AimShot1();
