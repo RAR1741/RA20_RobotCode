@@ -156,6 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // shooter.reHome();
+    limelight.setLightEnabled(false);
   }
 
   @Override
@@ -227,6 +228,7 @@ public class Robot extends TimedRobot {
         aim.stopState();
         aiming = false;
       }
+      limelight.setLightEnabled(aiming);
       aim.run();
     }
   }
