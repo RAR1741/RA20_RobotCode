@@ -11,6 +11,7 @@ public class Shooter {
 
   private CANSparkMax launcher = null;
   private CANSparkMax angleMotor = null;
+  PhotoswitchSensor light = null;
 
   private double targetAngle;
 
@@ -26,15 +27,25 @@ public class Shooter {
    * @param launcher   CAN Id for the launcher motor.
    * @param angleMotor CAN Id for the angle motor.
    */
-  public Shooter(CANSparkMax launcher, CANSparkMax angleMotor) {
+  public Shooter(CANSparkMax launcher, CANSparkMax angleMotor, PhotoswitchSensor light) {
     this.launcher = launcher;
     this.angleMotor = angleMotor;
     launcher.setInverted(true);
+
+    this.light = light;
 
     angleMotor.getPIDController().setP(1);
     angleMotor.getPIDController().setI(0.0);
     angleMotor.getPIDController().setD(0.0);
     angleMotor.getEncoder().setPositionConversionFactor(0.3765);
+    angleMotor.getPIDController().setOutputRange(-0.5, 0.5);
+
+    launcher.getPIDController().setP(0.0004);
+    launcher.getPIDController().setI(0.0);
+    launcher.getPIDController().setD(0.0);
+    launcher.getEncoder().setPositionConversionFactor(1.0);
+    launcher.getEncoder().setVelocityConversionFactor(1.5);
+    launcher.setClosedLoopRampRate(3.0);
 
     angleMotor.getPIDController().setFeedbackDevice(angleMotor.getEncoder());
     state = State.HomingDown;
@@ -97,6 +108,32 @@ public class Shooter {
 
   public void reHome() {
     state = State.HomingDown;
+  }
+
+  public double getAngleMotorCurrent() {
+    return angleMotor.getOutputCurrent();
+  }
+
+  public double getAngleMotorTemp() {
+    return angleMotor.getMotorTemperature();
+  }
+
+  public void setLauncherRPM(double rpm) {
+    // TODO: Determine why this is necessary. Magic.
+    double finalRPM = rpm * 1.23 * getRampMultiplier();
+    launcher.getPIDController().setReference(finalRPM, ControlType.kVelocity);
+  }
+
+  /**
+   * Gets the multiplier for rpm if the photoswitch sensor is blocked.
+   * @return multiplier for rpm if the photoswitch sensor is blocked.
+   */
+  private double getRampMultiplier() {
+    return light.getBlocked() ? 1.5 : 1; // TODO: Determine multiplier.
+  }
+
+  public double getLauncherMotorCurrent() {
+    return launcher.getOutputCurrent();
   }
 
   /**

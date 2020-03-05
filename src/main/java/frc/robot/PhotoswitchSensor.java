@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class PhotoswitchSensor {
     DigitalInput input;
 
+    private boolean previousState;
+
     /**
      * Constructor
      * 
@@ -12,6 +14,10 @@ public class PhotoswitchSensor {
      */
     public PhotoswitchSensor(DigitalInput input) {
         this.input = input;
+    }
+
+    public void update() {
+        previousState = this.getBlocked();
     }
 
     /**

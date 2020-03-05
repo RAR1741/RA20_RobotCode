@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(11, MotorType.kBrushless), new CANSparkMax(12, MotorType.kBrushless));
+      shooter = new Shooter(new CANSparkMax(5, MotorType.kBrushless), new CANSparkMax(8, MotorType.kBrushless), lightShoot);
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -227,7 +227,7 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * operator.getY(Hand.kRight);
+        speed = operator.getY(Hand.kRight);
         shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
 
@@ -235,12 +235,27 @@ public class Robot extends TimedRobot {
         speed = 0;
       }
 
+      if (operator.getXButton()) {
+        shooter.setLauncherRPM(-3500);
+      } else {
+        shooter.setLauncherRPM(0);
+      }
+
+      // if (operator.getXButtonPressed()) {
+      // shooter.setAngle(20.0);
+      // }
+
+      // if (operator.getYButtonPressed()) {
+      // shooter.setAngle(30.0);
+      // }
+
       if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
         shooter.reHome();
       }
 
-      if ((shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) && !aiming) {
-        shooter.manualControl(speed, shooterAngleSpeed);
+      if (shooter.getState() == Shooter.State.Idle || shooter.getState() ==
+      Shooter.State.ManualControl) {
+      shooter.manualControl(speed, shooterAngleSpeed);
       }
       shooter.update();
 
@@ -251,6 +266,9 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
       SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
       SmartDashboard.putString("ShooterState", shooter.getState().toString());
+      SmartDashboard.putNumber("ShooterAngleTemp", shooter.getAngleMotorTemp());
+      SmartDashboard.putNumber("ShooterAngleCurrent", shooter.getAngleMotorCurrent());
+      SmartDashboard.putNumber("ShooterCurrent", shooter.getLauncherMotorCurrent());
     }
 
     if (this.manipulationToggle) {
