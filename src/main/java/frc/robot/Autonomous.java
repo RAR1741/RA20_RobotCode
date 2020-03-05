@@ -23,9 +23,9 @@ public class Autonomous{
    private boolean done = false;
 
    //TODO: determine correct target speeds
-   private double targetSpeedMax; 
-   private double targetSpeedMin;
-   private double targetSpeed;
+   private double targetRPMMax; 
+   private double targetRPMMin;
+   private double targetRPM;
 
    private double leftPosition;
    private double rightPosition;
@@ -63,7 +63,7 @@ public class Autonomous{
    }
 
    public void Shoot1(){
-      shooter.autoControl(targetSpeed);
+      shooter.setLauncherRPM(targetRPM);
       shoot();
    }
 
@@ -80,7 +80,7 @@ public class Autonomous{
     * Brings shooter up to speed and shoots.
     */
    private void shoot() {
-      if(shooter.getLauncherRPM() <= targetSpeedMax && shooter.getLauncherRPM() < targetSpeedMin){
+      if(shooter.getLauncherRPM() <= targetRPMMax && shooter.getLauncherRPM() < targetRPMMin){
          manipulation.setIndexFeed(true);
       }
    }

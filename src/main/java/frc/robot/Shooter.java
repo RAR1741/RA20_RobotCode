@@ -62,9 +62,6 @@ public class Shooter {
     angleMotor.set(angleMotorPower);
 
   }
-  public void autoControl(double power) {
-    launcher.set(power);
-  }
 
   public double getTargetAngle() {
     return targetAngle;
@@ -120,7 +117,7 @@ public class Shooter {
 
   public void setLauncherRPM(double rpm) {
     // TODO: Determine why this is necessary. Magic.
-    double finalRPM = rpm * 1.23 * getRampMultiplier();
+    double finalRPM = rpm; // * 1.23 * getRampMultiplier()
     launcher.getPIDController().setReference(finalRPM, ControlType.kVelocity);
   }
 
