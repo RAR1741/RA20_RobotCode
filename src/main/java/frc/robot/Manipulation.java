@@ -30,12 +30,12 @@ public class Manipulation {
      * @param indexPull        The CAN id of the spark for pulling balls into the
      *                         shooter
      */
-    Manipulation(CANSparkMax intakeWheel, CANSparkMax indexLoad, CANSparkMax indexFeed, PhotoswitchSensor shootGate,
+    Manipulation(CANSparkMax intakeWheel, DoubleSolenoid intakePneumatics, CANSparkMax indexLoad, CANSparkMax indexFeed, PhotoswitchSensor shootGate,
             PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;
         this.indexLoad = indexLoad;
         this.indexFeed = indexFeed;
-        // this.intakePneumatics = intakePneumatics;
+        this.intakePneumatics = intakePneumatics;
         this.shootGate = shootGate;
         this.intakeGate = intakeGate;
         // this.indexPull = indexPull;

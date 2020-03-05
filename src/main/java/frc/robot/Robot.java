@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
+      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless), new DoubleSolenoid(2, 0, 1),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
           lightIntake);
 
@@ -154,8 +154,9 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 4));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 5));
+      Solenoid pto = new Solenoid(2,2);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
