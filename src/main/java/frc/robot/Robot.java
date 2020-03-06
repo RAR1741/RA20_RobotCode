@@ -65,6 +65,8 @@ public class Robot extends TimedRobot {
   boolean navXToggle = false;
   boolean powercellDetectorToggle = false;
 
+  boolean ptoEngaged = false;
+
   private static final double DEADBAND_LIMIT = 0.01;
   private static final double SPEED_CAP = 0.6;
   InputScaler joystickDeadband = new Deadband(DEADBAND_LIMIT);
@@ -268,7 +270,7 @@ public class Robot extends TimedRobot {
       // double rightInput = driver.getY(Hand.kRight);
 
       // Limit speed input to a lower percentage unless boost mode is on
-      boost.setEnabled(driver.getAButton());
+      boost.setEnabled(driver.getTriggerAxis(Hand.kLeft) > 0.5);
       speedInput = boost.scale(speedInput);
 
       // if (driver.getXButtonPressed()) {
@@ -279,6 +281,11 @@ public class Robot extends TimedRobot {
 
       // drive.tankDrive(leftInput, rightInput);
       drive.arcadeDrive(turnInput, speedInput);
+
+      if (driver.getBButtonPressed()) {
+        ptoEngaged = !ptoEngaged;
+        drive.setPTO(ptoEngaged);
+      }
     }
   }
 

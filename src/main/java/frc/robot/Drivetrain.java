@@ -47,6 +47,11 @@ public class Drivetrain {
         right.set(sp);
     }
 
+    public void setPTO(boolean engaged) {
+        left.setPTO(engaged);
+        right.setPTO(engaged);
+    }
+
     /**
      * Drives the robot with an arcade style drive
      *
