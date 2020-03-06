@@ -14,7 +14,6 @@ import frc.robot.Manipulation;
 import java.io.File;
 import java.nio.file.Paths;
 
-
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -79,16 +78,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   *
+   * 
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   *
-   *
-   *
-   *
-   *
+   * 
+   * 
+   * 
+   * 
+   * 
    * PCM Channels:
-   *
+   * 
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
@@ -116,7 +115,7 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless), new DoubleSolenoid(2, 0, 1),
+      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
           lightIntake);
 
@@ -154,7 +153,7 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      Solenoid pto = new Solenoid(2,2);
+      Solenoid pto = new Solenoid(2, 2);
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
       DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
@@ -243,8 +242,11 @@ public class Robot extends TimedRobot {
     }
 
     if (this.manipulationToggle) {
-      // manipulation.setIntakeExtend(operator.getBumperPressed(Hand.kRight));
-      // manipulation.setIntakeExtend(!operator.getBumperPressed(Hand.kLeft));
+      if (driver.getBumperPressed(Hand.kRight)) {
+        manipulation.setIntakeExtend(true);
+      } else if (driver.getBumperPressed(Hand.kLeft)) {
+        manipulation.setIntakeExtend(false);
+      }
 
       if (operator.getBumper(Hand.kRight)) {
         manipulation.shootAllTheThings(true);
@@ -262,24 +264,21 @@ public class Robot extends TimedRobot {
     if (this.drivetrainToggle) {
       double turnInput = deadband(driver.getX(Hand.kRight));
       double speedInput = deadband(driver.getY(Hand.kLeft));
+      // double leftInput = driver.getY(Hand.kLeft);
+      // double rightInput = driver.getY(Hand.kRight);
 
       // Limit speed input to a lower percentage unless boost mode is on
       boost.setEnabled(driver.getAButton());
       speedInput = boost.scale(speedInput);
 
+      // if (driver.getXButtonPressed()) {
+      // limelight.setLightEnabled(true);
+      // } else if (driver.getYButtonPressed()) {
+      // limelight.setLightEnabled(false);
+      // }
+
       // drive.tankDrive(leftInput, rightInput);
       drive.arcadeDrive(turnInput, speedInput);
-
-      if (driver.getXButtonPressed()) {
-        limelight.setLightEnabled(true);
-      } else if (driver.getYButtonPressed()) {
-        limelight.setLightEnabled(false);
-      }
-    }
-
-    if (this.photoswitchSensorToggle) {
-      // FIXME..?
-      // SmartDashboard.putBoolean("LightClear", light.getClear());
     }
   }
 
@@ -303,5 +302,4 @@ public class Robot extends TimedRobot {
       return Paths.get(localPath(), "deploy", fileName).toString();
     }
   }
-
 }
