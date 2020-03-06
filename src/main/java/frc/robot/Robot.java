@@ -217,11 +217,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (this.limelightToggle) {
       limelight.update();
-      // if (driver.getXButtonPressed()) {
-      // limelight.setLightEnabled(true);
-      // } else if (driver.getYButtonPressed()) {
-      // limelight.setLightEnabled(false);
-      // }
+      if (driver.getXButtonPressed()) {
+        limelight.setLightEnabled(true);
+      } else if (driver.getYButtonPressed()) {
+        limelight.setLightEnabled(false);
+      }
     }
 
     // if (this.powercellDetectorToggle) {
@@ -232,6 +232,11 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
+        // if (operator.getYButton()) {
+        // speed -= 0.01;
+        // } else if (operator.getXButton()) {
+        // speed += 0.01;
+        // }
         speed = -1 * operator.getY(Hand.kRight);
         shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
@@ -315,12 +320,11 @@ public class Robot extends TimedRobot {
         aiming = true;
         aim.resetState();
       } else if (driverYPressed && aiming) {
-        System.out.println("Here");
         aiming = false;
         aim.stopState();
       }
 
-      limelight.setLightEnabled(aiming);
+      // limelight.setLightEnabled(aiming);
       aim.run();
     }
   }

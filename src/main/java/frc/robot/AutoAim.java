@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoAim {
 
@@ -58,6 +59,10 @@ public class AutoAim {
             case IDLE:
                 break;
         }
+
+        SmartDashboard.putString("AutoAimState", state.toString());
+        SmartDashboard.putNumber("MotorPower", motorPower);
+        SmartDashboard.putNumber("gyroDegrees", gyroDegrees);
     }
 
     /**
@@ -82,12 +87,14 @@ public class AutoAim {
      * Aims to robot to the X-coordinate of the power port.
      */
     private void AimX() {
-        error = (gyroDegrees - gyro.getYaw()) / 29.8;
-        motorPower = -.2 * error;
+        // error = (gyroDegrees - gyro.getYaw()) / 29.8;
+        error = (gyroDegrees - gyro.getYaw());
+        // motorPower = -.5 * error;
+        motorPower = -error * 1;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
         if (getWithinTolerance(gyroDegrees, gyro.getYaw(), 1)) {
-            state = AutoAimState.AIM_ANGLE;
+            state = AutoAimState.IDLE;
         }
     }
 
