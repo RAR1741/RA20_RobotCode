@@ -12,10 +12,7 @@ public class AutoAim {
     private boolean sweeping;
 
     public enum AutoAimState {
-        SET_ANGLES,
-        AIM_X,
-        AIM_ANGLE,
-        IDLE;
+        SET_ANGLES, AIM_X, AIM_ANGLE, IDLE;
     }
 
     private AutoAimState state;
@@ -24,14 +21,13 @@ public class AutoAim {
     private Shooter shooter;
     private AHRS gyro;
 
-
     /**
      * Constructor
      * 
-     * @param drive drive train object.
+     * @param drive     drive train object.
      * @param limelight limelight object.
-     * @param shooter shooter object.
-     * @param gyro gyro object.
+     * @param shooter   shooter object.
+     * @param gyro      gyro object.
      */
     public AutoAim(Drivetrain drive, Limelight limelight, Shooter shooter, AHRS gyro) {
         state = AutoAimState.IDLE;
@@ -45,7 +41,7 @@ public class AutoAim {
      * Runs Automatic Aiming state machine.
      */
     public void run() {
-        switch(state) {
+        switch (state) {
 
             case SET_ANGLES:
                 SetAngles();
@@ -86,8 +82,8 @@ public class AutoAim {
      * Aims to robot to the X-coordinate of the power port.
      */
     private void AimX() {
-        error = (gyroDegrees - gyro.getYaw())/29.8;
-        motorPower = .5 * error;
+        error = (gyroDegrees - gyro.getYaw()) / 29.8;
+        motorPower = -.2 * error;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
         if (getWithinTolerance(gyroDegrees, gyro.getYaw(), 1)) {
@@ -96,10 +92,12 @@ public class AutoAim {
     }
 
     /**
-     * Aims the shooter angle to the appropriate angle, based on distance, to the power port.
+     * Aims the shooter angle to the appropriate angle, based on distance, to the
+     * power port.
      */
     private void AimAngle() {
-        angleDegrees = 1 *limelight.getTargetVertical(); //TODO: Use a table from testing to create an equation to plug this into
+        angleDegrees = 1 * limelight.getTargetVertical(); // TODO: Use a table from testing to create an equation to
+                                                          // plug this into
         shooter.setAngle(angleDegrees);
         if (getWithinTolerance(angleDegrees, shooter.getAngleInDegrees(), 1)) {
             state = AutoAimState.IDLE;
@@ -109,8 +107,8 @@ public class AutoAim {
     /**
      * Gets if input is within tolerance of its goal.
      * 
-     * @param goal desired value of input.
-     * @param current current value of input.
+     * @param goal      desired value of input.
+     * @param current   current value of input.
      * @param tolerance tolerance of current input to desired input.
      * @return true if within tolerance, false if not within tolerance.
      */

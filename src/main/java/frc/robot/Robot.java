@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   boolean autoAimToggle = true;
 
   boolean manipulationToggle = true;
-  boolean navXToggle = false;
+  boolean navXToggle = true;
   boolean powercellDetectorToggle = false;
 
   boolean ptoEngaged = false;
@@ -160,16 +160,6 @@ public class Robot extends TimedRobot {
       System.out.println("Shooter disabled. Skipping initialization...");
     }
 
-    if (this.drivetrainToggle) {
-      System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 0));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 1));
-      drive = new Drivetrain(leftModule, rightModule, detector, limelight, gyro);
-      System.out.println("done");
-    } else {
-      System.out.println("Drivetrain disabled. Skipping initialization...");
-    }
-
     if (this.navXToggle) {
       System.out.print("Initializing gyro system (NavX)...");
       gyro = new AHRS(SPI.Port.kMXP);
@@ -178,6 +168,17 @@ public class Robot extends TimedRobot {
       System.out.println("done");
     } else {
       System.out.println("Gyro system (NavX) disabled. Skipping initialization...");
+    }
+
+    if (this.drivetrainToggle) {
+      System.out.print("Initializing drivetrain...");
+      Solenoid pto = new Solenoid(2, 2);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
+      drive = new Drivetrain(leftModule, rightModule, detector, gyro);
+      System.out.println("done");
+    } else {
+      System.out.println("Drivetrain disabled. Skipping initialization...");
     }
 
     if (this.autoAimToggle) {
@@ -194,7 +195,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
-    // compressor = new Compressor(2);
+    compressor = new Compressor(2);
     System.out.println("done");
   }
 
@@ -309,13 +310,16 @@ public class Robot extends TimedRobot {
         aiming = false;
       }
 
-      if (operator.getYButtonPressed() && !aiming) {
+      boolean driverYPressed = driver.getYButtonPressed();
+      if (driverYPressed && !aiming) {
         aiming = true;
         aim.resetState();
-      } else if (operator.getYButtonPressed() && aiming) {
+      } else if (driverYPressed && aiming) {
+        System.out.println("Here");
         aiming = false;
         aim.stopState();
       }
+
       limelight.setLightEnabled(aiming);
       aim.run();
     }

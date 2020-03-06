@@ -30,14 +30,14 @@ public class Drivetrain {
      * @param left     The left drive module
      * @param right    The right drive module
      * @param detector The powercell detection object.
+     * @param gyro     The gyro object.
      */
-    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector, Limelight limelight, AHRS gyro) {
+    Drivetrain(DriveModule left, DriveModule right, PowercellDetection detector, AHRS gyro) {
         this.left = left;
         this.right = right;
         right.setInverted(true);
 
         this.detector = detector;
-        this.limelight = limelight;
         this.gyro = gyro;
 
         sweepState = SweepState.IDLE;
@@ -142,8 +142,8 @@ public class Drivetrain {
      */
     private void sweepLeft() {
         if (gyro.getAngle() < gyroAngle + 80) {
-            driveLeft(-0.50);
-            driveRight(0.50);
+            driveLeft(-0.25);
+            driveRight(0.25);
         } else {
             sweepState = SweepState.SWEEP_RIGHT;
         }
@@ -155,8 +155,8 @@ public class Drivetrain {
      */
     private void sweepRight() {
         if (gyro.getAngle() > gyroAngle - 80) {
-            driveLeft(0.50);
-            driveRight(-0.50);
+            driveLeft(0.25);
+            driveRight(-0.25);
         } else {
             sweepState = SweepState.SWEEP_LEFT;
         }

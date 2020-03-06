@@ -59,7 +59,7 @@ public class Manipulation {
      * @param extend true if it should extend, false if not.
      */
     public void setIntakeExtend(boolean extend) {
-        // intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
+        intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
     }
 
     /**
