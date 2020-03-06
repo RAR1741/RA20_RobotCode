@@ -16,8 +16,8 @@ public class DriveModule {
     this.slave1 = slave1;
     this.slave2 = slave2;
 
-    this.slave1.follow(this.master);
-    this.slave2.follow(this.master);
+    // this.slave1.follow(this.master);
+    // this.slave2.follow(this.master);
 
     this.pto = pto;
   }
@@ -30,6 +30,8 @@ public class DriveModule {
 
   public void set(double input) {
     master.set(TalonFXControlMode.PercentOutput, input);
+    slave1.set(TalonFXControlMode.PercentOutput, input);
+    slave2.set(TalonFXControlMode.PercentOutput, input);
   }
 
   public void setPTO(boolean engaged) {

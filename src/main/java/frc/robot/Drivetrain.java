@@ -14,7 +14,7 @@ public class Drivetrain {
 
     /**
      * Constructor
-     * 
+     *
      * @param left     The left drive module
      * @param right    The right drive module
      * @param detector The powercell detection object.
@@ -29,7 +29,7 @@ public class Drivetrain {
 
     /**
      * Drives the left side of the robot either forward or backward.
-     * 
+     *
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
     public void driveLeft(double speed) {
@@ -39,12 +39,17 @@ public class Drivetrain {
 
     /**
      * Drives the right side of the robot either forward or backward.
-     * 
+     *
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
      */
     public void driveRight(double speed) {
         double sp = deadband(speed);
         right.set(sp);
+    }
+
+    public void setPTO(boolean engaged) {
+        left.setPTO(engaged);
+        right.setPTO(engaged);
     }
 
     /**
@@ -87,7 +92,7 @@ public class Drivetrain {
 
     /**
      * Moves the robot to intercept powercells
-     * 
+     *
      * @param x target X-coordinate
      */
     public void approachPC(double x) {

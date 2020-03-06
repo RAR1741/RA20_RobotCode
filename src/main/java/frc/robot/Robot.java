@@ -65,6 +65,19 @@ public class Robot extends TimedRobot {
   boolean navXToggle = false;
   boolean powercellDetectorToggle = false;
 
+  boolean ptoEngaged = false;
+
+  private static final double DEADBAND_LIMIT = 0.01;
+  private static final double SPEED_CAP = 0.6;
+  InputScaler joystickDeadband = new Deadband(DEADBAND_LIMIT);
+  InputScaler joystickSquared = new SquaredInput(DEADBAND_LIMIT);
+  BoostInput boost = new BoostInput(SPEED_CAP);
+
+  public double deadband(double in) {
+    double out = joystickSquared.scale(in);
+    return joystickDeadband.scale(out);
+  }
+
   /**
    * CAN ID's:
    * 
@@ -104,7 +117,7 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
+      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
           lightIntake);
 
@@ -142,8 +155,9 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), new Solenoid(2, 4));
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), new Solenoid(2, 5));
+      Solenoid pto = new Solenoid(2, 2);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
@@ -230,8 +244,11 @@ public class Robot extends TimedRobot {
     }
 
     if (this.manipulationToggle) {
-      // manipulation.setIntakeExtend(operator.getBumperPressed(Hand.kRight));
-      // manipulation.setIntakeExtend(!operator.getBumperPressed(Hand.kLeft));
+      if (driver.getBumperPressed(Hand.kRight)) {
+        manipulation.setIntakeExtend(true);
+      } else if (driver.getBumperPressed(Hand.kLeft)) {
+        manipulation.setIntakeExtend(false);
+      }
 
       if (operator.getBumper(Hand.kRight)) {
         manipulation.shootAllTheThings(true);
@@ -247,19 +264,28 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = driver.getX(Hand.kRight);
-      double speedInput = driver.getY(Hand.kLeft);
+      double turnInput = deadband(driver.getX(Hand.kRight));
+      double speedInput = deadband(driver.getY(Hand.kLeft));
       // double leftInput = driver.getY(Hand.kLeft);
       // double rightInput = driver.getY(Hand.kRight);
 
-      if (driver.getXButtonPressed()) {
-        limelight.setLightEnabled(true);
-      } else if (driver.getYButtonPressed()) {
-        limelight.setLightEnabled(false);
-      }
+      // Limit speed input to a lower percentage unless boost mode is on
+      boost.setEnabled(driver.getTriggerAxis(Hand.kLeft) > 0.5);
+      speedInput = boost.scale(speedInput);
+
+      // if (driver.getXButtonPressed()) {
+      // limelight.setLightEnabled(true);
+      // } else if (driver.getYButtonPressed()) {
+      // limelight.setLightEnabled(false);
+      // }
 
       // drive.tankDrive(leftInput, rightInput);
       drive.arcadeDrive(turnInput, speedInput);
+
+      if (driver.getBButtonPressed()) {
+        ptoEngaged = !ptoEngaged;
+        drive.setPTO(ptoEngaged);
+      }
     }
   }
 
