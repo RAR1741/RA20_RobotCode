@@ -8,7 +8,7 @@ public class Manipulation {
 
     private CANSparkMax intakeWheel;
     private DoubleSolenoid intakePneumatics;
-    private CANSparkMax indexLoad;
+    private CANSparkMax indexHelix;
     private CANSparkMax indexFeed;
     private PhotoswitchSensor shootGate;
     private PhotoswitchSensor intakeGate;
@@ -22,18 +22,18 @@ public class Manipulation {
      * Constructor
      * 
      * @param intakeWheel      The CAN id of the spark for the intake system
-     * @param intakePneumatics The intake solenoid
-     * @param indexLoad        The CAN id of the spark for the index loader
+     * @param intakePneumatics The intake double solenoid
+     * @param indexHelix        The CAN id of the spark for the index loader
      * @param indexFeed        The CAN id of the spark for the index feeder
      * @param shootGate        The shooting photoswitch object
      * @param intakeGate       The intake photoswitch object
      * @param indexPull        The CAN id of the spark for pulling balls into the
-     *                         shooter
+     *                         shooter ... Not currently needed
      */
-    Manipulation(DoubleSolenoid intakePneumatics, CANSparkMax intakeWheel, CANSparkMax indexLoad, CANSparkMax indexFeed,
+    Manipulation(DoubleSolenoid intakePneumatics, CANSparkMax intakeWheel, CANSparkMax indexHelix, CANSparkMax indexFeed,
             PhotoswitchSensor shootGate, PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;
-        this.indexLoad = indexLoad;
+        this.indexHelix = indexHelix;
         this.indexFeed = indexFeed;
         this.intakePneumatics = intakePneumatics;
         this.shootGate = shootGate;
@@ -67,9 +67,9 @@ public class Manipulation {
      * 
      * @param load true if it should load
      */
-    public void setIndexLoad(boolean load) {
+    public void setIndexHelix(boolean load) {
         // TODO: test if this power is right.
-        indexLoad.set(load ? 0.5 : 0);
+        indexHelix.set(load ? 0.5 : 0);
     }
 
     /**
@@ -87,7 +87,7 @@ public class Manipulation {
 
     public void shootAllTheThings(boolean fire) {
         indexFeed.set(fire ? 0.75 : 0);
-        indexLoad.set(fire ? 0.75 : 0);
+        indexHelix.set(fire ? 0.75 : 0);
     }
 
     /**

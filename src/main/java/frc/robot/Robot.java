@@ -257,7 +257,7 @@ public class Robot extends TimedRobot {
 
         manipulation.setIndexFeed(operator.getBButton() ? 0.25 : (operator.getAButton() ? -0.25 : 0));
 
-        manipulation.setIndexLoad(operator.getXButton());
+        manipulation.setIndexHelix(operator.getXButton());
       }
 
       // manipulation.setIndexPull(driver.getAButton());
