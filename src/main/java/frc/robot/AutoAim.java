@@ -13,8 +13,7 @@ public class AutoAim {
 
     public enum AutoAimState {
         SET_ANGLES,
-        AIM_X,
-        AIM_ANGLE,
+        AIM,
         IDLE;
     }
 
@@ -51,11 +50,8 @@ public class AutoAim {
                 SetAngles();
                 break;
 
-            case AIM_X:
+            case AIM:
                 AimX();
-                break;
-
-            case AIM_ANGLE:
                 AimAngle();
                 break;
 
@@ -72,7 +68,7 @@ public class AutoAim {
             sweeping = false;
             drive.stopSweep();
             gyroDegrees = gyro.getYaw() + limelight.getTargetXDegrees();
-            state = AutoAimState.AIM_X;
+            state = AutoAimState.AIM;
         } else {
             if (!sweeping) {
                 drive.resetState();
@@ -90,9 +86,6 @@ public class AutoAim {
         motorPower = .5 * error;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
-        if (getWithinTolerance(gyroDegrees, gyro.getYaw(), 1)) {
-            state = AutoAimState.AIM_ANGLE;
-        }
     }
 
     /**
@@ -101,8 +94,18 @@ public class AutoAim {
     private void AimAngle() {
         angleDegrees = 1 *limelight.getTargetVertical(); //TODO: Use a table from testing to create an equation to plug this into
         shooter.setAngle(angleDegrees);
-        if (getWithinTolerance(angleDegrees, shooter.getAngleInDegrees(), 1)) {
-            state = AutoAimState.IDLE;
+    }
+
+    /**
+     * Gets if done aiming.
+     * 
+     * @return true if robot is done aiming, false if not done aiming.
+     */
+    private boolean getDoneAiming() {
+        if (getWithinTolerance(angleDegrees, shooter.getAngleInDegrees(), 1) && getWithinTolerance(gyroDegrees, gyro.getYaw(), 1)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
