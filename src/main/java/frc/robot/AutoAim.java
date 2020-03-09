@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoAim {
 
@@ -16,21 +17,19 @@ public class AutoAim {
         AIM,
         IDLE;
     }
-
     private AutoAimState state;
     private Drivetrain drive;
     private Limelight limelight;
     private Shooter shooter;
     private AHRS gyro;
 
-
     /**
      * Constructor
      * 
-     * @param drive drive train object.
+     * @param drive     drive train object.
      * @param limelight limelight object.
-     * @param shooter shooter object.
-     * @param gyro gyro object.
+     * @param shooter   shooter object.
+     * @param gyro      gyro object.
      */
     public AutoAim(Drivetrain drive, Limelight limelight, Shooter shooter, AHRS gyro) {
         state = AutoAimState.IDLE;
@@ -44,7 +43,7 @@ public class AutoAim {
      * Runs Automatic Aiming state machine.
      */
     public void run() {
-        switch(state) {
+        switch (state) {
 
             case SET_ANGLES:
                 SetAngles();
@@ -58,6 +57,10 @@ public class AutoAim {
             case IDLE:
                 break;
         }
+
+        SmartDashboard.putString("AutoAimState", state.toString());
+        SmartDashboard.putNumber("MotorPower", motorPower);
+        SmartDashboard.putNumber("gyroDegrees", gyroDegrees);
     }
 
     /**
@@ -82,17 +85,21 @@ public class AutoAim {
      * Aims to robot to the X-coordinate of the power port.
      */
     private void AimX() {
-        error = (gyroDegrees - gyro.getYaw())/29.8;
-        motorPower = .5 * error;
+        // error = (gyroDegrees - gyro.getYaw()) / 29.8;
+        error = (gyroDegrees - gyro.getYaw());
+        // motorPower = -.5 * error;
+        motorPower = -error * 1;
         drive.driveLeft(motorPower);
         drive.driveRight(-motorPower);
     }
 
     /**
-     * Aims the shooter angle to the appropriate angle, based on distance, to the power port.
+     * Aims the shooter angle to the appropriate angle, based on distance, to the
+     * power port.
      */
     private void AimAngle() {
-        angleDegrees = 1 *limelight.getTargetVertical(); //TODO: Use a table from testing to create an equation to plug this into
+        angleDegrees = 1 * limelight.getTargetVertical(); // TODO: Use a table from testing to create an equation to
+                                                          // plug this into
         shooter.setAngle(angleDegrees);
     }
 
@@ -112,8 +119,8 @@ public class AutoAim {
     /**
      * Gets if input is within tolerance of its goal.
      * 
-     * @param goal desired value of input.
-     * @param current current value of input.
+     * @param goal      desired value of input.
+     * @param current   current value of input.
      * @param tolerance tolerance of current input to desired input.
      * @return true if within tolerance, false if not within tolerance.
      */
