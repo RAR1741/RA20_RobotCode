@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class DriveModule {
+
+  private final double MAX_CURRENT = 10; // TODO: Determine max current to prevent brownouts
+
   private TalonFX master;
   private TalonFX slave1;
   private TalonFX slave2;
@@ -29,9 +32,13 @@ public class DriveModule {
   }
 
   public void set(double input) {
-    master.set(TalonFXControlMode.PercentOutput, input);
-    slave1.set(TalonFXControlMode.PercentOutput, input);
-    slave2.set(TalonFXControlMode.PercentOutput, input);
+    master.set(TalonFXControlMode.PercentOutput, limitedCurrent(master, input));
+    slave1.set(TalonFXControlMode.PercentOutput, limitedCurrent(slave1, input));
+    slave2.set(TalonFXControlMode.PercentOutput, limitedCurrent(slave2, input));
+  }
+
+  public double limitedCurrent(TalonFX motor, double input) {
+    return motor.getSupplyCurrent() < MAX_CURRENT ? input : (motor.getMotorOutputPercent() * (MAX_CURRENT / motor.getSupplyCurrent()));
   }
 
   public void setPTO(boolean engaged) {

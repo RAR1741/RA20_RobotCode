@@ -12,6 +12,9 @@ public class Drivetrain {
     private DriveModule right;
     private PowercellDetection detector;
 
+    private double speedLeft = 0;
+    private double speedRight = 0;
+
     /**
      * Constructor
      *
@@ -38,6 +41,21 @@ public class Drivetrain {
     }
 
     /**
+     * Drives the left side of the robot either forward or backward.
+     *
+     * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
+     */
+    public void AccelerateLeft(double speed) {
+        if (speed > speedLeft) {
+            speedLeft = speed > speedLeft + 0.05 ? (speedLeft + 0.05) : speed;
+        } else if (speed < speedLeft) {
+            speedLeft = speed < speedLeft - 0.05 ? (speedLeft - 0.05) : speed;
+        }
+        double sp = deadband(speedLeft);
+        left.set(sp);
+    }
+
+    /**
      * Drives the right side of the robot either forward or backward.
      *
      * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
@@ -45,6 +63,21 @@ public class Drivetrain {
     public void driveRight(double speed) {
         double sp = deadband(speed);
         right.set(sp);
+    }
+
+    /**
+     * Accel the right side of the robot either forward or backward.
+     *
+     * @param speed the speed at which to drive (ranges from -1.0 to +1.0)
+     */
+    public void AccelerateRight(double speed) {
+        if (speed > speedRight) {
+            speedRight = speed > speedRight + 0.05 ? (speedRight + 0.05) : speed;
+        } else if (speed < speedRight) {
+            speedRight = speed < speedRight - 0.05 ? (speedRight - 0.05) : speed;
+        }
+        double sp = deadband(speedRight);
+        left.set(sp);
     }
 
     public void setPTO(boolean engaged) {
@@ -61,8 +94,8 @@ public class Drivetrain {
      *               from -1.0 to +1.0)
      */
     public void arcadeDrive(double turnInput, double speedInput) {
-        this.driveLeft(speedInput - turnInput);
-        this.driveRight(speedInput + turnInput);
+        this.AccelerateLeft(speedInput - turnInput);
+        this.AccelerateRight(speedInput + turnInput);
     }
 
     /**
