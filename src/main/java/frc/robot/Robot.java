@@ -60,8 +60,8 @@ public class Robot extends TimedRobot {
   boolean limelightToggle = false;
   boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
-  boolean drivetrainToggle = true;
-  boolean manipulationToggle = true;
+  boolean drivetrainToggle = false;
+  boolean manipulationToggle = false;
   boolean navXToggle = false;
   boolean powercellDetectorToggle = false;
 
@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
 
     if (this.shooterToggle) {
       System.out.print("Initializing shooter...");
-      shooter = new Shooter(new CANSparkMax(11, MotorType.kBrushless), new CANSparkMax(12, MotorType.kBrushless));
+      shooter = new Shooter(new TalonFX(0));
       System.out.println("done");
     } else {
       System.out.println("Shooter disabled. Skipping initialization...");
@@ -217,30 +217,33 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * operator.getY(Hand.kRight);
-        shooterAngleSpeed = operator.getY(Hand.kLeft);
+        speed = -0.6;
+        // -1 * operator.getY(Hand.kRight);
+        // shooterAngleSpeed = operator.getY(Hand.kLeft);
       }
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
 
-      if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
-        shooter.reHome();
-      }
+      // if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
+      // shooter.reHome();
+      // }
 
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
         shooter.manualControl(speed, shooterAngleSpeed);
       }
-      shooter.update();
+      // shooter.update();
 
-      SmartDashboard.putNumber("ShooterPower", speed);
-      SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
-      SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
-      SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
-      SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
-      SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
-      SmartDashboard.putString("ShooterState", shooter.getState().toString());
+      // SmartDashboard.putNumber("ShooterPower", speed);
+      // SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+      // SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
+      // SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
+      // SmartDashboard.putBoolean("ShooterAngleForwardLimit",
+      // shooter.getForwardLimit());
+      // SmartDashboard.putBoolean("ShooterAngleReverseLimit",
+      // shooter.getReverseLimit());
+      // SmartDashboard.putString("ShooterState", shooter.getState().toString());
     }
 
     if (this.manipulationToggle) {
