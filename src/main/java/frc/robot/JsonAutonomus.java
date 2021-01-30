@@ -32,7 +32,7 @@ public class JsonAutonomus extends Autonomous{
 	private boolean edge;
 	private final double TICKS_PER_ROTATION = 1; //tbd
 	private final double TICKS_PER_INCH = TICKS_PER_ROTATION / (4 * Math.PI);
-	private final double TICKS_PER_DEGREE = TICKS_PER_INCH * 0.30531;
+	private final double TICKS_PER_DEGREE = TICKS_PER_INCH * 1; //tbd (INCHES_PER_DEGREE)
 	
 	private FileReader fr;
 	private JsonReader jr;
@@ -55,13 +55,14 @@ public class JsonAutonomus extends Autonomous{
 		}
     }
     
-    	/**
+    /**
 	 * Creates a JsonAutonomous from the specified file
 	 * @param file The location of the file to parse
 	 */
 	public JsonAutonomus(String file, AHRS gyro, Drivetrain drive) {
 		this.drive = drive;
 		this.gyro = gyro;
+		//todo: Add PID controls
 		parseFile(file);
     }
     
@@ -72,12 +73,10 @@ public class JsonAutonomus extends Autonomous{
 		instructions = new ArrayList<AutoInstruction>();
 		try
 		{
-			//System.out.println(new File(file).exists());
 			fr = new FileReader(new File(file));
 			jr = new JsonReader(fr);
 			jp = new JsonParser();
 			auto = jp.parse(jr);
-			//auto = new JsonParser().parse(new JsonReader(new FileReader(new File(file))));
 			JsonElement inner = auto.getAsJsonObject().get("auto");
 			if(inner.isJsonArray())
 			{
@@ -98,6 +97,7 @@ public class JsonAutonomus extends Autonomous{
 			e.printStackTrace();
 		}
 	}
+
     public static Unit parseUnit(String in)
 	{
 		return Unit.valueOf(in);
