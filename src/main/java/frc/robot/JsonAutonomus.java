@@ -109,6 +109,21 @@ public class JsonAutonomus extends Autonomous{
 		{
 			reset();
 		}
+		if(instructions.size() == step)
+		{
+			drive.arcadeDrive(0, 0);
+			return;
+		}
+		AutoInstruction ai = instructions.get(step);
+		if(ai.type.equals("drive"))
+		{
+			drive(ai);
+		} else if (ai.type.equals("turnDeg")) {
+			turnDegrees(ai);
+		} else {
+			System.out.println("Invalid Command");
+			reset();
+		}
 	}
 
 	/**
@@ -164,6 +179,19 @@ public class JsonAutonomus extends Autonomous{
 		return (angle > 0) ? angle : angle + 360;
 	}
 
+	public void turnDegrees(AutoInstruction ai)
+	{
+		if(Math.abs(drive.getLeftEncoder()-start) < ai.amount * TICKS_PER_DEGREE)
+		{
+			rotateDegrees(ai.args.get(0), ai.amount);
+		}
+		else
+		{
+			drive.arcadeDrive(0, 0);
+			reset();
+		}
+	}
+
 	public void drive(AutoInstruction ai)
 	{
 		System.out.println(ai.args.get(2));
@@ -194,8 +222,7 @@ public class JsonAutonomus extends Autonomous{
 	private void reset()
 	{
 		step++;
-		drive.driveLeft(0);
-		drive.driveRight(0);
+		drive.arcadeDrive(0, 0);
 		timer.reset();
 		timer.start();
 		start = drive.getLeftEncoder();
