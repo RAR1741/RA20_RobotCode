@@ -113,15 +113,14 @@ public class JsonAutonomus extends Autonomous{
 
 	/**
 	 * @param s Speed
-	 * @param z Turn Speed
 	 * @param t Time
 	 * @return Done
 	 */
-	private boolean driveTime(double s, double z, double t)
+	private boolean driveTime(double s, double t)
 	{
 		if(timer.get() < t)
 		{
-			drive.arcadeDrive(z, s);
+			drive.arcadeDrive(0, s);
 		}
 		else
 		{
@@ -132,20 +131,31 @@ public class JsonAutonomus extends Autonomous{
 	
 	/**
 	 * @param s Speed
-	 * @param z Turn Speed
 	 * @param d Distance
 	 * @return Done
 	 */
-	private boolean driveDistance(double s, double z, double d)
+	private boolean driveDistance(double s, double d)
 	{
 		if(Math.abs(drive.getLeftEncoder()-start) < d)
 		{
-			drive.arcadeDrive(z, s);
+			drive.arcadeDrive(0, s);
 		}
 		else
 		{
 			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * @param speed Turn Speed
+	 * @param deg Degrees turnt
+	 * @return Done
+	 */
+	private boolean rotateDegrees(double speed, double deg )
+	{
+		if(Math.abs(getAngle()-navxStart-deg) < 0.5) { return true; }
+		drive.arcadeDrive(speed, 0);
 		return false;
 	}
 
@@ -160,21 +170,21 @@ public class JsonAutonomus extends Autonomous{
 		Unit u = ai.unit;
 		if(u.equals(Unit.Seconds) || u.equals(Unit.Milliseconds))
 		{
-			if(driveTime(ai.args.get(0), ai.args.get(1), (u.equals(Unit.Seconds) ? ai.amount : ai.amount/1000.0)))
+			if(driveTime(ai.args.get(0), (u.equals(Unit.Seconds) ? ai.amount : ai.amount/1000.0)))
 			{
 				reset();
 			}
 		}
 		else if(u.equals(Unit.EncoderTicks) || u.equals(Unit.Rotations))
 		{
-			if(driveDistance(ai.args.get(0), ai.args.get(1), (u.equals(Unit.EncoderTicks) ? ai.amount : ai.amount*TICKS_PER_ROTATION)))
+			if(driveDistance(ai.args.get(0), (u.equals(Unit.EncoderTicks) ? ai.amount : ai.amount*TICKS_PER_ROTATION)))
 			{
 				reset();
 			}
 		}
 		else if(u.equals(Unit.Feet) || u.equals(Unit.Inches))
 		{	
-			if(driveDistance(ai.args.get(0),ai.args.get(1), (u.equals(Unit.Inches) ? ai.amount*TICKS_PER_INCH : (ai.amount*TICKS_PER_INCH))*12.0))
+			if(driveDistance(ai.args.get(0), (u.equals(Unit.Inches) ? ai.amount*TICKS_PER_INCH : (ai.amount*TICKS_PER_INCH))*12.0))
 			{
 				reset();
 			}
