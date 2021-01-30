@@ -100,4 +100,12 @@ public class Drivetrain {
         driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent() / 4)));
         driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent() / 4)));
     }
+
+    public double getLeftEncoder(){
+        return left.getEncoderCount();
+    }
+
+    public double getRightEncoder(){
+        return right.getEncoderCount();
+    }
 }

@@ -37,4 +37,8 @@ public class DriveModule {
   public void setPTO(boolean engaged) {
     pto.set(engaged);
   }
+
+  public double getEncoderCount(){
+    return master.getSelectedSensorPosition();
+  }
 }
