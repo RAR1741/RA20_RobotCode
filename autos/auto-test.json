@@ -1,0 +1,6 @@
+{
+    "auto":[
+            {"type":"drive","unit":"Seconds","amount":2,"args":[0.3]},
+            {"type":"turnDeg","unit":"Degrees","amount":90,"args":[0.3]}
+    ]
+}
