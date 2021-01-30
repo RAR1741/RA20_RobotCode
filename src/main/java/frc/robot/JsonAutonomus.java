@@ -170,7 +170,7 @@ public class JsonAutonomus extends Autonomous{
 	private boolean rotateDegrees(double speed, double deg )
 	{
 		if(Math.abs(getAngle()-navxStart-deg) < 0.5) { return true; }
-		drive.arcadeDrive(speed, 0);
+		drive.arcadeDrive(deg > 0 ? speed : -speed, 0);
 		return false;
 	}
 
