@@ -2,8 +2,8 @@
     "auto": [
         {
             "type": "drive",
-            "unit": "Seconds",
-            "amount": 1.34,
+            "unit": "Feet",
+            "amount": 10.0,
             "args": [
                 0.15
             ]

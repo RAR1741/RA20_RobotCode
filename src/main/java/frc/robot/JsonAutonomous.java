@@ -30,8 +30,10 @@ public class JsonAutonomous extends Autonomous{
 	private double turnSpeed;
 	private boolean red;
 	private boolean edge;
-	private final double TICKS_PER_ROTATION = 1; //tbd
-	private final double TICKS_PER_INCH = TICKS_PER_ROTATION / (4 * Math.PI);
+
+	//                                        Falcon   Ratio 1       Ratio 2
+	private final double TICKS_PER_ROTATION = 2048.0 * (50.0/14.0) * (42.0/22.0);
+	private final double TICKS_PER_INCH = TICKS_PER_ROTATION / (6.0 * Math.PI);
 	private final double TICKS_PER_DEGREE = TICKS_PER_INCH * 1; //tbd (INCHES_PER_DEGREE)
 	
 	private FileReader fr;
@@ -115,8 +117,8 @@ public class JsonAutonomous extends Autonomous{
 			return;
 		}
 		AutoInstruction ai = instructions.get(step);
-		if(ai.type.equals("drive"))
-		{
+
+		if(ai.type.equals("drive")) {
 			drive(ai);
 		} else if (ai.type.equals("turnDeg")) {
 			turnDegrees(ai);
@@ -151,9 +153,11 @@ public class JsonAutonomous extends Autonomous{
 	 */
 	private boolean driveDistance(double s, double d)
 	{
+		System.out.println(drive.getLeftEncoder()-start);
+
 		if(Math.abs(drive.getLeftEncoder()-start) < d)
 		{
-			drive.arcadeDrive(0, s);
+			drive.arcadeDrive(0, -s);
 		}
 		else
 		{
@@ -208,7 +212,7 @@ public class JsonAutonomous extends Autonomous{
 		}
 		else if(u.equals(Unit.Feet) || u.equals(Unit.Inches))
 		{	
-			if(driveDistance(ai.args.get(0), (u.equals(Unit.Inches) ? ai.amount*TICKS_PER_INCH : (ai.amount*TICKS_PER_INCH))*12.0))
+			if(driveDistance(ai.args.get(0), (u.equals(Unit.Inches) ? ai.amount*TICKS_PER_INCH : (ai.amount*TICKS_PER_INCH*12.0))))
 			{
 				reset();
 			}
