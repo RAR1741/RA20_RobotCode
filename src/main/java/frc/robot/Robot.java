@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.Limelight;
 import frc.robot.Shooter;
 import frc.robot.Manipulation;
+import frc.robot.JsonAutonomous;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   private Toml config;
+  private JsonAutonomous auton;
   AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor lightShoot;
@@ -62,7 +64,7 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
-  boolean navXToggle = false;
+  boolean navXToggle = true;
   boolean powercellDetectorToggle = false;
 
   boolean ptoEngaged = false;
@@ -186,10 +188,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    auton = new JsonAutonomous("/home/lvuser/deploy/autos/auto-test.json", gyro, drive);
   }
 
   @Override
   public void autonomousPeriodic() {
+    auton.run();
   }
 
   @Override

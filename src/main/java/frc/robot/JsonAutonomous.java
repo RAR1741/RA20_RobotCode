@@ -18,7 +18,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class JsonAutonomus extends Autonomous{
+public class JsonAutonomous extends Autonomous{
     private JsonElement auto;
 	private List<AutoInstruction> instructions;
 	private int step;
@@ -59,7 +59,7 @@ public class JsonAutonomus extends Autonomous{
 	 * Creates a JsonAutonomous from the specified file
 	 * @param file The location of the file to parse
 	 */
-	public JsonAutonomus(String file, AHRS gyro, Drivetrain drive) {
+	public JsonAutonomous(String file, AHRS gyro, Drivetrain drive) {
 		this.drive = drive;
 		this.gyro = gyro;
 		//todo: Add PID controls
@@ -175,8 +175,7 @@ public class JsonAutonomus extends Autonomous{
 	}
 
 	private double getAngle(){
-		double angle = gyro.getAngle() % 360;
-		return (angle > 0) ? angle : angle + 360;
+		return (gyro.getAngle() > 0) ? gyro.getAngle() % 360 : gyro.getAngle() % 360 + 360;
 	}
 
 	public void turnDegrees(AutoInstruction ai)
@@ -194,7 +193,6 @@ public class JsonAutonomus extends Autonomous{
 
 	public void drive(AutoInstruction ai)
 	{
-		System.out.println(ai.args.get(2));
 		Unit u = ai.unit;
 		if(u.equals(Unit.Seconds) || u.equals(Unit.Milliseconds))
 		{
@@ -226,7 +224,7 @@ public class JsonAutonomus extends Autonomous{
 		timer.reset();
 		timer.start();
 		start = drive.getLeftEncoder();
-		navxStart =  getAngle();
+		navxStart = getAngle();
 		edge = true;
 	}
 }
