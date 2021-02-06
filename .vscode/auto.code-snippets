@@ -1,0 +1,32 @@
+{
+  "Auto turn degrees": {
+    "scope": "json",
+    "prefix": "turn-degrees",
+    "body": [
+      "{",
+      "  \"type\": \"turnDeg\",",
+      "  \"unit\": \"Degrees\",",
+      "  \"amount\": $1,",
+      "  \"args\": [",
+      "    $2",
+      "  ]",
+      "}$0"
+    ],
+    "description": "Auto turn degrees"
+  },
+  "Auto drive seconds": {
+    "scope": "json",
+    "prefix": "drive-seconds",
+    "body": [
+      "{",
+      "  \"type\": \"drive\",",
+      "  \"unit\": \"Seconds\",",
+      "  \"amount\": $1,",
+      "  \"args\": [",
+      "    $2",
+      "  ]",
+      "}$0"
+    ],
+    "description": "Auto drive seconds"
+  }
+}
