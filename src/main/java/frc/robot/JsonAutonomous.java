@@ -135,7 +135,7 @@ public class JsonAutonomous extends Autonomous{
 	{
 		if(timer.get() < t)
 		{
-			drive.arcadeDrive(0, s);
+			drive.arcadeDrive(0, -s);
 		}
 		else
 		{
@@ -169,22 +169,20 @@ public class JsonAutonomous extends Autonomous{
 	 */
 	private boolean rotateDegrees(double speed, double deg )
 	{
-		if(Math.abs(getAngle()-navxStart-deg) < 0.5) { return true; }
-		drive.arcadeDrive(deg > 0 ? speed : -speed, 0);
+		System.out.println(getAngle() - navxStart);
+		if(Math.abs(getAngle()-navxStart-deg) < 0.2) { return true; }
+		drive.arcadeDrive((getAngle()-navxStart-deg) < 1 ? speed : -speed, 0);
 		return false;
 	}
 
 	private double getAngle(){
-		return (gyro.getAngle() > 0) ? gyro.getAngle() % 360 : gyro.getAngle() % 360 + 360;
+		// return (gyro.getAngle() > 0) ? gyro.getAngle() % 360 : gyro.getAngle() % 360 + 360;
+		return gyro.getAngle();
 	}
 
 	public void turnDegrees(AutoInstruction ai)
 	{
-		if(Math.abs(drive.getLeftEncoder()-start) < ai.amount * TICKS_PER_DEGREE)
-		{
-			rotateDegrees(ai.args.get(0), ai.amount);
-		}
-		else
+		if(rotateDegrees(ai.args.get(0), ai.amount))
 		{
 			drive.arcadeDrive(0, 0);
 			reset();

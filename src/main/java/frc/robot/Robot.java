@@ -158,8 +158,8 @@ public class Robot extends TimedRobot {
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
       Solenoid pto = new Solenoid(2, 2);
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), pto);
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
@@ -188,7 +188,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    auton = new JsonAutonomous("/home/lvuser/deploy/autos/auto-test.json", gyro, drive);
+    auton = new JsonAutonomous("/home/lvuser/deploy/autos/slalom-path.json", gyro, drive);
   }
 
   @Override
