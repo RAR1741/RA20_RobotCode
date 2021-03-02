@@ -19,6 +19,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -119,9 +120,15 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
-          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
-          lightIntake);
+      manipulation = new Manipulation(
+        new DoubleSolenoid(2, 0, 1),
+        new CANSparkMax(13, MotorType.kBrushless),
+        new CANSparkMax(14, MotorType.kBrushless),
+        new TalonSRX(16),
+        // new CANSparkMax(16, MotorType.kBrushless),
+        lightShoot,
+        lightIntake
+      );
 
       System.out.println("done");
     } else {

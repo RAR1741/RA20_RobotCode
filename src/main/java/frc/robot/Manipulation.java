@@ -3,13 +3,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Manipulation {
 
     private CANSparkMax intakeWheel;
     private DoubleSolenoid intakePneumatics;
     private CANSparkMax indexLoad;
-    private CANSparkMax indexFeed;
+    private TalonSRX indexFeed;
     private PhotoswitchSensor shootGate;
     private PhotoswitchSensor intakeGate;
     private CANSparkMax indexPull;
@@ -30,7 +32,7 @@ public class Manipulation {
      * @param indexPull        The CAN id of the spark for pulling balls into the
      *                         shooter
      */
-    Manipulation(DoubleSolenoid intakePneumatics, CANSparkMax intakeWheel, CANSparkMax indexLoad, CANSparkMax indexFeed,
+    Manipulation(DoubleSolenoid intakePneumatics, CANSparkMax intakeWheel, CANSparkMax indexLoad, TalonSRX indexFeed,
             PhotoswitchSensor shootGate, PhotoswitchSensor intakeGate) {
         this.intakeWheel = intakeWheel;
         this.indexLoad = indexLoad;
@@ -59,7 +61,7 @@ public class Manipulation {
      * @param extend true if it should extend, false if not.
      */
     public void setIntakeExtend(boolean extend) {
-        // intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
+        intakePneumatics.set(extend ? Value.kForward : Value.kReverse);
     }
 
     /**
@@ -78,15 +80,15 @@ public class Manipulation {
      * @param power the power thr motor pull turn at.
      */
     public void setIndexFeed(double power) {
-        indexFeed.set(power);
+        indexFeed.set(ControlMode.PercentOutput, power);
     }
 
     public void setIndexPull(boolean pull) {
-        // indexPull.set(pull ? 1 : 0);
+        indexPull.set(pull ? 1 : 0);
     }
 
     public void shootAllTheThings(boolean fire) {
-        indexFeed.set(fire ? 0.75 : 0);
+        indexFeed.set(ControlMode.PercentOutput, fire ? 0.75 : 0);
         indexLoad.set(fire ? 0.75 : 0);
     }
 
