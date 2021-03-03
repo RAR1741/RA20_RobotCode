@@ -115,16 +115,15 @@ public class Robot extends TimedRobot {
 
     if (this.manipulationToggle) {
       System.out.print("Initializing manipulation...");
-      // manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
-      // new DoubleSolenoid(1, 2),
-      // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
-      // MotorType.kBrushless), lightShoot, lightIntake,
-      // new CANSparkMax(16, MotorType.kBrushless));
+
+      TalonSRX feedMotor = new TalonSRX(16);
+      feedMotor.setInverted(true);
+
       manipulation = new Manipulation(
         new DoubleSolenoid(2, 0, 1),
         new CANSparkMax(13, MotorType.kBrushless),
         new CANSparkMax(14, MotorType.kBrushless),
-        new TalonSRX(16),
+        feedMotor,
         // new CANSparkMax(16, MotorType.kBrushless),
         lightShoot,
         lightIntake
@@ -195,6 +194,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    shooter.reHome();
     auton = new JsonAutonomous("/home/lvuser/deploy/autos/slalom-path.json", gyro, drive);
   }
 

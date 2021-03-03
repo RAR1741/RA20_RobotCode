@@ -25,6 +25,9 @@ public class Drivetrain {
         right.setInverted(true);
 
         this.detector = detector;
+
+        // Set the PTO to default to driving mode
+        this.setPTO(true);
     }
 
     /**
