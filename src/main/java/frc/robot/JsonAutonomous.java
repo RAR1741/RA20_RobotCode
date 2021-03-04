@@ -149,20 +149,15 @@ public class JsonAutonomous extends Autonomous{
 				turnDegrees(ai);
 				break;
 
+			case "intake":
+				intake(ai);
+				break;
+
 			default:
 				System.out.println("Invalid Command");
 				reset();
 				break;
 		}
-
-		// if(ai.type.equals("drive")) {
-		// 	drive(ai);
-		// } else if (ai.type.equals("turnDeg")) {
-		// 	turnDegrees(ai);
-		// } else {
-		// 	System.out.println("Invalid Command");
-		// 	reset();
-		// }
 	}
 
 	/**
@@ -219,6 +214,14 @@ public class JsonAutonomous extends Autonomous{
 	private double getAngle(){
 		// return (gyro.getAngle() > 0) ? gyro.getAngle() % 360 : gyro.getAngle() % 360 + 360;
 		return gyro.getAngle();
+	}
+
+	public void intake(AutoInstruction ai)
+	{
+		manipulation.setIntakeExtend(ai.args.get(0) != 1.0);
+		manipulation.setIntakeSpin(ai.args.get(1) == 1.0);
+
+		reset();
 	}
 
 	public void turnDegrees(AutoInstruction ai)

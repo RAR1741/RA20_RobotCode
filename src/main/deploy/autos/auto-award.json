@@ -1,18 +1,18 @@
 {
     "auto": [
         {
+            "type": "intake",
+            "args": [
+                0,
+                0
+            ]
+        }
+        {
             "type": "drive",
             "unit": "Feet",
             "amount": 1.0,
             "args": [
                 0.15
-            ]
-        },
-        {
-            "type": "intake",
-            "args": [
-                1,
-                0.5
             ]
         }
     ]
