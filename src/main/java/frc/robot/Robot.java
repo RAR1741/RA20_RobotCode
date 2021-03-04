@@ -194,7 +194,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    shooter.reHome();
+    // shooter.reHome();
     auton = new JsonAutonomous("/home/lvuser/deploy/autos/auto-award.json", gyro, drive, manipulation, shooter);
   }
 
@@ -210,6 +210,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    System.out.println(shooter.getAngleInDegrees());
+
     if (this.limelightToggle) {
       limelight.update();
 
@@ -241,7 +243,8 @@ public class Robot extends TimedRobot {
       }
 
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
-        shooter.manualControl(speed, shooterAngleSpeed);
+        shooter.manualControl(-0.4, shooterAngleSpeed);
+        // shooter.manualControl(speed, shooterAngleSpeed);
       }
       shooter.update();
 

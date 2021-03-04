@@ -247,7 +247,7 @@ public class JsonAutonomous extends Autonomous{
 	public void shoot(AutoInstruction ai)
 	{
 		shooter.setShooterPower(-ai.args.get(0));
-		shooter.setAngle(ai.args.get(1));
+		// shooter.setAngle(ai.args.get(1));
 
 		reset();
 	}
