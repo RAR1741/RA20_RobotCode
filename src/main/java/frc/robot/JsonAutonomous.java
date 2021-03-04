@@ -153,6 +153,10 @@ public class JsonAutonomous extends Autonomous{
 				intake(ai);
 				break;
 
+			case "index":
+				index(ai);
+				break;
+
 			default:
 				System.out.println("Invalid Command");
 				reset();
@@ -220,6 +224,14 @@ public class JsonAutonomous extends Autonomous{
 	{
 		manipulation.setIntakeExtend(ai.args.get(0) != 1.0);
 		manipulation.setIntakeSpin(ai.args.get(1) == 1.0);
+
+		reset();
+	}
+
+	public void index(AutoInstruction ai)
+	{
+		manipulation.setIndexFeed(ai.args.get(0));
+		manipulation.setIndexLoad(ai.args.get(1) == 1.0);
 
 		reset();
 	}
