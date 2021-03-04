@@ -161,6 +161,10 @@ public class JsonAutonomous extends Autonomous{
 				shoot(ai);
 				break;
 
+			case "wait":
+				wait(ai);
+				break;
+
 			default:
 				System.out.println("Invalid Command");
 				reset();
@@ -246,6 +250,14 @@ public class JsonAutonomous extends Autonomous{
 		shooter.setAngle(ai.args.get(1));
 
 		reset();
+	}
+
+	public void wait(AutoInstruction ai)
+	{
+		if(timer.get() >= ai.args.get(0))
+		{
+			reset();
+		}
 	}
 
 	public void turnDegrees(AutoInstruction ai)

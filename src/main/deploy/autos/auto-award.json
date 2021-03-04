@@ -1,9 +1,22 @@
 {
     "auto": [
         {
-            "type": "shoot",
+            "type": "index",
             "args": [
-                0.5,
+                1,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                3
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
                 0
             ]
         }
