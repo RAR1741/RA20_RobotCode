@@ -50,6 +50,13 @@ public class JsonAutonomous extends Autonomous{
 		public Unit unit;
 		public double amount;
 		public List<Double> args;
+
+		public AutoInstruction(String type, List<Double> args)
+		{
+			this.type = type;
+			this.args = args;
+		}
+
 		public AutoInstruction(String type, Unit unit, double amount, List<Double> args)
 		{
 			this.type = type;
@@ -98,10 +105,14 @@ public class JsonAutonomous extends Autonomous{
 					}
 
 					String type = o.get("type").getAsString();
-					Unit unit = parseUnit(o.get("unit").getAsString());
-					Double amount = o.get("amount").getAsDouble();
 
-					instructions.add(new AutoInstruction(type, unit, amount, extraArgs));
+					String unitString = o.has("unit") ? o.get("unit").getAsString() : null;
+					Unit unit = unitString != null ? parseUnit(unitString) : null;
+
+					Double amount = o.has("amount") ? o.get("amount").getAsDouble() : null;
+
+					AutoInstruction ai = unit == null ? new AutoInstruction(type, extraArgs) : new AutoInstruction(type, unit, amount, extraArgs);
+					instructions.add(ai);
 				}
 			}
 		}
