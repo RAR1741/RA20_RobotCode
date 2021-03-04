@@ -157,6 +157,10 @@ public class JsonAutonomous extends Autonomous{
 				index(ai);
 				break;
 
+			case "shoot":
+				shoot(ai);
+				break;
+
 			default:
 				System.out.println("Invalid Command");
 				reset();
@@ -232,6 +236,14 @@ public class JsonAutonomous extends Autonomous{
 	{
 		manipulation.setIndexFeed(ai.args.get(0));
 		manipulation.setIndexLoad(ai.args.get(1) == 1.0);
+
+		reset();
+	}
+
+	public void shoot(AutoInstruction ai)
+	{
+		shooter.setShooterPower(-ai.args.get(0));
+		shooter.setAngle(ai.args.get(1));
 
 		reset();
 	}

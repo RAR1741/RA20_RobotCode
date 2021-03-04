@@ -83,16 +83,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   * 
+   *
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   * 
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
+   *
    * PCM Channels:
-   * 
+   *
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 

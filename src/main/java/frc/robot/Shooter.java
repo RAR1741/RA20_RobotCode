@@ -22,7 +22,7 @@ public class Shooter {
 
   /**
    * Constructor
-   * 
+   *
    * @param launcher   CAN Id for the launcher motor.
    * @param angleMotor CAN Id for the angle motor.
    */
@@ -43,7 +43,7 @@ public class Shooter {
 
   /**
    * Sets motor power.
-   * 
+   *
    * @param power the power at which the shooter spins.
    */
   public void manualControl(double power, double angleMotorPower) {
@@ -98,7 +98,7 @@ public class Shooter {
 
   /**
    * Gets the shooter RPM
-   * 
+   *
    * @return shooter RPM.
    */
   public double getLauncherRPM() {
@@ -107,7 +107,7 @@ public class Shooter {
 
   /**
    * Gets the angle the angle motor is turned
-   * 
+   *
    * @return degrees the angle motor is turned to
    */
   public double getAngleInDegrees() {
@@ -120,13 +120,17 @@ public class Shooter {
 
   /**
    * Sets angle motor to a specified angle
-   * 
+   *
    * @param degrees degrees to which the angle motor will be turned.
    */
   public void setAngle(double degrees) {
     state = State.MovingToAngle;
     targetAngle = degrees;
     angleMotor.getPIDController().setReference(targetAngle, ControlType.kPosition);
+  }
+
+  public void setShooterPower(double power) {
+    launcher.set(power);
   }
 
   public boolean getReverseLimit() {
