@@ -27,7 +27,7 @@ public class Drivetrain {
         this.detector = detector;
 
         // Set the PTO to default to driving mode
-        this.setPTO(true);
+        this.setPTO(false);
     }
 
     /**

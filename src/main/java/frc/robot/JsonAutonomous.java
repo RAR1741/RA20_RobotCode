@@ -27,6 +27,8 @@ public class JsonAutonomous extends Autonomous{
 	private double navxStart;
 	private AHRS gyro;
 	private Drivetrain drive;
+	private Shooter shooter;
+	private Manipulation manipulation;
 	private double turnSpeed;
 	private boolean red;
 	private boolean edge;
@@ -35,13 +37,13 @@ public class JsonAutonomous extends Autonomous{
 	private final double TICKS_PER_ROTATION = 2048.0 * (50.0/14.0) * (42.0/22.0);
 	private final double TICKS_PER_INCH = TICKS_PER_ROTATION / (6.0 * Math.PI);
 	private final double TICKS_PER_DEGREE = TICKS_PER_INCH * 1; //tbd (INCHES_PER_DEGREE)
-	
+
 	private FileReader fr;
 	private JsonReader jr;
 	private JsonParser jp;
-		
+
 	private enum Unit { Seconds, Milliseconds, EncoderTicks, Rotations, Inches, Feet, Degrees, Invalid };
-	
+
 	private static class AutoInstruction
 	{
 		public String type;
@@ -56,20 +58,23 @@ public class JsonAutonomous extends Autonomous{
 			this.args = args;
 		}
     }
-    
+
     /**
 	 * Creates a JsonAutonomous from the specified file
 	 * @param file The location of the file to parse
 	 */
-	public JsonAutonomous(String file, AHRS gyro, Drivetrain drive) {
+	public JsonAutonomous(String file, AHRS gyro, Drivetrain drive, Manipulation manipulation, Shooter shooter) {
 		this.drive = drive;
 		this.gyro = gyro;
+		this.manipulation = manipulation;
+		this.shooter = shooter;
+
 		//todo: Add PID controls
 		parseFile(file);
     }
-    
+
     public void parseFile(String file)
-	{		
+	{
 		step = -1;
 		timer = new Timer();
 		instructions = new ArrayList<AutoInstruction>();
@@ -85,12 +90,18 @@ public class JsonAutonomous extends Autonomous{
 				for(JsonElement e : inner.getAsJsonArray())
 				{
 					JsonObject o = e.getAsJsonObject();
-					List<Double> tmp = new ArrayList<Double>();
+
+					List<Double> extraArgs = new ArrayList<Double>();
 					for(JsonElement e2 : o.get("args").getAsJsonArray())
 					{
-						tmp.add(e2.getAsDouble());
+						extraArgs.add(e2.getAsDouble());
 					}
-					instructions.add(new AutoInstruction(o.get("type").getAsString(), parseUnit(o.get("unit").getAsString()), o.get("amount").getAsDouble(), tmp));
+
+					String type = o.get("type").getAsString();
+					Unit unit = parseUnit(o.get("unit").getAsString());
+					Double amount = o.get("amount").getAsDouble();
+
+					instructions.add(new AutoInstruction(type, unit, amount, extraArgs));
 				}
 			}
 		}
@@ -118,14 +129,29 @@ public class JsonAutonomous extends Autonomous{
 		}
 		AutoInstruction ai = instructions.get(step);
 
-		if(ai.type.equals("drive")) {
-			drive(ai);
-		} else if (ai.type.equals("turnDeg")) {
-			turnDegrees(ai);
-		} else {
-			System.out.println("Invalid Command");
-			reset();
+		switch (ai.type) {
+			case "drive":
+				drive(ai);
+				break;
+
+			case "turnDeg":
+				turnDegrees(ai);
+				break;
+
+			default:
+				System.out.println("Invalid Command");
+				reset();
+				break;
 		}
+
+		// if(ai.type.equals("drive")) {
+		// 	drive(ai);
+		// } else if (ai.type.equals("turnDeg")) {
+		// 	turnDegrees(ai);
+		// } else {
+		// 	System.out.println("Invalid Command");
+		// 	reset();
+		// }
 	}
 
 	/**
@@ -145,7 +171,7 @@ public class JsonAutonomous extends Autonomous{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param s Speed
 	 * @param d Distance
@@ -153,7 +179,7 @@ public class JsonAutonomous extends Autonomous{
 	 */
 	private boolean driveDistance(double s, double d)
 	{
-		System.out.println(drive.getLeftEncoder()-start);
+		// System.out.println(drive.getLeftEncoder()-start);
 
 		if(Math.abs(drive.getLeftEncoder()-start) < d)
 		{
@@ -173,7 +199,7 @@ public class JsonAutonomous extends Autonomous{
 	 */
 	private boolean rotateDegrees(double speed, double deg )
 	{
-		System.out.println(getAngle() - navxStart);
+		// System.out.println(getAngle() - navxStart);
 		if(Math.abs(getAngle()-navxStart-deg) < 0.2) { return true; }
 		drive.arcadeDrive((getAngle()-navxStart-deg) < 1 ? speed : -speed, 0);
 		return false;
@@ -211,7 +237,7 @@ public class JsonAutonomous extends Autonomous{
 			}
 		}
 		else if(u.equals(Unit.Feet) || u.equals(Unit.Inches))
-		{	
+		{
 			if(driveDistance(ai.args.get(0), (u.equals(Unit.Inches) ? ai.amount*TICKS_PER_INCH : (ai.amount*TICKS_PER_INCH*12.0))))
 			{
 				reset();

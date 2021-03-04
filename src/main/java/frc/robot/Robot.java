@@ -195,7 +195,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     shooter.reHome();
-    auton = new JsonAutonomous("/home/lvuser/deploy/autos/slalom-path.json", gyro, drive);
+    auton = new JsonAutonomous("/home/lvuser/deploy/autos/auto-award.json", gyro, drive, manipulation, shooter);
   }
 
   @Override
