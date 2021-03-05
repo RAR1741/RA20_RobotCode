@@ -25,6 +25,9 @@ public class Drivetrain {
         right.setInverted(true);
 
         this.detector = detector;
+
+        // Set the PTO to default to driving mode
+        this.setPTO(false);
     }
 
     /**
@@ -99,5 +102,13 @@ public class Drivetrain {
         // TODO: Determine division variable for percent of screen
         driveLeft(x >= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent() / 4)));
         driveRight(x <= 0 ? 0.75 : (0.75 * (detector.getTarget(0).getInvertedAreaPercent() / 4)));
+    }
+
+    public double getLeftEncoder(){
+        return left.getEncoderCount();
+    }
+
+    public double getRightEncoder(){
+        return right.getEncoderCount();
     }
 }

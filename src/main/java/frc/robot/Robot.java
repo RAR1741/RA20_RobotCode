@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.Limelight;
 import frc.robot.Shooter;
 import frc.robot.Manipulation;
+import frc.robot.JsonAutonomous;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -41,6 +43,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   private Toml config;
+  private JsonAutonomous auton;
   AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor lightShoot;
@@ -62,7 +65,7 @@ public class Robot extends TimedRobot {
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
   boolean manipulationToggle = true;
-  boolean navXToggle = false;
+  boolean navXToggle = true;
   boolean powercellDetectorToggle = false;
 
   boolean ptoEngaged = false;
@@ -80,16 +83,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   * 
+   *
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   * 
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
+   *
    * PCM Channels:
-   * 
+   *
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
@@ -112,14 +115,19 @@ public class Robot extends TimedRobot {
 
     if (this.manipulationToggle) {
       System.out.print("Initializing manipulation...");
-      // manipulation = new Manipulation(new CANSparkMax(13, MotorType.kBrushless),
-      // new DoubleSolenoid(1, 2),
-      // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
-      // MotorType.kBrushless), lightShoot, lightIntake,
-      // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
-          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
-          lightIntake);
+
+      TalonSRX feedMotor = new TalonSRX(16);
+      feedMotor.setInverted(true);
+
+      manipulation = new Manipulation(
+        new DoubleSolenoid(2, 0, 1),
+        new CANSparkMax(13, MotorType.kBrushless),
+        new CANSparkMax(14, MotorType.kBrushless),
+        feedMotor,
+        // new CANSparkMax(16, MotorType.kBrushless),
+        lightShoot,
+        lightIntake
+      );
 
       System.out.println("done");
     } else {
@@ -156,8 +164,8 @@ public class Robot extends TimedRobot {
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
       Solenoid pto = new Solenoid(2, 2);
-      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
-      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
+      DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), pto);
+      DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
       System.out.println("done");
     } else {
@@ -186,10 +194,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    gyro.reset();
+
+    // shooter.reHome();
+
+    auton = new JsonAutonomous("/home/lvuser/deploy/autos/auto-award.json", gyro, drive, manipulation, shooter);
   }
 
   @Override
   public void autonomousPeriodic() {
+    auton.run();
   }
 
   @Override
@@ -199,6 +213,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    // System.out.println(shooter.getAngleInDegrees());
+
     if (this.limelightToggle) {
       limelight.update();
 
@@ -231,6 +247,7 @@ public class Robot extends TimedRobot {
 
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
         shooter.manualControl(speed, shooterAngleSpeed);
+        // shooter.manualControl(speed, shooterAngleSpeed);
       }
       shooter.update();
 

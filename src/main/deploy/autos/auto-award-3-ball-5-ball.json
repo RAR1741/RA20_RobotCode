@@ -1,0 +1,167 @@
+{
+    "auto": [
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "shoot",
+            "args": [
+                0.37,
+                0
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 11.0,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0.75,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                6
+            ]
+        },
+        {
+            "type": "shoot",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 11.0,
+            "args": [
+                -0.15
+            ]
+        },
+        {
+            "type": "turnDeg",
+            "unit": "Degrees",
+            "amount": 180,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "intake",
+            "args": [
+                1,
+                1
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                2
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 20.0,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "intake",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "turnDeg",
+            "unit": "Degrees",
+            "amount": 180,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "shoot",
+            "args": [
+                0.40,
+                0
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 31.0,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                1
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0.75,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                10
+            ]
+        },
+        {
+            "type": "shoot",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        }
+    ]
+}
