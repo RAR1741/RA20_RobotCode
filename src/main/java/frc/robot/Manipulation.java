@@ -71,7 +71,7 @@ public class Manipulation {
      */
     public void setIndexLoad(boolean load) {
         // TODO: test if this power is right.
-        indexLoad.set(load ? 0.3 : 0);
+        indexLoad.set(load ? 0.35 : 0);
     }
 
     /**
