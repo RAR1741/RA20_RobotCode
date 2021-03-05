@@ -1,0 +1,53 @@
+{
+    "auto": [
+        {
+            "type": "shoot",
+            "args": [
+                0.0,
+                0
+            ]
+        },
+        {
+            "type": "intake",
+            "args": [
+                1,
+                1
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0.0,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                2
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 17.0,
+            "args": [
+                0.15
+            ]
+        },
+        {
+            "type": "intake",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        }
+    ]
+}

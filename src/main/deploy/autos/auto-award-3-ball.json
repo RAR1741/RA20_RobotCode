@@ -1,0 +1,46 @@
+{
+    "auto": [
+        {
+            "type": "shoot",
+            "args": [
+                0.40,
+                0
+            ]
+        },
+        {
+            "type": "drive",
+            "unit": "Feet",
+            "amount": 11.0,
+            "args": [
+                0.20
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0.75,
+                1
+            ]
+        },
+        {
+            "type": "wait",
+            "args": [
+                10
+            ]
+        },
+        {
+            "type": "shoot",
+            "args": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "index",
+            "args": [
+                0,
+                0
+            ]
+        }
+    ]
+}

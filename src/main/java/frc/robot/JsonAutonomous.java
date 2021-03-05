@@ -201,7 +201,11 @@ public class JsonAutonomous extends Autonomous{
 
 		if(Math.abs(drive.getLeftEncoder()-start) < d)
 		{
-			drive.arcadeDrive(0, -s);
+			double gyroBias = this.getAngle() / 100.0;
+
+			System.out.println(gyroBias);
+
+			drive.arcadeDrive(-gyroBias, -s);
 		}
 		else
 		{
@@ -218,7 +222,7 @@ public class JsonAutonomous extends Autonomous{
 	private boolean rotateDegrees(double speed, double deg )
 	{
 		// System.out.println(getAngle() - navxStart);
-		if(Math.abs(getAngle()-navxStart-deg) < 0.2) { return true; }
+		if(Math.abs(getAngle()-navxStart-deg) < 0.25) { return true; }
 		drive.arcadeDrive((getAngle()-navxStart-deg) < 1 ? speed : -speed, 0);
 		return false;
 	}
@@ -301,6 +305,7 @@ public class JsonAutonomous extends Autonomous{
 		drive.arcadeDrive(0, 0);
 		timer.reset();
 		timer.start();
+		gyro.reset();
 		start = drive.getLeftEncoder();
 		navxStart = getAngle();
 		edge = true;
