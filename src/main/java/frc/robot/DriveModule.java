@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -19,6 +20,9 @@ public class DriveModule {
     // this.slave1.follow(this.master);
     // this.slave2.follow(this.master);
 
+    master.setNeutralMode(NeutralMode.Coast);
+    slave1.setNeutralMode(NeutralMode.Coast);
+    slave2.setNeutralMode(NeutralMode.Coast);
     this.pto = pto;
   }
 
