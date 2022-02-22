@@ -234,7 +234,7 @@ public class Robot extends TimedRobot {
       // }
 
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
-        shooter.manualControl(speed * 0.7, 0);
+        shooter.manualControl(-1 * speed * 0.7, shooterAngleSpeed);
       }
       shooter.update();
 
@@ -265,8 +265,8 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = deadband(overrideEngaged ? operator.getX(Hand.kRight) : driver.getX(Hand.kRight));
-      double speedInput = deadband(overrideEngaged ? operator.getX(Hand.kRight) : driver.getY(Hand.kLeft));
+      double turnInput = deadband(overrideEngaged ? operator.getX(Hand.kLeft) : driver.getX(Hand.kLeft));
+      double speedInput = deadband(overrideEngaged ? operator.getY(Hand.kLeft) : driver.getY(Hand.kLeft));
 
       // Limit speed input to a lower percentage unless boost mode is on
       boost.setEnabled(false);
