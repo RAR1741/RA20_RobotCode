@@ -23,13 +23,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -66,9 +65,11 @@ public class Robot extends TimedRobot {
   boolean powercellDetectorToggle = false;
 
   boolean ptoEngaged = false;
+  boolean overrideEngaged = false;
+  boolean intakeEntended = false;
 
   private static final double DEADBAND_LIMIT = 0.01;
-  private static final double SPEED_CAP = 0.6;
+  private static final double SPEED_CAP = 0.30;
   InputScaler joystickDeadband = new Deadband(DEADBAND_LIMIT);
   InputScaler joystickSquared = new SquaredInput(DEADBAND_LIMIT);
   BoostInput boost = new BoostInput(SPEED_CAP);
@@ -80,16 +81,16 @@ public class Robot extends TimedRobot {
 
   /**
    * CAN ID's:
-   * 
+   *
    * PDP -> 1 PCM -> 2 Climber -> 4 Drive -> 5-10 Shooter -> 11 Shooter Hood -> 12
    * Intake -> 13 Helix Index -> 14 Feeder Index -> 15 Pull Index -> 16
-   * 
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
+   *
    * PCM Channels:
-   * 
+   *
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
+    PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
     if (this.limelightToggle) {
@@ -117,7 +119,7 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
+      manipulation = new Manipulation(new DoubleSolenoid(2, moduleType, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
           lightIntake);
 
@@ -155,7 +157,7 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      Solenoid pto = new Solenoid(2, 2);
+      Solenoid pto = new Solenoid(2, moduleType, 2);
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
       DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
@@ -199,6 +201,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    if (operator.getBButtonPressed()) {
+      overrideEngaged = !overrideEngaged;
+    }
+
     if (this.limelightToggle) {
       limelight.update();
 
@@ -216,73 +223,58 @@ public class Robot extends TimedRobot {
       double speed = 0;
       double shooterAngleSpeed = 0;
 
-      if (operator.getTriggerAxis(Hand.kRight) > 0.5) {
-        speed = -1 * operator.getY(Hand.kRight);
-        shooterAngleSpeed = operator.getY(Hand.kLeft);
-      }
+      speed = operator.getRightTriggerAxis();
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
 
-      if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
-        shooter.reHome();
-      }
+      // if (operator.getLeftBumper() && operator.getRightBumper()) {
+      //   shooter.reHome();
+      // }
 
       if (shooter.getState() == Shooter.State.Idle || shooter.getState() == Shooter.State.ManualControl) {
-        shooter.manualControl(speed, shooterAngleSpeed);
+        shooter.manualControl(-1 * speed * 0.7, shooterAngleSpeed);
       }
       shooter.update();
 
-      SmartDashboard.putNumber("ShooterPower", speed);
-      SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
-      SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
-      SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
-      SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
-      SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
-      SmartDashboard.putString("ShooterState", shooter.getState().toString());
+      // SmartDashboard.putNumber("ShooterPower", speed);
+      // SmartDashboard.putNumber("ShooterRPM", shooter.getLauncherRPM());
+      // SmartDashboard.putNumber("ShooterAngle", shooter.getAngleInDegrees());
+      // SmartDashboard.putNumber("ShooterAngleEncoder", shooter.getEncoderCount());
+      // SmartDashboard.putBoolean("ShooterAngleForwardLimit", shooter.getForwardLimit());
+      // SmartDashboard.putBoolean("ShooterAngleReverseLimit", shooter.getReverseLimit());
+      // SmartDashboard.putString("ShooterState", shooter.getState().toString());
     }
 
     if (this.manipulationToggle) {
-      if (driver.getBumperPressed(Hand.kRight)) {
-        manipulation.setIntakeExtend(true);
-      } else if (driver.getBumperPressed(Hand.kLeft)) {
-        manipulation.setIntakeExtend(false);
+      if (operator.getLeftBumperPressed()) {
+        manipulation.setIntakeExtend(intakeEntended = !intakeEntended);
       }
 
-      if (operator.getBumper(Hand.kRight)) {
+      if (operator.getRightBumper()) {
         manipulation.shootAllTheThings(true);
       } else {
+        manipulation.shootAllTheThings(false);
         manipulation.setIntakeSpin(operator.getYButton());
 
-        manipulation.setIndexFeed(operator.getBButton() ? 0.25 : (operator.getAButton() ? -0.25 : 0));
+        manipulation.setIndexFeed(operator.getAButton() ? -0.25 : 0);
 
-        manipulation.setIndexLoad(operator.getXButton());
+        // manipulation.setIndexLoad(operator.getAButton());
       }
-
-      // manipulation.setIndexPull(driver.getAButton());
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = deadband(driver.getX(Hand.kRight));
-      double speedInput = deadband(driver.getY(Hand.kLeft));
-      // double leftInput = driver.getY(Hand.kLeft);
-      // double rightInput = driver.getY(Hand.kRight);
+      double turnInput = deadband(overrideEngaged ? operator.getLeftX() : driver.getLeftX());
+      double speedInput = deadband(overrideEngaged ? operator.getLeftY() : driver.getLeftY());
 
       // Limit speed input to a lower percentage unless boost mode is on
-      boost.setEnabled(driver.getTriggerAxis(Hand.kLeft) > 0.5);
+      boost.setEnabled(false);
       speedInput = boost.scale(speedInput);
 
-      // if (driver.getXButtonPressed()) {
-      // limelight.setLightEnabled(true);
-      // } else if (driver.getYButtonPressed()) {
-      // limelight.setLightEnabled(false);
-      // }
+      drive.arcadeDrive(turnInput*0.3, speedInput);
 
-      // drive.tankDrive(leftInput, rightInput);
-      drive.arcadeDrive(turnInput, speedInput);
-
-      if (driver.getBButtonPressed()) {
+      if (operator.getXButtonPressed()) {
         ptoEngaged = !ptoEngaged;
         drive.setPTO(ptoEngaged);
       }
