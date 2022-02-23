@@ -223,13 +223,13 @@ public class Robot extends TimedRobot {
       double speed = 0;
       double shooterAngleSpeed = 0;
 
-      speed = operator.getTriggerAxis(Hand.kRight);
+      speed = operator.getRightTriggerAxis();
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
       }
 
-      // if (operator.getBumper(Hand.kLeft) && operator.getBumper(Hand.kRight)) {
+      // if (operator.getLeftBumper() && operator.getRightBumper()) {
       //   shooter.reHome();
       // }
 
@@ -248,11 +248,11 @@ public class Robot extends TimedRobot {
     }
 
     if (this.manipulationToggle) {
-      if (operator.getBumperPressed(Hand.kLeft)) {
+      if (operator.getLeftBumperPressed()) {
         manipulation.setIntakeExtend(intakeEntended = !intakeEntended);
       }
 
-      if (operator.getBumper(Hand.kRight)) {
+      if (operator.getRightBumper()) {
         manipulation.shootAllTheThings(true);
       } else {
         manipulation.shootAllTheThings(false);
@@ -265,8 +265,8 @@ public class Robot extends TimedRobot {
     }
 
     if (this.drivetrainToggle) {
-      double turnInput = deadband(overrideEngaged ? operator.getX(Hand.kLeft) : driver.getX(Hand.kLeft));
-      double speedInput = deadband(overrideEngaged ? operator.getY(Hand.kLeft) : driver.getY(Hand.kLeft));
+      double turnInput = deadband(overrideEngaged ? operator.getLeftX() : driver.getLeftX());
+      double speedInput = deadband(overrideEngaged ? operator.getLeftY() : driver.getLeftY());
 
       // Limit speed input to a lower percentage unless boost mode is on
       boost.setEnabled(false);
