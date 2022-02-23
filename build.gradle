@@ -67,7 +67,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    compile 'com.moandjiezana.toml:toml4j:0.7.2'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 }
 
 // Simulation configuration (e.g. environment variables).
