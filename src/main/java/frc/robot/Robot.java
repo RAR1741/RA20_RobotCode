@@ -23,13 +23,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -101,6 +100,7 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
+    PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
     String path = localDeployPath("config.toml");
     config = new Toml().read(new File(path));
     if (this.limelightToggle) {
@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
       // new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15,
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
-      manipulation = new Manipulation(new DoubleSolenoid(2, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
+      manipulation = new Manipulation(new DoubleSolenoid(2, moduleType, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
           new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
           lightIntake);
 
@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
 
     if (this.drivetrainToggle) {
       System.out.print("Initializing drivetrain...");
-      Solenoid pto = new Solenoid(2, 2);
+      Solenoid pto = new Solenoid(2, moduleType, 2);
       DriveModule leftModule = new DriveModule(new TalonFX(5), new TalonFX(6), new TalonFX(7), pto);
       DriveModule rightModule = new DriveModule(new TalonFX(8), new TalonFX(9), new TalonFX(10), pto);
       drive = new Drivetrain(leftModule, rightModule, detector);
