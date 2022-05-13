@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
-    // compressor = new Compressor(2);
+    compressor = new Compressor(2, moduleType);
     System.out.println("done");
   }
 
@@ -224,6 +224,7 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       speed = operator.getRightTriggerAxis();
+      //shooterAngleSpeed = operator.getLeftY(); // TODO Replace controls with something better
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
