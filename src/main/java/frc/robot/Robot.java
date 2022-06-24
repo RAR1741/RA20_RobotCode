@@ -18,7 +18,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.moandjiezana.toml.Toml;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+// import com.moandjiezana.toml.Toml;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -39,7 +40,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Toml config;
+  // private Toml config;
   AHRS gyro;
   Limelight limelight;
   PhotoswitchSensor lightShoot;
@@ -101,8 +102,8 @@ public class Robot extends TimedRobot {
      * for any initialization code.
      */
     PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
-    String path = localDeployPath("config.toml");
-    config = new Toml().read(new File(path));
+    // String path = localDeployPath("config.toml");
+    // config = new Toml().read(new File(path));
     if (this.limelightToggle) {
       System.out.print("Initializing vision system (limelight)...");
       limelight = new Limelight();
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
       // MotorType.kBrushless), lightShoot, lightIntake,
       // new CANSparkMax(16, MotorType.kBrushless));
       manipulation = new Manipulation(new DoubleSolenoid(2, moduleType, 0, 1), new CANSparkMax(13, MotorType.kBrushless),
-          new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(16, MotorType.kBrushless), lightShoot,
+          new CANSparkMax(14, MotorType.kBrushless), new TalonSRX(16), lightShoot,
           lightIntake);
 
       System.out.println("done");
@@ -223,7 +224,7 @@ public class Robot extends TimedRobot {
       double speed = 0;
       double shooterAngleSpeed = 0;
 
-      speed = operator.getRightTriggerAxis();
+      speed = operator.getRightTriggerAxis() * .8;
       //shooterAngleSpeed = operator.getLeftY(); // TODO Replace controls with something better
 
       if (Math.abs(speed) < 0.1) {
@@ -259,9 +260,9 @@ public class Robot extends TimedRobot {
         manipulation.shootAllTheThings(false);
         manipulation.setIntakeSpin(operator.getYButton());
 
-        manipulation.setIndexFeed(operator.getAButton() ? -0.25 : 0);
+        //manipulation.setIndexFeed(operator.getAButton() ? -0.25 : 0);
 
-        // manipulation.setIndexLoad(operator.getAButton());
+        manipulation.setIndexLoad(operator.getAButton());
       }
     }
 
