@@ -65,6 +65,8 @@ public class Robot extends TimedRobot {
   boolean navXToggle = false;
   boolean powercellDetectorToggle = false;
 
+  boolean aimToggle = false;
+
   boolean ptoEngaged = false;
   boolean overrideEngaged = false;
   boolean intakeEntended = false;
@@ -179,7 +181,7 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
-    operator = new XboxController(1);
+    operator = driver; //new XboxController(1);
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
@@ -203,9 +205,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    if (operator.getBButtonPressed()) {
+    /*if (operator.getBButtonPressed()) {
       overrideEngaged = !overrideEngaged;
-    }
+    }*/
 
     if (this.limelightToggle) {
       limelight.update();
@@ -225,7 +227,11 @@ public class Robot extends TimedRobot {
       double shooterAngleSpeed = 0;
 
       speed = operator.getRightTriggerAxis() * .8;
-      //shooterAngleSpeed = operator.getLeftY(); // TODO Replace controls with something better
+
+      if(operator.getXButtonPressed()) {
+        aimToggle = !aimToggle;
+      }
+      shooterAngleSpeed = aimToggle ? operator.getLeftY() : 0; // TODO Replace controls with something better
 
       if (Math.abs(speed) < 0.1) {
         speed = 0;
@@ -266,7 +272,7 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (this.drivetrainToggle) {
+    if (this.drivetrainToggle && !aimToggle) {
       double turnInput = deadband(overrideEngaged ? operator.getLeftX() : driver.getLeftX());
       double speedInput = deadband(overrideEngaged ? operator.getLeftY() : driver.getLeftY());
 
@@ -276,10 +282,10 @@ public class Robot extends TimedRobot {
 
       drive.arcadeDrive(turnInput*0.3, speedInput);
 
-      if (operator.getXButtonPressed()) {
+      /*if (operator.getXButtonPressed()) {
         ptoEngaged = !ptoEngaged;
         drive.setPTO(ptoEngaged);
-      }
+      }*/
     }
   }
 
