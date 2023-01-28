@@ -1,8 +1,7 @@
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import frc.robot.SquaredInput;
-
-import static org.junit.Assert.assertEquals;
 
 public class SquaredInputTest {
   private static double CLOSE_ENOUGH = 0.01;

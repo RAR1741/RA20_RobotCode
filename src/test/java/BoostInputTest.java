@@ -1,8 +1,7 @@
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import frc.robot.BoostInput;
-
-import static org.junit.Assert.assertEquals;
 
 public class BoostInputTest {
   private static double CLOSE_ENOUGH = 0.0001;
