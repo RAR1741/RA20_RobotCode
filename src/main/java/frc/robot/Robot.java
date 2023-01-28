@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   Compressor compressor = null;
 
   // Booleans for toggling different things...
-  boolean limelightToggle = false;
+  boolean limelightToggle = true;
   boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
