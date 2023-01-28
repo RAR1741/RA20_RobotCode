@@ -1,7 +1,13 @@
 
-package frc.robot;
+package frc.robot.limelight;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -14,6 +20,7 @@ public class Limelight {
     private double tvert;
 
     NetworkTable limelightTable;
+    BufferedWriter writer;
 
     /**
      * Constructor
@@ -38,6 +45,14 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightArea", this.getTargetArea());
         SmartDashboard.putBoolean("LimelightTargeted", this.isTargetVisible());
         SmartDashboard.putNumber("LimelightHeight", this.getTargetVertical());
+
+        try {
+            writer = new BufferedWriter(new FileWriter(new File("./test.json")));
+            writer.write(limelightTable.getEntry("json").getString("")); // TODO: Not working atm
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -7,8 +7,8 @@
 
 package frc.robot;
 
-import frc.robot.Limelight;
 import frc.robot.Shooter;
+import frc.robot.limelight.Limelight;
 import frc.robot.Manipulation;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   Compressor compressor = null;
 
   // Booleans for toggling different things...
-  boolean limelightToggle = false;
+  boolean limelightToggle = true;
   boolean photoswitchSensorToggle = false;
   boolean shooterToggle = true;
   boolean drivetrainToggle = true;
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
     if (this.limelightToggle) {
       System.out.print("Initializing vision system (limelight)...");
       limelight = new Limelight();
-      limelight.setLightEnabled(false);
+      limelight.setLightEnabled(true);
       System.out.println("done");
     } else {
       System.out.println("Vision system (limelight) disabled. Skipping initialization...");
@@ -209,8 +209,10 @@ public class Robot extends TimedRobot {
       overrideEngaged = !overrideEngaged;
     }*/
 
+    limelight.update();
+
     if (this.limelightToggle) {
-      limelight.update();
+      // limelight.update();
 
       if (driver.getXButtonPressed())
         limelight.setLightEnabled(true);
