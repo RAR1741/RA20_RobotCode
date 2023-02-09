@@ -38,7 +38,7 @@ public class Limelight {
                 limelightInfo.put(key, limelight.getEntry(key).getDouble(Double.NaN));
             }
             else if (type.equals("DoubleArray")) {
-                limelightInfo.put(key, limelight.getEntry(key).getDoubleArray(new double[0]));
+                limelightInfo.put(key, limelight.getEntry(key).getDoubleArray(new double[6]));
             }
 
             SmartDashboard.putString(key, (type.equals("String") || type.equals("Double")) ? limelightInfo.get(key).toString() : Arrays.toString((double[]) limelightInfo.get(key)));
@@ -49,6 +49,6 @@ public class Limelight {
      * Enable the LEDs
      */
     public void setLightEnabled(boolean enabled) {
-        limelight.getEntry("ledMode").setNumber(enabled ? 3: 1);
+        limelight.getEntry("ledMode").setNumber(enabled ? 3 : 1);
     }
-}
+} 

@@ -97,12 +97,12 @@ public class Robot extends TimedRobot {
    * Drivetrain PTO's -> 0 Manipulation Forward -> 1 Manipulation Reverse -> 2
    */
 
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
   @Override
   public void robotInit() {
-    /**
-     * This function is run when the robot is first started up and should be used
-     * for any initialization code.
-     */
     PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
     // String path = localDeployPath("config.toml");
     // config = new Toml().read(new File(path));
@@ -181,7 +181,7 @@ public class Robot extends TimedRobot {
 
     System.out.print("Initializing driver interface...");
     driver = new XboxController(0);
-    operator = driver; //new XboxController(1);
+    operator = new XboxController(1);
     System.out.println("done");
 
     System.out.print("Initializing compressor...");
@@ -204,7 +204,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
     /*if (operator.getBButtonPressed()) {
       overrideEngaged = !overrideEngaged;
     }*/
@@ -212,10 +211,14 @@ public class Robot extends TimedRobot {
     if (this.limelightToggle) {
       limelight.update();
 
-      if (driver.getXButtonPressed())
+      if (driver.getAButtonPressed()) {
+        SmartDashboard.putString("Limelight", "on");
         limelight.setLightEnabled(true);
-      else if (driver.getYButtonPressed())
+      }
+      else if (driver.getBButtonPressed()) {
+        SmartDashboard.putString("Limelight", "off");
         limelight.setLightEnabled(false);
+      }
     }
 
     if (this.powercellDetectorToggle) {
