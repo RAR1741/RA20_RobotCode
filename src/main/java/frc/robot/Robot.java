@@ -7,10 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.Limelight;
-import frc.robot.Shooter;
-import frc.robot.Manipulation;
-
 import java.io.File;
 import java.nio.file.Paths;
 
@@ -209,9 +205,9 @@ public class Robot extends TimedRobot {
     if (this.limelightToggle) {
       limelight.update();
 
-      if (driver.getXButtonPressed())
+      if (driver.getAButtonPressed())
         limelight.setLightEnabled(true);
-      else if (driver.getYButtonPressed())
+      else if (driver.getBButtonPressed())
         limelight.setLightEnabled(false);
     }
 
