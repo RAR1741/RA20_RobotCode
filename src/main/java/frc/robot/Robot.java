@@ -191,6 +191,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     limelightInfo = limelight.update();
+
+    if ((double) limelightInfo.get("tid") == 5) {
+      SmartDashboard.putNumberArray("CameraPos", (double[]) limelightInfo.get("targetpose_cameraspace"));
+    }
   }
 
   @Override
@@ -199,9 +203,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if ((double) limelightInfo.get("tid") == 8) {
-      drive.tankDrive(-0.3, 0.3);
-    }
+    // if ((double) limelightInfo.get("tid") == 8) {
+    //   drive.tankDrive(-0.3, 0.3);
+    // }
+    // else {
+    //   drive.tankDrive(0, 0);
+    // }
   }
 
   @Override
