@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
     NetworkTable limelight;
-    LinkedHashMap<String, Object> limelightInfo;
+    HashMap<String, Object> limelightInfo;
 
     ArrayList<Double> defaultDoubleArray = new ArrayList<Double>();
 
@@ -21,13 +21,13 @@ public class Limelight {
      */
     public Limelight() {
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
-        limelightInfo = new LinkedHashMap<String, Object>();
+        limelightInfo = new HashMap<String, Object>();
     }
 
     /**
      * Updates limelight values.
      */
-    public void update() {
+    public HashMap<String, Object> update() {
         for (String key: limelight.getKeys()) {
             String type = limelight.getEntry(key).getType().name().substring(1);
 
@@ -43,6 +43,8 @@ public class Limelight {
 
             SmartDashboard.putString(key, (type.equals("String") || type.equals("Double")) ? limelightInfo.get(key).toString() : Arrays.toString((double[]) limelightInfo.get(key)));
         }
+
+        return limelightInfo;
     }
 
     /**

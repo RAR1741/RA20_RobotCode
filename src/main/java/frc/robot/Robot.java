@@ -7,12 +7,9 @@
 
 package frc.robot;
 
-import frc.robot.Limelight;
-import frc.robot.Shooter;
-import frc.robot.Manipulation;
-
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
@@ -55,6 +52,8 @@ public class Robot extends TimedRobot {
   XboxController operator = null;
   DriveModule module = null;
   Compressor compressor = null;
+
+  HashMap<String, Object> limelightInfo = new HashMap<String, Object>();
 
   // Booleans for toggling different things...
   boolean limelightToggle = true;
@@ -190,11 +189,19 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void robotPeriodic() {
+    limelightInfo = limelight.update();
+  }
+
+  @Override
   public void autonomousInit() {
   }
 
   @Override
   public void autonomousPeriodic() {
+    if ((double) limelightInfo.get("tid") == 8) {
+      drive.tankDrive(-0.3, 0.3);
+    }
   }
 
   @Override
@@ -209,8 +216,6 @@ public class Robot extends TimedRobot {
     }*/
 
     if (this.limelightToggle) {
-      limelight.update();
-
       if (driver.getAButtonPressed()) {
         SmartDashboard.putString("Limelight", "on");
         limelight.setLightEnabled(true);
